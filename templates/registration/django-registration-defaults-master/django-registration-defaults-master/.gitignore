@@ -1,6 +1,0 @@
-build/
-*.pyc
-*.swp
-.DS_Store
-MANIFEST
-dist
