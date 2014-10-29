@@ -9,5 +9,5 @@ urlpatterns = patterns('',
 	url(r'^$', include('home.urls', namespace="home")),
     url(r'^admin/', include(admin.site.urls)),
 	#(r'^accounts/', include('registration.backends.default.urls')),
-	(r'^accounts/', include('registration.backends.simple.urls')),   
+	(r'^accounts/', include('registration2.backends.simple.urls')),   
 ) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

@@ -37,7 +37,7 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
 	'polls',
-	'registration',
+	'registration2',
 )
 ACCOUNT_ACTIVATION_DAYS = 5
 EMAIL_HOST='localhost'
