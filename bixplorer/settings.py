@@ -1,5 +1,5 @@
 """
-Django settings for mysite project.
+Django settings for testDjango project.
 
 For more information on this file, see
 https://docs.djangoproject.com/en/1.7/topics/settings/
@@ -12,17 +12,17 @@ https://docs.djangoproject.com/en/1.7/ref/settings/
 import os
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
+
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.7/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'm4mhd5xgc79%ms&yn2%%%^w--shecps*z#uoskmnbn3e*j6-b6'
+SECRET_KEY = '-wzn4i9mgye7gegh^ys-uv+2jnnmrs+yn$pq-8*do8f^1zc7w('
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
 TEMPLATE_DEBUG = True
-TEMPLATE_DIRS = [os.path.join(BASE_DIR, 'templates')]
 
 ALLOWED_HOSTS = []
 
@@ -36,14 +36,12 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-	'polls',
-	'registration2',
+    'polls',
+    'registration',
+    'userprofile',
+    'home',
+    'projects',
 )
-ACCOUNT_ACTIVATION_DAYS = 5
-EMAIL_HOST='localhost'
-EMAIL_PORT=1023
-EMAIL_HOST_USER='username'
-EMAIL_HOST_PASSWORD='password'
 
 MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -66,7 +64,7 @@ WSGI_APPLICATION = 'bixplorer.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'bixplorer',
+        'NAME': 'testDjango',
 		'USER': 'root',
         'PASSWORD': 'root',
         'HOST': '127.0.0.1',
@@ -92,3 +90,22 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.7/howto/static-files/
 
 STATIC_URL = '/static/'
+
+# Returns the path to given filename
+def get_path(filename):
+    return os.path.join(os.path.dirname(os.path.dirname(__file__)), filename)
+
+# STATIC_URL = (
+    # get_path('static'),
+# )    
+STATICFILES_DIRS = (
+    #get_path('static'),
+    os.path.join(os.path.dirname(__file__), "static"),
+)
+    
+TEMPLATE_DIRS = (
+    get_path('templates'),
+    # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
+    # Always use forward slashes, even on Windows.
+    # Don't forget to use absolute paths, not relative paths.
+)

@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% if not is_popup %}
+{% block breadcrumbs %}
+<div class="breadcrumbs">
+<a href="{% url 'admin:index' %}">{% trans 'Home' %}</a>
+&rsaquo;
+</div>
+{{ user.username }}
+{{ user.email }}
+first name: {{ user.firstname }}
+{% endblock %}
+{% endif %}
+
+{% block sidebar %}{% endblock %}
