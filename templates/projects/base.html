@@ -58,7 +58,7 @@
                     <li class="dropdown {% if active_tag == 'about'  %} active {% endif %}"><a href="{% static 'home/about/'%}"><span class="glyphicon glyphicon-info-sign"></span> About</a></li>
                     
                     <!-- logout menu -->
-                    <li><a href="{% static 'login/logout_action/'%}"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>            
+                    <li><a href="{{ BASE_URL }} accounts/logout/"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>            
                 </ul>
             </div>
         </div>

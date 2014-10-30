@@ -96,12 +96,14 @@ def get_path(filename):
 
 # STATIC_URL = (
     # get_path('static'),
-# )    
+# ) 
 STATICFILES_DIRS = (
     #get_path('static'),
     os.path.join(os.path.dirname(__file__), "static"),
 )
-    
+
+LOGIN_REDIRECT_URL = "/projects/"
+
 TEMPLATE_DIRS = (
     get_path('templates'),
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
