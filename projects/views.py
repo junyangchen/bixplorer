@@ -1,8 +1,9 @@
 from django.shortcuts import render
 from django.template.response import TemplateResponse
+from django.conf import settings
 # Create your views here.
 def index(request):
-    context = { 'active_tag': 'home'}
+    context = { 'active_tag': 'home', 'BASE_URL':settings.BASE_URL}
     return TemplateResponse(request, 'projects/index.html', context)
     
 # from django.http import HttpResponse

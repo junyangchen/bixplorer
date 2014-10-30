@@ -4,11 +4,11 @@
         <meta charset="utf-8"> 
         <title>Bixplorer</title>
 		{% load staticfiles %}
-        <link rel="stylesheet" type="text/css" href="{% static 'css/lib/bootstrap.min.css' %}">
-        <link rel="stylesheet" type="text/css" href="{% static 'css/lib/bootstrap-theme.min.css' %}">    
-        <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
-        <script type="text/javascript" src="{% static 'js/lib/jquery-2.1.1.min.js' %}"></script>
-        <script type="text/javascript" src="{% static 'js/lib/bootstrap.min.js' %}"></script>
+        <link rel="stylesheet" type="text/css" href="{% static 'common/css/lib/bootstrap.min.css' %}">
+        <link rel="stylesheet" type="text/css" href="{% static 'common/css/lib/bootstrap-theme.min.css' %}">    
+        <link rel="stylesheet" type="text/css" href="{% static 'common/css/style.css' %}">
+        <script type="text/javascript" src="{% static 'common/js/lib/jquery-2.1.1.min.js' %}"></script>
+        <script type="text/javascript" src="{% static 'common/js/lib/bootstrap.min.js' %}"></script>
     </head>
 
     <body>
@@ -31,21 +31,21 @@
                         <!-- Carousel items -->
                         <div class="carousel-inner">
                             <div class="active item">
-                                <img src="{% static 'imgs/bic1.png' %}" class="img-rounded" alt="Rounded Image">
+                                <img src="{% static 'common/imgs/bic1.png' %}" class="img-rounded" alt="Rounded Image">
                                 <div class="carousel-caption">
                                     <h3>Correlation Matrix</h3>
                                     <p>Coordinated relations between two domains</p>
                                 </div>
                             </div>
                             <div class="item">
-                                <img src="{% static 'imgs/bic2.png' %}" class="img-rounded" alt="Rounded Image">
+                                <img src="{% static 'common/imgs/bic2.png' %}" class="img-rounded" alt="Rounded Image">
                                 <div class="carousel-caption">
                                     <h3>Parallel Sets</h3>
                                     <p>Correlation across sets of entities</p>
                                 </div>
                             </div>
                             <div class="item">
-                                <img src="{% static 'imgs/bic3.png' %}" class="img-rounded" alt="Rounded Image">
+                                <img src="{% static 'common/imgs/bic3.png' %}" class="img-rounded" alt="Rounded Image">
                                 <div class="carousel-caption">
                                     <h3>Parallel Coordinates</h3>
                                     <p>Correlation across multiple dimensions</p>
@@ -166,6 +166,6 @@
             </div>
         </div> <!-- end of pbody -->
 
-        <script type="text/javascript" src="{% static 'js/regvalidate.js' %}"></script>
+        <script type="text/javascript" src="{% static 'common/js/regvalidate.js' %}"></script>
     </body>
 </html>
