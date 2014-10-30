@@ -1,22 +1,34 @@
 from django.shortcuts import render
 from django.template.response import TemplateResponse
 from django.conf import settings
+from projects.models import Project, Comment
+from itertools import chain
+
 # Create your views here.
 def index(request):
     context = { 'active_tag': 'home', 'BASE_URL':settings.BASE_URL}
     return TemplateResponse(request, 'projects/index.html', context)
     
-# from django.http import HttpResponse
-# from django.template import RequestContext, loader
-# from django.shortcuts import get_object_or_404, render
-# from django.contrib.auth.forms import AuthenticationForm
-# from django.template.response import TemplateResponse
-
-# def index(request, template_name='home/index.html', authentication_form=AuthenticationForm,):
-    #template = loader.get_template('home/index.html')
-    # form = authentication_form(request)
-    # context = {
-        # 'form': form,
-        # }
-    #return render(request, 'home/index.html')
-    # return TemplateResponse(request, template_name, context)
+def detail(request, project_id):
+    theproject = Project.objects.get(id = project_id)
+    if theproject.is_creator(request.user):
+        # List all comments of this project that are not deleted
+        comments = Comment.objects.filter( project = theproject)
+        #comments = Comment.objects.filter( project = theproject).filter( is_deleted = '0' )
+        iscreate = True
+    else:
+        # List comments created by a user that are not deleted
+        comments = Comment.objects.filter( user = request.user)
+        #comments = Comment.objects.filter( user = request.user).filter( is_deleted = '0' )
+        iscreate = False
+        
+    
+    # known_ids = set()
+    # comments = []
+    # for element in comments1:
+        # if element.id not in known_ids:
+                # known_ids.add(element.id)
+                # comments.append(element)
+               
+    context = { 'user' : request.user, 'BASE_URL':settings.BASE_URL, 'project' : theproject, 'comments': comments}
+    return TemplateResponse(request, 'projects/detail.html', context)

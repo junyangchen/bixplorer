@@ -17,7 +17,10 @@ class Project(models.Model):
     create_time = models.DateTimeField('date published')
     is_deleted = models.BooleanField(default = 0)
     def __unicode__(self):
-        return self.name    
+        return self.name   
+        
+    def is_creator(self, user):
+        return user == self.user #or user.has_perm('your_app.manage_object')
     
 class Comment(models.Model):
     project = models.ForeignKey(Project)
@@ -26,3 +29,12 @@ class Comment(models.Model):
     create_time = models.DateTimeField('date published')
     is_deleted = models.BooleanField(default = 0)
     
+    def __unicode__(self):
+        return self.content   
+    
+    def is_comment_creator(self, user):
+        return user == self.user
+        
+    def is_project_creator(self, user):
+        return user == self.project.user
+       

@@ -1,0 +1,23 @@
+{% extends "projects/base.html" %}
+{% load staticfiles %}
+        <!-- four cards for users --> 
+        {% block content %}
+        User: {{ user }}
+        <br>
+        <br>
+        Project name:    {{ project.name }}
+        <br>
+        <br>
+        Project description: {{ project.description }}        
+        <br>
+        <br>
+        <H1>Comments:</H1>
+        {% for comment in comments %}
+        <br>
+            <!-- Show only non-deleted comments -->
+            {% if not comment.is_deleted %}
+            {{ comment }}
+            Created by {{ comment.user }} {{ comment.create_time }}
+            {% endif %} 
+        {% endfor %}
+{% endblock %}
