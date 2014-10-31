@@ -16,7 +16,7 @@ $(document).ready(function(){
 	//requestDataset(selected_dataset_id);
 });
 
-
+console.log('here');
 // add a new project and save it in the add view
 $("#new_project").ajaxForm(projectSave);
 
