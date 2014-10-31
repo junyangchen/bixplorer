@@ -1,23 +1,43 @@
 {% extends "projects/base.html" %}
 {% load staticfiles %}
-        <!-- four cards for users --> 
-        {% block content %}
-        User: {{ user }}
-        <br>
-        <br>
-        Project name:    {{ project.name }}
-        <br>
-        <br>
-        Project description: {{ project.description }}        
-        <br>
-        <br>
-        <H1>Comments:</H1>
-        {% for comment in comments %}
-        <br>
-            <!-- Show only non-deleted comments -->
-            {% if not comment.is_deleted %}
-            {{ comment }}
-            Created by {{ comment.user }} {{ comment.create_time }}
-            {% endif %} 
-        {% endfor %}
+
+{% block content %}
+    <div class="row">
+        <h3>Project Information</h3>
+
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 shade-container">
+                <!-- basic information for a project -->
+                <div class="col-lg-5 col-md-5 col-sm-12 col-xs-12">
+                    <div class="container">
+                        <h4>Basic Information</h4>
+                        <label>Project name:</label>
+                        <p>{{ project.name }}</p>
+
+                        <label>Project owner:</label>
+                        <p>{{ project.user }}</p>
+
+                        <label>Project description:</label>
+                        <p>{{ project.description }}</p>                       
+                    </div>
+                </div>
+
+                <!-- comment of a project -->
+                <div class="col-lg-5 col-md-5 col-sm-12 col-xs-12">
+                    <h4>Comments:</h4>
+                    {% for comment in comments %}
+                    <br>
+                        <!-- Show only non-deleted comments -->
+                        {% if not comment.is_deleted %}
+                        {{ comment }}
+                        Created by {{ comment.user }} {{ comment.create_time }}
+                        {% endif %} 
+                    {% endfor %}
+                </div>
+
+                User: {{ user }}
+                <br>
+                <br>
+
+        </div>
+    </div>
 {% endblock %}
