@@ -2,14 +2,12 @@
 {% load staticfiles %}
 {% block content %}
         <div class="row">
-        <div >sfdsf
-                <input id="csrf_token" type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
-            </div>
             <div class="col-lg-12 col-md-12 col-sm-8 col-xs-9 shade-container">
                 <div class="col-lg-12 col-md-12 col-sm-9 col-xs-9">
                     <!-- control panel -->
                     <div class="col-lg-2">
-                        <form id="new_project" method="post" enctype="multipart/form-data">
+                    <input id="csrf_token" type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
+                        <!-- <input id="csrf_token" type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}"> -->
                             <!-- project name -->
                             <div class="control-group">
                                 <label>Project name:</label><br />
@@ -56,8 +54,7 @@
                                     <button type="submit" class="btn btn-default btn-sm" id="project_save"><span class="glyphicon glyphicon-floppy-saved"></span> Save</button>
                                     <button type="button" class="btn btn-default btn-sm" id="btn_restart"><span class="glyphicon glyphicon-repeat"></span> Restart</button>
                                 </div>
-                            </div>
-                        </form>                                                 
+                            </div>                                                 
                     </div>
 
                     <!-- data view -->

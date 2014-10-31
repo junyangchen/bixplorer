@@ -17,7 +17,7 @@ $(document).ready(function(){
 });
 
 // add a new project and save it in the add view
-$("#new_project").ajaxForm(projectSave);
+$("#project_save").click(projectSave);
 
 // Saving a project in the edit view
 $("#save_project").ajaxForm(projectSave);
@@ -80,8 +80,11 @@ function requestDataset(datasetId){
 
 
 function projectSave() {
+<<<<<<< HEAD
 	console.log('here');
     alert("test");
+=======
+>>>>>>> FETCH_HEAD
 	// cancel ajax to get values from all inputs
     $.ajaxSetup({async:false});
     var csrftoken = $('#csrf_token').val();  
@@ -98,10 +101,11 @@ function projectSave() {
     	"project_name": pname,
     	"project_description": pdes,
     	"project_privacy": isPrivate,
-    	"dataset_id": dataset
+    	"dataset_id": dataset,
+        "csrfmiddlewaretoken": csrftoken
     }
     
-	$.post(window.SERVER_PATH + "project/add/", save_project, function(data) {
+	$.post(window.SERVER_PATH + "projects/add/", save_project, function(data) {
 		// redirect when the data has been stored in the database
 		if(data.status == 'success') {
 			window.location = window.SERVER_PATH + "project/plist/";

@@ -4,12 +4,13 @@ from django.conf import settings
 from projects.models import Project, Comment
 from itertools import chain
 from django.views.decorators.csrf import csrf_protect
+from django.http import HttpResponse
 
 def index(request):
     context = { 'active_tag': 'home', 'BASE_URL':settings.BASE_URL}
     return TemplateResponse(request, 'projects/index.html', context)
 
-@csrf_protect    
+@csrf_protect   
 def add(request):
     if request.method == 'GET':
         context = { 'active_tag': 'home', 'BASE_URL':settings.BASE_URL}
@@ -21,16 +22,18 @@ def add(request):
     
 def detail(request, project_id):
     theproject = Project.objects.get(id = project_id)
-    if theproject.is_creator(request.user):
-        # List all comments of this project that are not deleted
-        comments = Comment.objects.filter( project = theproject)
+    allComments =    Comment.objects.all();
+    selectedComments = allComments.filter(user = request.user)
+    # if theproject.is_creator(request.user):
+        #List all comments of this project that are not deleted
+        # comments = Comment.objects.filter( project = theproject)
         #comments = Comment.objects.filter( project = theproject).filter( is_deleted = '0' )
-        iscreate = True
-    else:
-        # List comments created by a user that are not deleted
-        comments = Comment.objects.filter( user = request.user)
+        # iscreate = True
+    # else:
+        #List comments created by a user that are not deleted
+        # comments = Comment.objects.filter( user = request.user).filter(project = theproject)
         #comments = Comment.objects.filter( user = request.user).filter( is_deleted = '0' )
-        iscreate = False
+        # iscreate = False
         
     
     # known_ids = set()
@@ -40,5 +43,5 @@ def detail(request, project_id):
                 # known_ids.add(element.id)
                 # comments.append(element)
                
-    context = { 'user' : request.user, 'BASE_URL':settings.BASE_URL, 'project' : theproject, 'comments': comments}
+    context = { 'user' : request.user, 'BASE_URL':settings.BASE_URL, 'project' : theproject, 'comments': selectedComments}
     return TemplateResponse(request, 'projects/detail.html', context)

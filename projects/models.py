@@ -15,6 +15,7 @@ class Project(models.Model):
     name = models.CharField(max_length=100)
     description = models.CharField(max_length=300)
     create_time = models.DateTimeField('date published')
+    is_private = models.BooleanField(default = 1)
     is_deleted = models.BooleanField(default = 0)
     def __unicode__(self):
         return self.name   

@@ -82,6 +82,7 @@
                             {% if form.errors %}
                             <p>{% blocktrans %}Your username and password didn't match. Please try again.{% endblocktrans %}</p>
                             {% endif %}
+<<<<<<< HEAD
                             <form method="post" action="{% url 'auth_login' %}">{% csrf_token %}
                                 <div class="control-group">
                                     <div class="input-group">
@@ -90,6 +91,10 @@
                                     </div>
                                 </div>
 
+=======
+                            <form method="post" action="{% url 'auth_login' %}">
+                            {% csrf_token %}
+>>>>>>> FETCH_HEAD
                                 <table>
 <!--                                     <tr>
                                         <td>{% trans form.username.label_tag %}</td>
