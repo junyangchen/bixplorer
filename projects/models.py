@@ -38,4 +38,12 @@ class Comment(models.Model):
         
     def is_project_creator(self, user):
         return user == self.project.user
-   
+        
+class Doc(models.Model):
+    dataset = models.ForeignKey(DataSet)
+    people = models.CharField(max_length=200)
+    location = models.CharField(max_length=200)
+    phone = models.CharField(max_length=200)
+    organization = models.CharField(max_length=200)
+    misc = models.CharField(max_length=200)
+    text = models.CharField(max_length=200)

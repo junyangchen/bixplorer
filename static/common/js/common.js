@@ -6,10 +6,11 @@
 $(document).ready(function(){		
 	
 	// refresh the data view when changing selected dataset
-	$('.selectpicker').on('change', function(){
+	/*$('.selectpicker').on('change', function(){
 		requestDataset($('.selectpicker').selectpicker('val'));
 	});
 
+    */
 	// Get the default dataset id
 	var selected_dataset_id = $('.selectpicker').selectpicker('val');
 	// display the content of the default dataset
@@ -80,8 +81,6 @@ function requestDataset(datasetId){
 
 
 function projectSave() {
-	console.log('here');
-    alert("test");
 	// cancel ajax to get values from all inputs
     $.ajaxSetup({async:false});
     var csrftoken = $('#csrf_token').val();  
@@ -101,11 +100,31 @@ function projectSave() {
     	"dataset_id": dataset,
         "csrfmiddlewaretoken": csrftoken
     }
+    function csrfSafeMethod(method) {
+        // these HTTP methods do not require CSRF protection
+        return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+    }
+    $.ajax({
+        url: window.SERVER_PATH + "projects/add/",
+        type: "POST",
+        data: JSON.stringify(save_project),
+        contentType: "application/json",
+        complete: function(data){
+            if(data.status == 'success') {
+                window.location = "http://www.google.com";
+            }
+        },
+        beforeSend: function(xhr, settings) {
+            if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                xhr.setRequestHeader("X-CSRFToken", csrftoken);
+            }
+        }
+    });
     
-	$.post(window.SERVER_PATH + "projects/add/", save_project, function(data) {
-		// redirect when the data has been stored in the database
-		if(data.status == 'success') {
-			window.location = window.SERVER_PATH + "project/plist/";
-		}
-    });	
+	// $.post(window.SERVER_PATH + "projects/add/", eval(save_project), function(data) {
+		//redirect when the data has been stored in the database
+		// if(data.status == 'success') {
+			// window.location = window.SERVER_PATH + "project/plist/";
+		// }
+    // });	
 }

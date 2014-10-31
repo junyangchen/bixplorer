@@ -1,10 +1,11 @@
 from django.shortcuts import render
 from django.template.response import TemplateResponse
 from django.conf import settings
-from projects.models import Project, Comment
+from projects.models import Project, Comment, DataSet
 from itertools import chain
 from django.views.decorators.csrf import csrf_protect
 from django.http import HttpResponse
+import json
 
 def index(request):
     context = { 'active_tag': 'home', 'BASE_URL':settings.BASE_URL}
@@ -13,11 +14,17 @@ def index(request):
 @csrf_protect   
 def add(request):
     if request.method == 'GET':
-        context = { 'active_tag': 'home', 'BASE_URL':settings.BASE_URL}
+        dataset = DataSet.objects.all()
+        context = { 'active_tag': 'home', 'BASE_URL':settings.BASE_URL, 'dataset': dataset}
         return TemplateResponse(request, 'projects/add.html', context)  
     elif request.method == 'POST':
-        print 'Raw Data: "%s"' % request.body   
-        return HttpResponse(request.body.project_name)
+        print 'Raw Data: "%s"' % request.body
+        # parse from front end
+        backendData = json.loads(request.body)
+        
+        # serialize for front end
+        newData = json.dumps(backendData)
+        return HttpResponse(newData)
       
     
 def detail(request, project_id):

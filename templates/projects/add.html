@@ -24,11 +24,9 @@
                             <label>Select Dataset:</label><br />
                             <div>
                                 <select id="project_dataset" class="selectpicker" data-live-search="true" data-width="80%" required>
-        							<?php foreach($datasets as $set) {
-        										$dataset_id = $set['id'];
-        										$dataset_name = $set['name'];?>
-                                        <option value = "<?php echo $dataset_id?>"><?php echo $dataset_name?></option>
-        							<?php } ?>
+        							{% for item in dataset %}
+                                        <option value = "{{item.id}}">{{ item.name }}</option>
+        							{% endfor %}
                                 </select>
                             </div>
 
