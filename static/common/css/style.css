@@ -134,8 +134,8 @@ div.shade-container{
 
 
 
-/*.widget .panel-body { padding:0px; }*/
-/*.widget .list-group { margin-bottom: 0; }
+.widget .panel-body { padding:0px; }
+.widget .list-group { margin-bottom: 0; }
 .widget .panel-title { display:inline }
 .widget .label-info { float: right; }
 .widget li.list-group-item {border-radius: 0;border: 0;border-top: 1px solid #ddd; margin-left: 0px !important;}
