@@ -43,5 +43,5 @@ def detail(request, project_id):
                 # known_ids.add(element.id)
                 # comments.append(element)
                
-    context = { 'user' : request.user, 'BASE_URL':settings.BASE_URL, 'project' : theproject, 'comments': selectedComments}
+    context = { 'user' : request.user, 'BASE_URL':settings.BASE_URL, 'project' : theproject, 'comments': allComments}
     return TemplateResponse(request, 'projects/detail.html', context)
