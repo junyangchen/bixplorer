@@ -70,6 +70,11 @@
             <div class="col-lg-3" id="pregister">
                 <div id="rtab">
                    <div class="well well-lg">
+                        <ul class="nav nav-tabs">
+                            <li class="active"><a href="#login" data-toggle="tab">Login</a></li>
+                            <li><a href="#create" data-toggle="tab">Sign up</a></li>
+                        </ul>
+
                         <div id="myTabContent" class="tab-content">
                             <!-- login tab -->
                             <div class="tab-pane active in" id="login">
@@ -86,7 +91,8 @@
                                 <div class="control-group">
                                     <div class="input-group">
                                         <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
-                                        {{ form.username }}
+                                        <input id="id_username" name="username" type="text" class="form-control">
+                                        <!-- {{ form.username }} -->
                                     </div>
                                 </div>
                             <form method="post" action="{% url 'auth_login' %}">
