@@ -38,4 +38,4 @@ class Comment(models.Model):
         
     def is_project_creator(self, user):
         return user == self.project.user
-       
+   
