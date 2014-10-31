@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404, redirect
 from django.template.response import TemplateResponse
 from django.http import HttpResponseNotAllowed, HttpResponseForbidden
 from django.conf import settings
@@ -27,6 +27,18 @@ def add(request):
         if projectRaw.has_key('project_id') and projectRaw['project_id'].isdigit():
             # TO-DO validate the data
             try:
+                theUser = request.user
+                # Load project data from the database                
+                toUpdate = Project.objects.get(pk = projectRaw['project_id'])
+                
+                # TO-DO check if the project is delted
+                
+                # Only the project creator, super user and collaborators can edit the project
+                has_permission = toUpdate.is_creator(theUser) or toUpdate.is_collaborator(theUser) or theUser.is_superuser
+    
+                if not has_permission:
+                    return HttpResponseForbidden("You dont' have the permission to edit this project!")    
+                
                 toUpdate = Project.objects.get(pk = projectRaw['project_id'])
                 toUpdate.dataset = DataSet.objects.get(id = projectRaw['dataset_id'])
                 toUpdate.name = projectRaw['project_name']
@@ -61,6 +73,8 @@ def edit(request, project_id):
         project = Project.objects.get(id = project_id)
         context = { 'active_tag': 'home', 'BASE_URL':settings.BASE_URL, 'datasets': datasets, 'selectedDatasetID':project.dataset.id, 'project': project}
         return TemplateResponse(request, 'projects/edit.html', context)
+        
+    # TO-DO    
     elif request.method == 'POST':    
         theUser = request.user
         
@@ -79,11 +93,32 @@ def edit(request, project_id):
     
     else:
         return HttpResponseForbidden("Error 405. Only GET and POST allowed for this view.")
+
+def delete(request, project_id):
+    theUser = request.user
+    # Load project data from the database                
+    toDelete = Project.objects.get(pk = project_id)
+    
+    # Only the project creator, super user can delete the project
+    has_permission = toDelete.is_creator(theUser) or toDelete.is_collaborator(theUser) or theUser.is_superuser
+    
+    if not has_permission:
+        return HttpResponseForbidden("You dont' have the permission to delete this project!")
+    
+    try:
+        toDelete.is_deleted = 1
+        toDelete.save()
+        return redirect('/projects/plist/')
+    except:
+        # TO-DO show error message
+        responseData = {'status':'fail'}    
+    
+    
         
 def plist(request):
     if request.method == 'GET':
         # Retrieve projects list from database
-        projectList = Project.objects.filter(user = request.user)
+        projectList = Project.objects.filter(user = request.user).filter(is_deleted = '0')
         context = { 'user' : request.user, 'BASE_URL':settings.BASE_URL, 'projects' : projectList}
     return TemplateResponse(request, 'projects/plist.html', context)
 
@@ -113,3 +148,8 @@ def detail(request, project_id):
                
     context = { 'user' : request.user, 'BASE_URL':settings.BASE_URL, 'project' : theproject, 'comments': allComments}
     return TemplateResponse(request, 'projects/detail.html', context)
+    
+def addCollaborator(request, project_id):
+    theproject = Project.objects.get(id = project_id)
+
+     

@@ -18,7 +18,7 @@ $('.plist_delete_btn').click(function(){
 	// find project id
 	var project_id = $('#p_hidden_id').html();
 	// request to delete the proejct
-	window.location = window.SERVER_PATH + "projects/delete_action/" + project_id;
+	window.location = window.SERVER_PATH + "projects/delete/" + project_id;
 });
 
 // update a project

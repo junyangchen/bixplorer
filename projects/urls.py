@@ -10,4 +10,5 @@ urlpatterns = patterns('',
     url(r'^add/$', views.add, name='add'),
     url(r'^plist/$', views.plist, name='plist'),
     url(r'^edit/(?P<project_id>\d+)/$', views.edit, name='edit'),
+    url(r'^delete/(?P<project_id>\d+)/$', views.delete, name='delete'),
 )
