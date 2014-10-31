@@ -1,4 +1,6 @@
-{% extends "userprofile/base.html" %}
+{% extends "projects/base.html" %}
+{% load staticfiles %}
+
 {% load i18n %}
 
 {% if not is_popup %}
@@ -7,10 +9,79 @@
 <a href="{% url 'admin:index' %}">{% trans 'Home' %}</a>
 &rsaquo;
 </div>
-{{ user.username }}
-{{ user.email }}
+
 first name: {{ user.firstname }}
 {% endblock %}
 {% endif %}
 
 {% block sidebar %}{% endblock %}
+
+{% block content %}
+	<div class="row">
+		<h1>My Profile</h1>
+		<hr>
+        <!-- left column -->
+        <div class="col-md-4 col-sm-6 col-xs-12">
+            <div class="text-center">
+                <img src="{% static 'common/imgs/default.jpg' %}" class="avatar img-circle img-thumbnail" alt="avatar">
+            </div>
+        </div>
+
+            <!-- edit form column -->
+            <div class="col-md-8 col-sm-6 col-xs-12 personal-info">
+
+                <form class="form-horizontal" role="form">
+
+                    <div class="form-group">
+                        <label class="col-md-3 control-label">Username:</label>
+                        <div class="col-md-8">
+                            <p class="p_aligh_lable">{{ user.username }}</p>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-lg-3 control-label">First name:</label>
+                        <div class="col-lg-8">
+                            <p class="p_aligh_lable">{{ user.first_name }}</p>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-lg-3 control-label">Last name:</label>
+                        <div class="col-lg-8">
+                            <p class="p_aligh_lable">{{ user.last_name }}</p>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-lg-3 control-label">Company:</label>
+                        <div class="col-lg-8">
+                            <p class="p_aligh_lable">My Company</p>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-lg-3 control-label">Email:</label>
+                        <div class="col-lg-8">
+                            <p class="p_aligh_lable">{{ user.email }}</p>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-lg-3 control-label">Time Zone:</label>
+                        <div class="col-lg-8">
+                            <p class="p_aligh_lable">(GMT-05:00) Eastern Time (US &amp; Canada)</p>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-md-8">
+                            <label class="col-lg-3 control-label"></label>
+                            <button type="button" class="btn btn-info btn-xs" id="btn_edit"><span class="glyphicon glyphicon-pencil"></span> Edit</button>
+                        </div>
+                    </div>
+
+                </form>
+            </div>        
+	</div>
+{% endblock %}
