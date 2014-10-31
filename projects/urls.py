@@ -9,4 +9,5 @@ urlpatterns = patterns('',
     url(r'^(?P<project_id>\d+)/$', views.detail, name='detail'),
     url(r'^add/$', views.add, name='add'),
     url(r'^plist/$', views.plist, name='plist'),
+    url(r'^edit/(?P<project_id>\d+)/$', views.edit, name='edit'),
 )

@@ -17,6 +17,9 @@ class Project(models.Model):
     create_time = models.DateTimeField('date published')
     is_private = models.BooleanField(default = 1)
     is_deleted = models.BooleanField(default = 0)
+    
+    
+    
     def __unicode__(self):
         return self.name   
         

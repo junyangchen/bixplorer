@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.template.response import TemplateResponse
+from django.http import HttpResponseNotAllowed
 from django.conf import settings
 from projects.models import Project, Comment, DataSet
 from itertools import chain
@@ -40,7 +41,27 @@ def add(request):
         newData = json.dumps(projectRaw)
         return HttpResponse(json.dumps(responseData), content_type = "application/json")
         #return HttpResponse(json.dumps(responseData))
-
+        
+@csrf_protect
+def edit(request, project_id):
+    if request.method != 'GET':
+        return HttpResponseNotAllowed('Only GET here')
+    
+    theUser = request.user
+        
+    # Load project data from the database
+    project = Project.objects.get(id = project_id)
+    
+    # check user permission
+    # Only the project creator, super user and moderator can edit the project
+    
+    
+    
+    # Load data set list from the database
+    
+    
+    return HttpResponse(project_id)
+        
 def plist(request):
     if request.method == 'GET':
         # Retrieve projects list from database
