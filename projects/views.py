@@ -126,6 +126,12 @@ def plist(request):
 def detail(request, project_id):
     theproject = Project.objects.get(id = project_id)
     allComments =    Comment.objects.all();
+    for comment in allComments:
+        if comment.user == request.user:
+            comment.edit_enable = True
+        else:
+            comment.edit_enable = False
+    
     selectedComments = allComments.filter(user = request.user)
     # if theproject.is_creator(request.user):
         #List all comments of this project that are not deleted

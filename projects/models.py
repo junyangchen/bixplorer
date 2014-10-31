@@ -39,6 +39,8 @@ class Comment(models.Model):
     create_time = models.DateTimeField('date published')
     is_deleted = models.BooleanField(default = 0)
     
+    edit_enable = False
+    
     def __unicode__(self):
         return self.content   
     
