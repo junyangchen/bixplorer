@@ -80,11 +80,8 @@ function requestDataset(datasetId){
 
 
 function projectSave() {
-<<<<<<< HEAD
 	console.log('here');
     alert("test");
-=======
->>>>>>> FETCH_HEAD
 	// cancel ajax to get values from all inputs
     $.ajaxSetup({async:false});
     var csrftoken = $('#csrf_token').val();  
