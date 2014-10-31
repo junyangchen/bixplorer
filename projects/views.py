@@ -125,7 +125,7 @@ def plist(request):
     
 def detail(request, project_id):
     theproject = Project.objects.get(id = project_id)
-    allComments =    theproject.comment.all();
+    allComments =    theproject.comment_set.all();
     for comment in allComments:
         if comment.user == request.user:
             comment.edit_enable = True

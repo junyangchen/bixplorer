@@ -84,8 +84,7 @@
                     <div class="panel-body">
                         <ul class="list-group">
                             {% for comment in comments %}                                
-                                {% if not comment.is_deleted %}
-                                    {{comment.edit_enable}}
+                                {% if not comment.is_deleted %}                                    
                                     <li class="list-group-item">
                                         <div class="row">
                                             <div class="col-xs-4 col-md-2 comment_photo">
@@ -103,15 +102,14 @@
                                                 <div class="comment-text">{{ comment }}</div>
 
                                                 <div class="action">
+                                                    {% if comment.edit_enable %}
                                                     <button type="button" class="btn btn-primary btn-xs" title="Edit">
                                                         <span class="glyphicon glyphicon-pencil"></span>
                                                     </button>
-                                                    <button type="button" class="btn btn-success btn-xs" title="Approved">
-                                                        <span class="glyphicon glyphicon-ok"></span>
-                                                    </button>
                                                     <button type="button" class="btn btn-danger btn-xs" title="Delete">
                                                         <span class="glyphicon glyphicon-remove"></span>
-                                                    </button>
+                                                    </button>                                                    
+                                                    {% endif %}
                                                 </div>
                                             </div>
                                         </div>
