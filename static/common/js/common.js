@@ -3,7 +3,8 @@
 */
 
 // show the defual dataset in the data view when loading the page
-$(document).ready(function(){			
+$(document).ready(function(){		
+	
 	// refresh the data view when changing selected dataset
 	$('.selectpicker').on('change', function(){
 		requestDataset($('.selectpicker').selectpicker('val'));
@@ -12,7 +13,7 @@ $(document).ready(function(){
 	// Get the default dataset id
 	var selected_dataset_id = $('.selectpicker').selectpicker('val');
 	// display the content of the default dataset
-	requestDataset(selected_dataset_id);
+	//requestDataset(selected_dataset_id);
 });
 
 
@@ -80,9 +81,10 @@ function requestDataset(datasetId){
 
 
 function projectSave() {
+    alert("test");
 	// cancel ajax to get values from all inputs
     $.ajaxSetup({async:false});
-    var csrftoken = $('#csrf_token').val();
+    var csrftoken = $('#csrf_token').val();  
 
     // get all relevent information of a project
     var pid = $('#project_id').html(),
