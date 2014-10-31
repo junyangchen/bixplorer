@@ -17,7 +17,7 @@ def add(request):
         return TemplateResponse(request, 'projects/add.html', context)  
     elif request.method == 'POST':
         print 'Raw Data: "%s"' % request.body   
-        return HttpResponse("OK")
+        return HttpResponse(request.body.project_name)
       
     
 def detail(request, project_id):
