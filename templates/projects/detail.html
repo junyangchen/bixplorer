@@ -23,7 +23,54 @@
                     </div>
                 </div>
                 <!-- collaborator of a project -->
-                <div class="shade-container">
+                <div class="panel panel-default widget shade-container">
+                    <div class="panel-heading">
+                        <span class="glyphicon glyphicon-link"></span>
+                        <h3 class="panel-title">Collaborators</h3>
+                        <span class="label label-info">2</span>
+                    </div>
+                    <div class="panel-body">
+                        <ul class="list-group">
+                            <li class="list-group-item">
+                                <div class="row">
+                                    <div class="col-xs-4 col-md-2 comment_photo">
+                                        <img src="{% static 'common/imgs/default.jpg' %}" class="img-circle img-responsive" alt="" />
+                                    </div>
+                                    <div class="col-xs-7 col-md-9">
+                                        <p>User Name1</p>
+                                        <div class="mic-info">User ID1</div>                                        
+                                    </div>
+                                    <div>
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="list-group-item">
+                                <div class="row">
+                                    <div class="col-xs-4 col-md-2 comment_photo">
+                                        <img src="{% static 'common/imgs/default.jpg' %}" class="img-circle img-responsive" alt="" />
+                                    </div>
+                                    <div class="col-xs-7 col-md-9">
+                                        <p>User Name2</p>
+                                        <div class="mic-info">User ID2</div>
+                                    </div>
+                                    <div>
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                    </div>                                    
+                                </div>                                
+                            </li>
+                            <li class="list-group-item">
+                                <!-- <div class="row"> -->
+                                    <div class="input-group">
+                                        <input type="text" class="form-control">
+                                        <span class="input-group-addon">Add collaborator</span>
+                                    </div>                                    
+                                <!-- </div> -->
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+<!--                 <div class="shade-container">
                     <div class="container">
                         <h4>Collaborator</h4>
                         <label>Project name:</label>
@@ -35,7 +82,7 @@
                         <label>Project description:</label>
                         <p>{{ project.description }}</p>
                     </div>                
-                </div> 
+                </div>  -->
             </div>
 
             <!-- comment of a project -->
@@ -54,7 +101,7 @@
                                     <li class="list-group-item">
                                         <div class="row">
                                             <div class="col-xs-4 col-md-2 comment_photo">
-                                                <img src="{% static 'common/imgs/default.jpg' %}" class="img-thumbnail img-responsive" alt="" />
+                                                <img src="{% static 'common/imgs/default.jpg' %}" class="img-circle img-responsive" alt="" />
                                             </div>
 
                                             <div class="col-xs-7 col-md-9">
