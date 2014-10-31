@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.template.response import TemplateResponse
-from django.http import HttpResponseNotAllowed
+from django.http import HttpResponseNotAllowed, HttpResponseForbidden
 from django.conf import settings
 from projects.models import Project, Comment, DataSet
 from itertools import chain
@@ -20,47 +20,65 @@ def add(request):
         context = { 'active_tag': 'home', 'BASE_URL':settings.BASE_URL, 'dataset': dataset}
         return TemplateResponse(request, 'projects/add.html', context)  
     elif request.method == 'POST':
-        print 'Raw Data: "%s"' % request.body
         # parse from front end
         projectRaw = json.loads(request.body)
         
-        
-        try:
-            newProject = Project(user = request.user, dataset = DataSet.objects.get(id = projectRaw['dataset_id']), 
-                name = projectRaw['project_name'], description = projectRaw['project_description'], 
-                create_time = timezone.now(), is_private = projectRaw['project_privacy'], 
-                is_deleted = 0)
+        # Handle the request from edit view
+        if projectRaw.has_key('project_id') and projectRaw['project_id'].isdigit():
+            # TO-DO validate the data
+            try:
+                toUpdate = Project.objects.get(pk = projectRaw['project_id'])
+                toUpdate.dataset = DataSet.objects.get(id = projectRaw['dataset_id'])
+                toUpdate.name = projectRaw['project_name']
+                toUpdate.description = projectRaw['project_description']
+                toUpdate.is_private = projectRaw['project_privacy']
+                toUpdate.save()
+                responseData = {'status':'success'}
+            except:
+                responseData = {'status':'fail'}
+        # Handle request from the add view    
+        else:     
+            try:
+                newProject = Project(user = request.user, dataset = DataSet.objects.get(id = projectRaw['dataset_id']), 
+                    name = projectRaw['project_name'], description = projectRaw['project_description'], 
+                    create_time = timezone.now(), is_private = projectRaw['project_privacy'], 
+                    is_deleted = 0)
             
-            newProject.save()
+                newProject.save()
             
-            responseData = {'status':'success'}
-        except:
-            responseData = {'status':'failed'}
+                responseData = {'status':'success'}
+            except:
+                responseData = {'status':'fail'}
         
-        # serialize for front end
-        newData = json.dumps(projectRaw)
+        # return status back to front end
         return HttpResponse(json.dumps(responseData), content_type = "application/json")
         #return HttpResponse(json.dumps(responseData))
         
 @csrf_protect
 def edit(request, project_id):
-    if request.method != 'GET':
-        return HttpResponseNotAllowed('Only GET here')
-    
-    theUser = request.user
+    if request.method == 'GET':
+        datasets = DataSet.objects.all()
+        project = Project.objects.get(id = project_id)
+        context = { 'active_tag': 'home', 'BASE_URL':settings.BASE_URL, 'datasets': datasets, 'selectedDatasetID':project.dataset.id, 'project': project}
+        return TemplateResponse(request, 'projects/edit.html', context)
+    elif request.method == 'POST':    
+        theUser = request.user
         
-    # Load project data from the database
-    project = Project.objects.get(id = project_id)
+        # Load project data from the database
+        project = Project.objects.get(id = project_id)
     
-    # check user permission
-    # Only the project creator, super user and moderator can edit the project
+        # check user permission
+        # Only the project creator, super user and collaborators can edit the project
+        has_permission = project.is_creator(theUser) or project.is_collaborator(theUser) or theUser.is_superuser
     
+        if not has_permission:
+            return HttpResponseForbidden("You dont' have the permission to edit this project!")
+            
+        # Load data set list from the database    
+        return HttpResponse(has_permission)
     
-    
-    # Load data set list from the database
-    
-    
-    return HttpResponse(project_id)
+    else:
+        return HttpResponseForbidden("Error 405. Only GET and POST allowed for this view.")
         
 def plist(request):
     if request.method == 'GET':

@@ -21,11 +21,11 @@ $(document).ready(function(){
 $("#project_save").click(projectSave);
 
 // Saving a project in the edit view
-$("#save_project").ajaxForm(projectSave);
+$("#save_project").click(projectSave);
 
 // clicking the cancel button and redirecting to the project list
 $('#btn_edit_cancel').click(function(){
-	window.location = window.SERVER_PATH + "project/plist/";
+	window.location = window.SERVER_PATH + "projects/plist/";
 });
 
 // restart a project
@@ -120,12 +120,5 @@ function projectSave() {
                 xhr.setRequestHeader("X-CSRFToken", csrftoken);
             }
         }
-    });
-    
-	// $.post(window.SERVER_PATH + "projects/add/", eval(save_project), function(data) {
-		//redirect when the data has been stored in the database
-		// if(data.status == 'success') {
-			// window.location = window.SERVER_PATH + "project/plist/";
-		// }
-    // });	
+    });	
 }

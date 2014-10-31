@@ -18,13 +18,19 @@ class Project(models.Model):
     is_private = models.BooleanField(default = 1)
     is_deleted = models.BooleanField(default = 0)
     
-    
+    # Relations
+    collaborators = models.ManyToManyField(User, 
+                                                 related_name=u"user_projects", 
+                                                 blank=True)
     
     def __unicode__(self):
         return self.name   
         
     def is_creator(self, user):
         return user == self.user #or user.has_perm('your_app.manage_object')
+        
+    def is_collaborator(self, user):
+        return user in self.collaborators.all()   
     
 class Comment(models.Model):
     project = models.ForeignKey(Project)
