@@ -109,9 +109,10 @@ function projectSave() {
         type: "POST",
         data: JSON.stringify(save_project),
         contentType: "application/json",
-        complete: function(data){
-            if(data.status == 'success') {
-                window.location = "http://www.google.com";
+        success: function(data){
+            console.log(data);
+            if(data['status'] == 'success') {
+                window.location = window.SERVER_PATH + "projects/plist/";
             }
         },
         beforeSend: function(xhr, settings) {

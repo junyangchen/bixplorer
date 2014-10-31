@@ -1,3 +1,7 @@
+{% extends "projects/base.html" %}
+{% load staticfiles %}
+
+{% block content %}
 		<div class="row">
 			<!-- container of project list -->
 			<div class="shade-container">
@@ -13,24 +17,16 @@
 						<th>Delete</th>
 					</thead>				
 					<tbody>
-						<?php if(!empty($projects)){?>
-							<?php foreach($projects as $project) {
-								$project_id = $project['project_id'];
-								$project_name = $project['project_name'];
-								$project_description = $project['project_description'];
-								$post_time = $project['post_time'];
-								$dataset_name = $project['dataset_name'];
-								?>
-								<tr value="<?php echo $project_id;?>">
-									<td><?php echo $project_name;?></td>
-									<td><?php echo $dataset_name;?></td>
-									<td><?php echo $project_description;?></td>
-									<td><?php echo $post_time;?></td>
-								    <td><p><button class="btn btn-primary btn-xs plist_update" data-title="Edit" data-toggle="modal" data-target="#edit" value="<?php echo $project_id;?>"><span class="glyphicon glyphicon-pencil"></span></button></p></td>
-	    							<td><p><button class="btn btn-danger btn-xs p_delete_icon" data-title="Delete" data-toggle="modal" data-target="#delete" value="<?php echo $project_id;?>"><span class="glyphicon glyphicon-trash" ></span></button></p></td>
+						{% for project in projects %}
+								<tr value="{{ project.id }}">
+									<td>{{ project.name }}</td>
+									<td>{{ project.dataset }}</td>
+									<td>{{ project.description }}</td>
+									<td>{{ project.create_time }}</td>
+								    <td><p><button class="btn btn-primary btn-xs plist_update" data-title="Edit" data-toggle="modal" data-target="#edit" value="{{ project.id }}"><span class="glyphicon glyphicon-pencil"></span></button></p></td>
+	    							<td><p><button class="btn btn-danger btn-xs p_delete_icon" data-title="Delete" data-toggle="modal" data-target="#delete" value="{{ project.id }}"><span class="glyphicon glyphicon-trash" ></span></button></p></td>
 								</tr>
-							<?php } ?>
-						<?php } ?>		
+						{% endfor %}		
 					</tbody>
 				</table>
 			</div>
@@ -59,6 +55,6 @@
 		</div>
 	    
 	    <script type="text/javascript" src="<?php echo PUBLIC_PATH?>js/listprocess.js"></script>
-	</body>
-</html>
+
+{% endblock %}
 

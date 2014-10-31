@@ -5,6 +5,7 @@ from projects.models import Project, Comment, DataSet
 from itertools import chain
 from django.views.decorators.csrf import csrf_protect
 from django.http import HttpResponse
+from django.utils import timezone
 import json
 
 def index(request):
@@ -20,12 +21,33 @@ def add(request):
     elif request.method == 'POST':
         print 'Raw Data: "%s"' % request.body
         # parse from front end
-        backendData = json.loads(request.body)
+        projectRaw = json.loads(request.body)
+        
+        
+        try:
+            newProject = Project(user = request.user, dataset = DataSet.objects.get(id = projectRaw['dataset_id']), 
+                name = projectRaw['project_name'], description = projectRaw['project_description'], 
+                create_time = timezone.now(), is_private = projectRaw['project_privacy'], 
+                is_deleted = 0)
+            
+            newProject.save()
+            
+            responseData = {'status':'success'}
+        except:
+            responseData = {'status':'failed'}
         
         # serialize for front end
-        newData = json.dumps(backendData)
-        return HttpResponse(newData)
-      
+        newData = json.dumps(projectRaw)
+        return HttpResponse(json.dumps(responseData), content_type = "application/json")
+        #return HttpResponse(json.dumps(responseData))
+
+def plist(request):
+    if request.method == 'GET':
+        # Retrieve projects list from database
+        projectList = Project.objects.filter(user = request.user)
+        context = { 'user' : request.user, 'BASE_URL':settings.BASE_URL, 'projects' : projectList}
+    return TemplateResponse(request, 'projects/plist.html', context)
+
     
 def detail(request, project_id):
     theproject = Project.objects.get(id = project_id)

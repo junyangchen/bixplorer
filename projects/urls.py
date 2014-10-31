@@ -8,4 +8,5 @@ urlpatterns = patterns('',
     url(r'^$', views.index, name='index'),
     url(r'^(?P<project_id>\d+)/$', views.detail, name='detail'),
     url(r'^add/$', views.add, name='add'),
+    url(r'^plist/$', views.plist, name='plist'),
 )
