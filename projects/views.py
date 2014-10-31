@@ -3,11 +3,21 @@ from django.template.response import TemplateResponse
 from django.conf import settings
 from projects.models import Project, Comment
 from itertools import chain
+from django.views.decorators.csrf import csrf_protect
 
-# Create your views here.
 def index(request):
     context = { 'active_tag': 'home', 'BASE_URL':settings.BASE_URL}
     return TemplateResponse(request, 'projects/index.html', context)
+
+@csrf_protect    
+def add(request):
+    if request.method == 'GET':
+        context = { 'active_tag': 'home', 'BASE_URL':settings.BASE_URL}
+        return TemplateResponse(request, 'projects/add.html', context)  
+    elif request.method == 'POST':
+        print 'Raw Data: "%s"' % request.body   
+        return HttpResponse("OK")
+      
     
 def detail(request, project_id):
     theproject = Project.objects.get(id = project_id)

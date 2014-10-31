@@ -7,4 +7,5 @@ urlpatterns = patterns('',
     # ex: /polls/
     url(r'^$', views.index, name='index'),
     url(r'^(?P<project_id>\d+)/$', views.detail, name='detail'),
+    url(r'^add/$', views.add, name='add'),
 )

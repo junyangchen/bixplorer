@@ -76,9 +76,13 @@ function requestDataset(datasetId){
 /*
 * save the project into the database
 */
+//var csrftoken = $.cookie('csrftoken');
+
+
 function projectSave() {
 	// cancel ajax to get values from all inputs
     $.ajaxSetup({async:false});
+    var csrftoken = $('#csrf_token').val();
 
     // get all relevent information of a project
     var pid = $('#project_id').html(),
@@ -95,7 +99,7 @@ function projectSave() {
     	"dataset_id": dataset
     }
     
-	$.post(window.SERVER_PATH + "project/save_action/", save_project, function(data) {
+	$.post(window.SERVER_PATH + "project/add/", save_project, function(data) {
 		// redirect when the data has been stored in the database
 		if(data.status == 'success') {
 			window.location = window.SERVER_PATH + "project/plist/";

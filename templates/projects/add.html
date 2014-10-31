@@ -1,4 +1,10 @@
+{% extends "projects/base.html" %}
+{% load staticfiles %}
+{% block content %}
         <div class="row">
+        <div >sfdsf
+                <input id="csrf_token" type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
+            </div>
             <div class="col-lg-12 col-md-12 col-sm-8 col-xs-9 shade-container">
                 <div class="col-lg-12 col-md-12 col-sm-9 col-xs-9">
                     <!-- control panel -->
@@ -81,7 +87,6 @@
             </div>
         </div>
 
-        <script type="text/javascript" src="<?php echo PUBLIC_PATH?>js/lib/jquery.dataTables.min.js"></script> 
-        <script type="text/javascript" src="<?php echo PUBLIC_PATH?>js/common.js"></script>
-    </body>
-</html>
+        <script type="text/javascript" src="{% static 'common/js/lib/jquery.dataTables.min.js' %}"></script> 
+        <script type="text/javascript" src="{% static 'common/js/common.js' %}"></script>
+        {% endblock %}
