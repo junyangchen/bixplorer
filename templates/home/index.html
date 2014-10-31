@@ -74,7 +74,7 @@
                             <!-- login tab -->
                             <div class="tab-pane active in" id="login">
                             {% load i18n %}
-                            {% block title %}{% trans "Login" %}{% endblock %}
+                            {% block title %}{% endblock %}
                             {% block content %}
                             {% url 'auth_password_reset' as auth_pwd_reset_url %}
                             {% url 'registration_register' as register_url%}
@@ -83,11 +83,18 @@
                             <p>{% blocktrans %}Your username and password didn't match. Please try again.{% endblocktrans %}</p>
                             {% endif %}
                             <form method="post" action="{% url 'auth_login' %}">{% csrf_token %}
+                                <div class="control-group">
+                                    <div class="input-group">
+                                        <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                                        {{ form.username }}
+                                    </div>
+                                </div>
+
                                 <table>
-                                    <tr>
+<!--                                     <tr>
                                         <td>{% trans form.username.label_tag %}</td>
                                         <td>{{ form.username }}</td>
-                                    </tr>
+                                    </tr> -->
                                     <tr>
                                         <td>{% trans form.password.label_tag %}</td>
                                         <td>{{ form.password }}</td>
@@ -97,7 +104,7 @@
                                 <a href="{{ register_url }}">Need an account</a>?{% endblocktrans %}</p>
 
                                 <input type="submit" value="{% trans "login" %}" />
-                                <input type="hidden" name="next" value="{{ next }}" />
+                                <!-- <input type="hidden" name="next" value="{{ next }}" /> -->
                             </form>
                             {% endblock %}
                             </div>

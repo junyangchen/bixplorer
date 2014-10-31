@@ -16,7 +16,6 @@ $(document).ready(function(){
 	//requestDataset(selected_dataset_id);
 });
 
-console.log('here');
 // add a new project and save it in the add view
 $("#new_project").ajaxForm(projectSave);
 
@@ -81,6 +80,7 @@ function requestDataset(datasetId){
 
 
 function projectSave() {
+	console.log('here');
     alert("test");
 	// cancel ajax to get values from all inputs
     $.ajaxSetup({async:false});
