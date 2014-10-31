@@ -52,7 +52,7 @@
                     <li class="dropdown {% if active_tag == 'analytics'  %} active {% endif %}"><a href="{% static 'dataviz/index/'%}"><span class="glyphicon glyphicon-eye-open"></span> Analytical Workspace</a></li>
                     
                     <!-- profile menu -->
-                    <li class="{% if active_tag == 'profile'  %} active {% endif %}"><a href="{% static 'login/profile/'%}"><span class="glyphicon glyphicon-user"></span> My Profile</a></li>                
+                    <li class="{% if active_tag == 'profile'  %} active {% endif %}"><a href="{{BASE_URL}}accounts/profile/"><span class="glyphicon glyphicon-user"></span> My Profile</a></li>                
                     
                     <!-- about menu -->
                     <li class="dropdown {% if active_tag == 'about'  %} active {% endif %}"><a href="{% static 'home/about/'%}"><span class="glyphicon glyphicon-info-sign"></span> About</a></li>
