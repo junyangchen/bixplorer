@@ -37,35 +37,46 @@
             </div>
             <div class="panel-body">
                 <ul class="list-group">
-                    <li class="list-group-item">
-                        <div class="row">
-                            <div class="col-xs-4 col-md-2">
-                                <img src="http://placehold.it/80" class="img-circle img-responsive" alt="" /></div>
-                            <div class="col-xs-8 col-md-6">
-                                <div>
-                                    <a href="http://www.jquery2dotnet.com/2013/10/google-style-login-page-desing-usign.html">
-                                        Google Style Login Page Design Using Bootstrap</a>
-                                    <div class="mic-info">
-                                        By: <a href="#">Bhaumik Patel</a> on 2 Aug 2013
+
+
+                    {% for comment in comments %}
+                        {% if not comment.is_deleted %}
+                        <li class="list-group-item">
+                            <div class="row">
+                                <div class="col-xs-4 col-md-2 comment_photo">
+                                    <img src="http://placehold.it/80" class="img-circle img-responsive" alt="" />
+                                </div>
+
+                                <div class="col-xs-7 col-md-9">
+                                    <div>
+                                        <a href="http://www.jquery2dotnet.com/2013/10/google-style-login-page-desing-usign.html">Placeholder for Comment Topics</a>
+                                        <div class="mic-info">
+                                            By: <a href="#">{{ comment.user }}</a> on {{ comment.create_time }}
+                                        </div>
                                     </div>
+
+                                    <div class="comment-text">
+                                        {{ comment }}
+                                    </div>
+
+                                    <div class="action">
+                                        <button type="button" class="btn btn-primary btn-xs" title="Edit">
+                                            <span class="glyphicon glyphicon-pencil"></span>
+                                        </button>
+                                        <button type="button" class="btn btn-success btn-xs" title="Approved">
+                                            <span class="glyphicon glyphicon-ok"></span>
+                                        </button>
+                                        <button type="button" class="btn btn-danger btn-xs" title="Delete">
+                                            <span class="glyphicon glyphicon-trash"></span>
+                                        </button>
+                                    </div>
+
                                 </div>
-                                <div class="comment-text">
-                                    Awesome design
-                                </div>
-                                <div class="action">
-                                    <button type="button" class="btn btn-primary btn-xs" title="Edit">
-                                        <span class="glyphicon glyphicon-pencil"></span>
-                                    </button>
-                                    <button type="button" class="btn btn-success btn-xs" title="Approved">
-                                        <span class="glyphicon glyphicon-ok"></span>
-                                    </button>
-                                    <button type="button" class="btn btn-danger btn-xs" title="Delete">
-                                        <span class="glyphicon glyphicon-trash"></span>
-                                    </button>                                
-                                </div>                                
-                            </div>   
-                        </div>
-                    </li>
+                            </div>
+                        </li>
+                        {% endif %} 
+                    {% endfor %}
+
                     <li class="list-group-item">
                         <div class="row">
                             <div class="col-xs-2 col-md-1">
@@ -102,24 +113,6 @@
     </div>
 <!-- </div> -->
 
-
-
-
-
-                    <h4>Comments:</h4>
-                    {% for comment in comments %}
-                    <br>
-                        <!-- Show only non-deleted comments -->
-                        {% if not comment.is_deleted %}
-                        {{ comment }}
-                        Created by {{ comment.user }} {{ comment.create_time }}
-                        {% endif %} 
-                    {% endfor %}
-                </div>
-
-                User: {{ user }}
-                <br>
-                <br>
 
         </div>
     </div>
