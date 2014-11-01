@@ -151,3 +151,6 @@ div.shade-container{
     padding-top: 7px;
     margin-bottom: 0;
 }
+
+/*hide a div*/
+.hide_this { display: none; }

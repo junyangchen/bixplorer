@@ -59,35 +59,47 @@ first name: {{ user.firstname }}
 			                <div class="form-group">
 			                    <label class="col-lg-3 control-label">First name:</label>
 			                    <div class="col-lg-8">
-			                        <p class="p_aligh_lable">{{ user.first_name }}</p>
+			                        <p class="p_aligh_lable active_this">{{ user.first_name }}</p>
+	            					<div class="hide_this">
+										<input type="text" name="firstName" placeholder="First Name" id="edit_first_name" data-toggle="tooltip"><br />
+									</div>			                        
 			                    </div>
 			                </div>
 
 			                <div class="form-group">
 			                    <label class="col-lg-3 control-label">Last name:</label>
 			                    <div class="col-lg-8">
-			                        <p class="p_aligh_lable">{{ user.last_name }}</p>
+			                        <p class="p_aligh_lable active_this">{{ user.last_name }}</p>
+	            					<div class="hide_this">
+										<input type="text" name="lastName" placeholder="Last Name" id="edit_last_name" data-toggle="tooltip"><br />
+									</div>			                        
 			                    </div>
 			                </div>
 
 			                <div class="form-group">
 			                    <label class="col-lg-3 control-label">Email:</label>
 			                    <div class="col-lg-8">
-			                        <p class="p_aligh_lable">{{ user.email }}</p>
+			                        <p class="p_aligh_lable active_this">{{ user.email }}</p>
+	            					<div class="hide_this">
+										<input type="text" name="email" placeholder="Email" id="edit_email" data-toggle="tooltip"><br />
+									</div>			                        
 			                    </div>
 			                </div>
 
 			                <div class="form-group">
 			                    <label class="col-lg-3 control-label">Career:</label>
 			                    <div class="col-lg-8">
-			                        <p class="p_aligh_lable">Graduate Students</p>
+			                        <p class="p_aligh_lable active_this">Graduate Students</p>
 			                    </div>
 			                </div>			                
 
 			                <div class="form-group">
 			                    <label class="col-lg-3 control-label">Location:</label>
 			                    <div class="col-lg-8">
-			                        <p class="p_aligh_lable">My Location</p>
+			                        <p class="p_aligh_lable active_this">My Location</p>
+	            					<div class="hide_this">
+										<input type="text" name="location" placeholder="Location" id="edit_location" data-toggle="tooltip"><br />
+									</div>			                        
 			                    </div>
 			                </div>
 
@@ -96,12 +108,18 @@ first name: {{ user.firstname }}
 			                        <div class="col-md-3"></div>
 			                        <div class="col-md-8">
 			                        	<div class="col-md-4">
-		                        		<button type="button" class="btn btn-info btn-xs" id="btn_edit"><span class="glyphicon glyphicon-pencil"></span> Edit Profile</button>
+		                        			<button type="button" class="btn btn-info btn-xs active_this" id="btn_profile_edit"><span class="glyphicon glyphicon-pencil"></span> Edit</button>
+
+											<button type="button" class="btn btn-success btn-xs hide_this" id="btn_profile_save" data-toggle="popover"><span class="glyphicon glyphicon-ok"></span> save</button>
+										</div>
+
+										<div class="col-md-4">
+											<button type="button" class="btn btn-default btn-xs hide_this" id="btn_profile_cancel">Cancel</button>
 		                        		</div>
 										
-										<div class="col-md-4 col-md-offset-4">
+<!-- 										<div class="col-md-4 col-md-offset-4">
 		                        		<button type="button" class="btn btn-info btn-xs" id="btn_edit"><span class="glyphicon glyphicon-lock"></span> Change Password</button>											
-										</div>		                        		
+										</div> -->		                        		
 			                        </div>
 			                    </div>
 			                </div>
@@ -175,4 +193,7 @@ first name: {{ user.firstname }}
 		</div>
                
 	</div>
+
+	<script type="text/javascript" src="{% static 'profile/js/edit.js'%}"></script>
 {% endblock %}
+
