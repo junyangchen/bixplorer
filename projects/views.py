@@ -54,7 +54,7 @@ def add(request):
                 # Log the change
                 change_msg = toUpdate.construct_change_message()
                 log_change(request, toUpdate, change_msg)
-                return HttpResponse(str(change_msg))
+                # return HttpResponse(str(change_msg))
                 responseData = {'status':'success'}
             except Exception as e:
                 return HttpResponse(e)
@@ -68,8 +68,9 @@ def add(request):
                     is_deleted = 0)
             
                 newProject.save()
-                log_addition(request, newProject)                
-               
+                
+                # Log project change actions
+                log_addition(request, newProject)              
             
                 responseData = {'status':'success'}
             except Exception as e:
