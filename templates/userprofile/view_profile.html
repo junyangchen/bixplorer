@@ -110,7 +110,7 @@ first name: {{ user.firstname }}
             <div class="panel panel-default widget shade-container">
                 <div class="panel-heading">
                     <span class="glyphicon glyphicon-list-alt"></span>
-                    <h3 class="panel-title">My activity feed</h3>
+                    <h3 class="panel-title">My Recent Activities</h3>
                     <span class="label label-info">{{history_actions|length}}</span>
                 </div>
                 <div class="panel-body">
@@ -131,8 +131,36 @@ first name: {{ user.firstname }}
                                 		<div class="mic-info">On {{ item.action_time }}</div>
                                 	</div>
                             	</div>
-                        	</li>
+                        	</li>                        	
 				        {% endfor %}
+						<li class="list-group-item">
+                            <div class="row">
+                                <div class="col-xs-4 col-md-2 left_15_gap">
+                                    <img src="{% static 'common/imgs/default.jpg' %}" class="img-circle img-responsive" alt="" />
+                                </div>
+                                <div class="col-xs-6 col-md-8">
+                                    <p>FAKE: Delete <a href="#">project</a></p>
+                                    <div class="mic-info">On a fake time</div>
+                                </div>
+                                <div class="col-xs-1 col-md-1">
+                                    <span class="glyphicon glyphicon-repeat"></span>
+                                </div>
+                            </div>
+                        </li>
+						<li class="list-group-item">
+                            <div class="row">
+                                <div class="col-xs-4 col-md-2 left_15_gap">
+                                    <img src="{% static 'common/imgs/default.jpg' %}" class="img-circle img-responsive" alt="" />
+                                </div>
+                                <div class="col-xs-6 col-md-8">
+                                    <p>FAKE: Update <a href="#">project</a></p>
+                                    <div class="mic-info">On another fake time</div>
+                                </div>
+                                <div class="col-xs-1 col-md-1">
+                                    <span class="glyphicon glyphicon-repeat"></span>
+                                </div>
+                            </div>
+                        </li>                        				        
                     </ul>
                     <!-- placeholder for more activities -->
                     <a href="#" class="btn btn-info btn-sm btn-block" role="button"><span class="glyphicon glyphicon-refresh"></span> More</a>
