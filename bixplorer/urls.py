@@ -1,5 +1,6 @@
 from django.conf.urls import patterns, include, url
 from django.contrib import admin
+from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
 urlpatterns = patterns('',
     # Examples:
@@ -10,4 +11,4 @@ urlpatterns = patterns('',
     url(r'^accounts/', include('registration.backends.simple.urls')),
     url(r'^$', include('home.urls', namespace="home")),
     url(r'^projects/', include('projects.urls', namespace="projects")),
-)
+) + staticfiles_urlpatterns()

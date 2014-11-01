@@ -88,7 +88,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.7/howto/static-files/
 
-STATIC_URL = '/static/'
+
 
 # Returns the path to given filename
 def get_path(filename):
@@ -104,7 +104,16 @@ STATICFILES_DIRS = (
 
 LOGIN_REDIRECT_URL = "/projects/"
 BASE_URL = "/"
-SITE_URL = 'http://google.com'
+
+STATIC_URL = '/static/'
+# Additional locations of static files
+STATICFILES_DIRS = (
+    #get_path('templates'),
+    "E:/xampp/htdocs/bixplorer/static/",
+    # Put strings here, like "/home/html/static" or "C:/www/django/static".
+    # Always use forward slashes, even on Windows.
+    # Don't forget to use absolute paths, not relative paths.
+)
 
 TEMPLATE_DIRS = (
     get_path('templates'),
