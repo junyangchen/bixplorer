@@ -18,6 +18,17 @@ first name: {{ user.firstname }}
 
 {% block content %}
 	<div class="row">
+        Activity Feeds <br>
+        {% for item in history_actions%}
+            (Action type: {{ item.action_flag }}),
+            (Content type: {{ item.content_type }}),
+            (Object name: TO-DO)
+            {% if item.change_message != '' %}
+            (Change message: {{ item.change_message }}),        
+            {% endif %}
+            (Log time: {{ item.action_time }})
+            <br>
+        {% endfor %}
 		<h1>My Profile</h1>
 		<hr>
         <!-- left column -->

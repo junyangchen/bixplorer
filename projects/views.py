@@ -8,7 +8,8 @@ from django.views.decorators.csrf import csrf_protect
 from django.http import HttpResponse
 from django.utils import timezone
 import json
-
+from home.utils import * 
+    
 def index(request):
     context = { 'active_tag': 'home', 'BASE_URL':settings.BASE_URL}
     return TemplateResponse(request, 'projects/index.html', context)
@@ -43,10 +44,20 @@ def add(request):
                 toUpdate.dataset = DataSet.objects.get(id = projectRaw['dataset_id'])
                 toUpdate.name = projectRaw['project_name']
                 toUpdate.description = projectRaw['project_description']
-                toUpdate.is_private = projectRaw['project_privacy']
+                is_private_front_end = projectRaw['project_privacy']
+                if is_private_front_end == 'True':
+                    toUpdate.is_private = True
+                else:
+                    toUpdate.is_private = False
+                    
                 toUpdate.save()
+                # Log the change
+                change_msg = toUpdate.construct_change_message()
+                log_change(request, toUpdate, change_msg)
+                return HttpResponse(str(change_msg))
                 responseData = {'status':'success'}
-            except:
+            except Exception as e:
+                return HttpResponse(e)
                 responseData = {'status':'fail'}
         # Handle request from the add view    
         else:     
@@ -57,9 +68,12 @@ def add(request):
                     is_deleted = 0)
             
                 newProject.save()
+                log_addition(request, newProject)                
+               
             
                 responseData = {'status':'success'}
-            except:
+            except Exception as e:
+                return HttpResponse(e)
                 responseData = {'status':'fail'}
         
         # return status back to front end
@@ -106,12 +120,13 @@ def delete(request, project_id):
         return HttpResponseForbidden("You dont' have the permission to delete this project!")
     
     try:
-        toDelete.is_deleted = 1
+        toDelete.is_deleted = True
         toDelete.save()
+        obj_display = force_text(toDelete)
+        log_deletion(request, toDelete, obj_display)
         return redirect('/projects/plist/')
-    except:
-        # TO-DO show error message
-        responseData = {'status':'fail'}    
+    except Exception as e:
+        return HttpResponse(e) 
     
     
         
