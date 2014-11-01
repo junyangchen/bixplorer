@@ -50,6 +50,9 @@ class Comment(models.Model):
     def is_project_creator(self, user):
         return user == self.project.user
         
+    class Meta:
+        ordering = ['-create_time']
+        
 class Doc(models.Model):
     dataset = models.ForeignKey(DataSet)
     people = models.CharField(max_length=200)

@@ -14,7 +14,7 @@
     <script type="text/javascript" src="{% static 'common/js/lib/bootstrap.min.js'%}"></script>
     <script type="text/javascript" src="{% static 'common/js/lib/bootstrap-select.min.js'%}"></script>
 	<script type="text/javascript">window.PUBLIC_PATH = "{% static ''%}";</script>
-	<script type="text/javascript">window.SERVER_PATH = "{{BASE_URL}}";</script>
+	<script type="text/javascript">window.SERVER_PATH = "{{ BASE_URL }}";</script>
 </head>
 
 <body class="db_after_login">
@@ -46,16 +46,16 @@
                     </li>
                     
                     <!-- dataset management menu -->
-                    <li class="dropdown {% if active_tag == 'dataset'  %} active {% endif %}"><a href="{% static 'dataset/index/'%}"><span class="glyphicon glyphicon-cog"></span> Dataset Management</a></li>
+                    <li class="dropdown {% if active_tag == 'dataset'  %} active {% endif %}"><a href="{{ BASE_URL }}dataset/index/"><span class="glyphicon glyphicon-cog"></span> Dataset Management</a></li>
                     
                     <!-- analytics workspace menu -->
-                    <li class="dropdown {% if active_tag == 'analytics'  %} active {% endif %}"><a href="{% static 'dataviz/index/'%}"><span class="glyphicon glyphicon-eye-open"></span> Analytical Workspace</a></li>
+                    <li class="dropdown {% if active_tag == 'analytics'  %} active {% endif %}"><a href="{{ BASE_URL }}dataviz/index/"><span class="glyphicon glyphicon-eye-open"></span> Analytical Workspace</a></li>
                     
                     <!-- profile menu -->
-                    <li class="{% if active_tag == 'profile'  %} active {% endif %}"><a href="{{BASE_URL}}accounts/profile/"><span class="glyphicon glyphicon-user"></span> My Profile</a></li>                
+                    <li class="{% if active_tag == 'profile'  %} active {% endif %}"><a href="{{ BASE_URL }}accounts/profile/"><span class="glyphicon glyphicon-user"></span> My Profile</a></li>                
                     
                     <!-- about menu -->
-                    <li class="dropdown {% if active_tag == 'about'  %} active {% endif %}"><a href="{% static 'home/about/'%}"><span class="glyphicon glyphicon-info-sign"></span> About</a></li>
+                    <li class="dropdown {% if active_tag == 'about'  %} active {% endif %}"><a href="{{ BASE_URL }}home/about/"><span class="glyphicon glyphicon-info-sign"></span> About</a></li>
                     
                     <!-- logout menu -->
                     <li><a href="{{ BASE_URL}}accounts/logout/"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>            
