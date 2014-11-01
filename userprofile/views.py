@@ -32,12 +32,20 @@ def view_profile(request):
     try:
         #hist_actions = user_history_actions(request)
         from django.contrib.admin.models import LogEntry
-        # data = LogEntry.objects.all().select_related('user', 'content_type').only('content_type', 'user')[:]
+        data = LogEntry.objects.all() #.select_related('user', 'content_type').only('content_type', 'user')[:]
 
-        # users = lambda data: list(set([(d.user_id, d.user.get_full_name() if d.user.get_full_name() else d.user.username) \
-                                       # for d in data]))
-        # content_types = lambda data: list(set([(d.content_type_id, d.content_type.name) for d in data]))
+        users = lambda data: list(set([(d.user_id, d.user.get_full_name() if d.user.get_full_name() else d.user.username) \
+                                       for d in data]))
+        content_types = lambda data: list(set([(d.content_type_id, d.content_type.name) for d in data]))
+        
         hist_actions = LogEntry.objects.filter(user = request.user)
+        choices=users(data)
+        temp = ''
+        for item in hist_actions:
+            contentType = item.content_type
+            temp = temp + str(item.content_type.get_object_for_this_type(pk=item.object_id)) + " SEP "
+        
+        #return HttpResponse(str(temp))
         profile = thisuser.userprofile    
         context = { "profile":profile, "user":thisuser, 'active_tag': 'userprofile', 'BASE_URL':settings.BASE_URL, 'history_actions': hist_actions}
         return TemplateResponse(request, 'userprofile/view_profile.html', context) 
