@@ -1,5 +1,40 @@
 
+// add tooltip for first name
+$('#edit_first_name').tooltip({
+    html: "true",
+    trigger: "focus",
+    title: "<span id='first_name_msg' class='glyphicon glyphicon-remove' style=color:#FF0004;'></span> No empty first name",
+	animation: false,
+	placement: "bottom"
+});
+// show instance message
+instMsgForText('#edit_first_name', '#first_name_msg');
+
+
+// add tooltip for last name
+$('#edit_last_name').tooltip({
+    html: "true",
+    trigger: "focus",
+    title: "<span id='last_name_msg' class='glyphicon glyphicon-remove' style=color:#FF0004;'></span> No empty last name",
+	animation: false,
+	placement: "bottom"
+});
+// show instance message
+instMsgForText('#edit_last_name', '#last_name_msg');
+
+
+
 $('#btn_profile_edit').click(function(){
+	// set first name
+	$('#edit_first_name').val($('#profile_first_name').html());
+	// set last name
+	$('#edit_last_name').val($('#profile_last_name').html());
+	// set email
+	$('#edit_email').val($('#profile_email').html());
+	// set location
+	$('#edit_location').val($('#profile_location').html());	
+
+
 	$('.hide_this').addClass('tmp_this')
 	$('.hide_this').removeClass('hide_this');
 	$('.active_this').addClass('hide_this');
