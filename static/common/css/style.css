@@ -154,3 +154,5 @@ div.shade-container{
 
 /*hide a div*/
 .hide_this { display: none; }
+
+.remove_collaborators:hover { cursor: pointer; }
