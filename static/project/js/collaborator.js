@@ -1,10 +1,41 @@
 
 // remove a collaborator
 $('.remove_collaborators').click(function() {
+    var csrftoken = $('#csrf_token').val();
+    var projectID = $('#projectID_token').val();
+    var selectedColUser = $(this).prop('title');
+    var selectedColID = $(this)
 
-	var selectedColID = $(this).prop('title');
-	// remove the selected collaborator (front end)
-	$('#' + selectedColID).remove();
+    var requestJSON = {
+        "project_id": projectID,
+        "collaborator_name": selectedColUser
+    }
+
+    function csrfSafeMethod(method) {
+        // these HTTP methods do not require CSRF protection
+        return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+    }
+
+    $.ajax({
+        url: window.SERVER_PATH + "projects/collaborator/delete/",
+        type: "POST",
+        data: JSON.stringify(requestJSON),
+        contentType: "application/json",
+        success: function(data){
+            console.log(data);
+            // if(data['status'] == 'success') {
+            //     window.location = window.SERVER_PATH + "projects/plist/";
+            // }
+
+            // hide the popup
+            $(selectedColID).remove();
+        },
+        beforeSend: function(xhr, settings) {
+            if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                xhr.setRequestHeader("X-CSRFToken", csrftoken);
+            }
+        }
+    });  
 })
 
 

@@ -15,5 +15,6 @@ urlpatterns = patterns('',
     #url(r'^(?P<project_id>\d+)/comment/$', views.comment, name='comment'),
     url(r'^comment/delete/$', views.delete_comment, name='delete_comment'), 
     url(r'^collaborator/add/$', views.add_collaborator, name='add_collaborator'), 
+    url(r'^collaborator/delete/$', views.delete_collaborator, name='delete_collaborator'), 
     url(r'^test/$', views.load_project_comment_json, name='test'),   
 )

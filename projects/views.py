@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.template.response import TemplateResponse
-from django.http import HttpResponseNotAllowed, HttpResponseForbidden
+from django.http import HttpResponseNotAllowed, HttpResponseForbidden, Http404
 from django.conf import settings
 from projects.models import Project, Comment, DataSet
 from itertools import chain
@@ -154,7 +154,11 @@ def detail(request, project_id):
         else:
             comment.edit_enable = False
             
-    context = { 'user' : request.user, 'BASE_URL':settings.BASE_URL, 'project' : theproject, 'comments': allComments}
+    # Load collaborators
+    collaborators = theproject.collaborators.all()
+    
+            
+    context = { 'user' : request.user, 'BASE_URL':settings.BASE_URL, 'project' : theproject, 'comments': allComments, 'collaborators':collaborators}
     return TemplateResponse(request, 'projects/detail.html', context)
     
 def addCollaborator(request, project_id):
@@ -179,7 +183,31 @@ def load_project_comment_json(request, project_id):
         else:
             comments_list.append({'edit_enable': False})
     return comments_list  
+
+def load_project_collaborators_json(request, project_id):
+    ''' Helper function for loading collaborators
+        Only the project owner, collaborators and
+        super user can request the collaborators
+    '''
+  
+    theproject = get_object_or_404(Project, pk = project_id)
     
+    # Check permission
+    theUser = request.user
+    if not (theproject.is_creator(theUser) or theUser.isupper or 
+        theproject.is_collaborator(theUser)):
+        raise Http404
+    
+    collaborators =    theproject.collaborators.all();
+    collaborators = collaborators.filter(is_active = True)
+    
+    collaborators_list = [] 
+    for collaborator in collaborators:
+        collaborators_list.append({'collaborator': collaborator.username})
+        collaborators_list.append({'collaborator_id': collaborator.id})
+        collaborators_list.append({'project_id':project_id})
+        
+    return collaborators_list      
     
 def add_comment(request, project_id):
     if request.method == 'POST':
@@ -269,6 +297,7 @@ def add_collaborator(request):
             project_id = projectRaw['project_id']
             collaborator_name = projectRaw['collaborator_name']
             theUser = request.user
+            # TO-DO handle situations when collaborator_name does not exist
             collaborator = get_object_or_404(User, username = collaborator_name)
             theProject = get_object_or_404(Project, pk = project_id)
             # check if the project is delted
@@ -290,6 +319,50 @@ def add_collaborator(request):
             responseData = {'status':'success'}
             return HttpResponse(json.dumps(responseData), content_type = "application/json")
         except Exception as e:        
+            raise Http404
+    else:
+        raise Http404
+        
+def delete_collaborator(request):    
+    if request.method == 'POST':
+        collaboratorRaw = json.loads(request.body)
+        try:            
+            project_id = collaboratorRaw['project_id']
+            collaborator_name = collaboratorRaw['collaborator_name']
+            theUser = request.user
+            # TO-DO handle situations when collaborator_name does not exist
+            collaborator = get_object_or_404(User, username = collaborator_name)
+            
+            # TO-DO send feedback
+            if theUser == collaborator:
+                raise Http404
+            
+            theProject = get_object_or_404(Project, pk = project_id) 
+            
+            # check if the project is delted or if the collaborator bellongs to the project
+            if theProject.is_deleted or (not theProject.is_collaborator(collaborator)):
+                raise Http404    
+                
+            # Only the project creator, super user can delete collaborator of the project
+            has_permission = theProject.is_creator(theUser) or theUser.is_superuser
+            
+            if not has_permission:
+                raise Http404
+                
+            theProject.collaborators.remove(collaborator)    
+            theProject.save()
+            
+            # obj_display = force_text(theComment)
+            # log_deletion(request, theComment, obj_display)
+            
+            
+            # Reload the collaborators from the database
+            collaborators_list = load_project_collaborators_json(request, project_id)
+            responseData = {'status':'success', 'collaborators': collaborators_list}
+            return HttpResponse( json.dumps(responseData) )
+            return HttpResponse(json.dumps(responseData), content_type = "application/json")
+        except Exception as e:
+            print e
             raise Http404
     else:
         raise Http404
