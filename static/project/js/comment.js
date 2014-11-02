@@ -1,16 +1,5 @@
 
-// show popup for confirming deletion
-$('.btn_comment_delete').click(function(){
-	// find project id
-	// var project_id = $(this).val();
-	// add this id to the hidden label
-	// $('#p_hidden_id').html(project_id);
-
-	// show confirm deletion popup
-	$('#comment_delete_alert').modal('toggle');
-});
-
-
+// add a new comment
 $('#add_new_comment').click(function(){
 
 	var csrftoken = $('#csrf_token').val();
@@ -47,5 +36,46 @@ $('#add_new_comment').click(function(){
             }
         }
     });	
-
 });
+
+var commentIDForDelete = '';
+// show popup for confirming deletion
+$('.btn_comment_delete').click(function(){
+    // show confirm deletion popup
+    $('#comment_delete_alert').modal('toggle');
+    commentIDForDelete = $(this).val();
+});
+
+
+$('#btn_comment_delete_confirm').click(function(){
+    var csrftoken = $('#csrf_token').val();
+    var commentedProjectID = $('#projectID_token').val();
+
+    var requestJSON = {
+        "project_id": commentedProjectID,
+        "comment_id": commentIDForDelete
+    }
+    // hide the popup
+    $('#comment_delete_alert').modal('hide');
+    // remove the selected item
+    $('#comment_list_' + commentIDForDelete).remove();
+
+    // $.ajax({
+    //     url: window.SERVER_PATH + "projects/comment/delete/",
+    //     type: "POST",
+    //     data: JSON.stringify(requestJSON),
+    //     contentType: "application/json",
+    //     success: function(data){
+    //         console.log(data);
+    //         // if(data['status'] == 'success') {
+    //         //     window.location = window.SERVER_PATH + "projects/plist/";
+    //         // }
+
+    //     },
+    //     beforeSend: function(xhr, settings) {
+    //         if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+    //             xhr.setRequestHeader("X-CSRFToken", csrftoken);
+    //         }
+    //     }
+    // });                
+})
