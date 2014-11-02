@@ -2,140 +2,177 @@
 {% load staticfiles %}
 
 {% block content %}
-    <div class="row">
-        <h3>Project Information</h3>
+<div class="row">
+    <h3>Project Information</h3>
 
-        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 ">
-            <!-- basic information for a project -->
-            <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
-                <!-- basic information -->
-                <div class="panel panel-default widget shade-container">
-                    <div class="panel-heading">
-                        <span class="glyphicon glyphicon-paperclip"></span>
-                        <h3 class="panel-title">Basic Information</h3>
-                    </div>
-                    <div class="panel-body">
-                        <label>Project name:</label>
-                        <p>{{ project.name }}</p>
-
-                        <label>Project owner:</label>
-                        <p>{{ project.user }}</p>
-
-                        <label>Project description:</label>
-                        <p>{{ project.description }}</p>
-                    </div>
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 ">
+        <!-- basic information for a project -->
+        <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+            <!-- basic information -->
+            <div class="panel panel-default widget shade-container">
+                <div class="panel-heading">
+                    <span class="glyphicon glyphicon-paperclip"></span>
+                    <h3 class="panel-title">Basic Information</h3>
                 </div>
-                <!-- collaborator of a project -->
-                <div class="panel panel-default widget shade-container">
-                    <div class="panel-heading">
-                        <span class="glyphicon glyphicon-link"></span>
-                        <h3 class="panel-title">Collaborators</h3>
-                        <span class="label label-info">2</span>
-                    </div>
-                    <div class="panel-body">
-                        <ul class="list-group" id="list_collaborator">
-                            <li class="list-group-item" id="col_list_1">
-                                <div class="row">
-                                    <div class="col-xs-3 col-md-2 left_15_gap">
-                                        <img src="{% static 'common/imgs/default.jpg' %}" class="img-circle img-responsive" alt="" />
-                                    </div>
-                                    <div class="col-xs-6 col-md-8">
-                                        <p>User Name1</p>
-                                        <div class="mic-info">User ID1</div>                                        
-                                    </div>
-                                    <div class="col-xs-2 col-md-1">
-                                        <span class="glyphicon glyphicon-remove remove_collaborators" title="col_list_1"></span>
-                                    </div>
+                <div class="panel-body">
+                    <label>Project name:</label>
+                    <p>{{ project.name }}</p>
+
+                    <label>Project owner:</label>
+                    <p>{{ project.user }}</p>
+
+                    <label>Project description:</label>
+                    <p>{{ project.description }}</p>
+                </div>
+            </div>
+            <!-- collaborator of a project -->
+            <div class="panel panel-default widget shade-container">
+                <div class="panel-heading">
+                    <span class="glyphicon glyphicon-link"></span>
+                    <h3 class="panel-title">Collaborators</h3>
+                    <span class="label label-info">2</span>
+                </div>
+                <div class="panel-body">
+                    <ul class="list-group" id="list_collaborator">
+                        <li class="list-group-item" id="col_list_1">
+                            <div class="row">
+                                <div class="col-xs-3 col-md-2 left_15_gap">
+                                    <img src="{% static 'common/imgs/default.jpg' %}" class="img-circle img-responsive" alt="" />
                                 </div>
-                            </li>
-                            <li class="list-group-item" id="col_list_2">
-                                <div class="row">
-                                    <div class="col-xs-3 col-md-2 left_15_gap">
-                                        <img src="{% static 'common/imgs/default.jpg' %}" class="img-circle img-responsive" alt="" />
-                                    </div>
-                                    <div class="col-xs-6 col-md-8">
-                                        <p>User Name2</p>
-                                        <div class="mic-info">User ID2</div>
-                                    </div>
-                                    <div class="col-xs-2 col-md-1">
-                                        <span class="glyphicon glyphicon-remove remove_collaborators" title="col_list_2"></span>
-                                    </div>                                    
-                                </div>                                
-                            </li>
- <!--                            <li class="list-group-item well">
-                                <div class="input-group col-md-10">
-                                    <input type="text" class="form-control">
-                                    <span class="input-group-addon">Add</span>
+                                <div class="col-xs-6 col-md-8">
+                                    <p>User Name1</p>
+                                    <div class="mic-info">User ID1</div>                                        
                                 </div>
-                            </li> -->
-                        </ul>
-                        <div class="well">
-                            <div class="input-group">
-                                <input type="text" class="form-control">
-                                <span class="input-group-btn">
-                                    <button class="btn btn-default" type="button" id="btn_collaborator_add">
-                                        <span class="glyphicon glyphicon-plus"></span>
-                                        Add a collaborator
-                                    </button>
-                                </span>
-                            </div>                            
-                        </div>
+                                <div class="col-xs-2 col-md-1">
+                                    <span class="glyphicon glyphicon-remove remove_collaborators" title="col_list_1"></span>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="list-group-item" id="col_list_2">
+                            <div class="row">
+                                <div class="col-xs-3 col-md-2 left_15_gap">
+                                    <img src="{% static 'common/imgs/default.jpg' %}" class="img-circle img-responsive" alt="" />
+                                </div>
+                                <div class="col-xs-6 col-md-8">
+                                    <p>User Name2</p>
+                                    <div class="mic-info">User ID2</div>
+                                </div>
+                                <div class="col-xs-2 col-md-1">
+                                    <span class="glyphicon glyphicon-remove remove_collaborators" title="col_list_2"></span>
+                                </div>                                    
+                            </div>                                
+                        </li>
+                    </ul>
+                    <div class="well">
+                        <div class="input-group">
+                            <input type="text" class="form-control">
+                            <span class="input-group-btn">
+                                <button class="btn btn-default" type="button" id="btn_collaborator_add">
+                                    <span class="glyphicon glyphicon-plus"></span>
+                                    Add a collaborator
+                                </button>
+                            </span>
+                        </div>                            
                     </div>
                 </div>
             </div>
+        </div>
 
-            <!-- comment of a project -->
-            <div class="col-lg-7 col-md-7 col-md-offset-1 col-sm-12 col-xs-12">
-                <div class="panel panel-default widget shade-container">
-                    <div class="panel-heading">
-                        <span class="glyphicon glyphicon-comment"></span>
-                        <h3 class="panel-title">Recent Comments</h3>
-                        <span class="label label-info">78</span>
-                    </div>
-                    <!-- a list of comment -->
-                    <div class="panel-body">
-                        <ul class="list-group">
-                            {% for comment in comments %}                                
-                                {% if not comment.is_deleted %}                                    
-                                    <li class="list-group-item">
-                                        <div class="row">
-                                            <div class="col-xs-4 col-md-2 left_15_gap">
-                                                <img src="{% static 'common/imgs/default1.png' %}" class="img-circle img-responsive" alt="" />
+        <!-- comment of a project -->
+        <div class="col-lg-7 col-md-7 col-md-offset-1 col-sm-12 col-xs-12">
+            <div class="panel panel-default widget shade-container">
+                <div class="panel-heading">
+                    <span class="glyphicon glyphicon-comment"></span>
+                    <h3 class="panel-title">Recent Comments</h3>
+                    <span class="label label-info">78</span>
+                </div>
+                <!-- a list of comment -->
+                <div class="panel-body">
+                    <ul class="list-group">
+                        {% for comment in comments %}                                
+                            {% if not comment.is_deleted %}                                    
+                                <li class="list-group-item">
+                                    <div class="row">
+                                        <div class="col-xs-4 col-md-2 left_15_gap">
+                                            <img src="{% static 'common/imgs/default1.png' %}" class="img-circle img-responsive" alt="" />
+                                        </div>
+
+                                        <div class="col-xs-7 col-md-9">
+                                            <div>
+                                                <a href="#" target="_blank">Placeholder for Comment Topics</a>
+                                                <div class="mic-info">
+                                                    <p>By: <a href="#"> {{ comment.user }} </a> on {{ comment.create_time }}</p>
+                                                </div>
                                             </div>
 
-                                            <div class="col-xs-7 col-md-9">
-                                                <div>
-                                                    <a href="#" target="_blank">Placeholder for Comment Topics</a>
-                                                    <div class="mic-info">
-                                                        <p>By: <a href="#"> {{ comment.user }} </a> on {{ comment.create_time }}</p>
-                                                    </div>
-                                                </div>
+                                            <div class="comment-text">{{ comment }}</div>
 
-                                                <div class="comment-text">{{ comment }}</div>
-
-                                                <div class="action">
-                                                    {% if comment.edit_enable %}
-                                                    <button type="button" class="btn btn-primary btn-xs" title="Edit">
-                                                        <span class="glyphicon glyphicon-pencil"></span>
-                                                    </button>
-                                                    <button type="button" class="btn btn-danger btn-xs" title="Delete">
-                                                        <span class="glyphicon glyphicon-remove"></span>
-                                                    </button>                                                    
-                                                    {% endif %}
-                                                </div>
+                                            <div class="action">
+                                                {% if comment.edit_enable %}
+                                                <button type="button" class="btn btn-primary btn-xs" title="Edit">
+                                                    <span class="glyphicon glyphicon-pencil"></span>
+                                                </button>
+                                                <button type="button" class="btn btn-danger btn-xs btn_comment_delete" title="Delete">
+                                                    <span class="glyphicon glyphicon-remove"></span>
+                                                </button>
+                                                {% endif %}
                                             </div>
                                         </div>
-                                    </li>
-                                {% endif %} 
-                            {% endfor %}
-                        </ul>
-                        <a href="#" class="btn btn-info btn-sm btn-block" role="button"><span class="glyphicon glyphicon-refresh"></span> More</a>
-                    </div>
+                                    </div>
+                                </li>
+                            {% endif %} 
+                        {% endfor %}
+                    </ul>
+                    <a href="#" class="btn btn-info btn-sm btn-block" role="button"><span class="glyphicon glyphicon-refresh"></span> More</a>
+
+<div class="row">
+        <div class="col-sm-12 col-md-12">
+            <div class="panel panel-default well" id="comment_message_board">
+                <div class="panel-body">
+
+                    <input id="csrf_token" type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
+                    <input id="projectID_token" type="hidden" value="{{ project.id }}">                                   
+                    <!-- <form accept-charset="UTF-8" action="" method="POST"> -->
+                    <textarea id="comment_message_area" class="form-control counted" name="message" placeholder="Type in your message" rows="5" style="margin-bottom:10px;"></textarea>
+                    <h6 class="pull-right" id="counter">320 characters remaining</h6>
+                    <button class="btn btn-info" id="add_new_comment">Post New Comment</button>
+                    <!-- </form> -->
                 </div>
             </div>
-
         </div>
     </div>
 
-    <script type="text/javascript" src="{% static 'project/js/collaborator.js'%}"></script>
+
+                </div>
+            </div>
+
+        <!-- a popup to ask user to confirm the deletion -->
+        <div class="modal fade" id="comment_delete_alert" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                        <h4 class="modal-title" id="myModalLabel">Delete This Comment</h4>
+                    </div>
+                    <!-- content -->
+                    <div class="modal-body">
+                        <div class="alert alert-warning"><span class="glyphicon glyphicon-warning-sign"></span> Are you sure you want to delete this comment?</div>
+                        <label id="p_hidden_id" style="display: none;"></label>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-warning" data-dismiss="modal"><span class="glyphicon glyphicon-remove"></span> No</button>
+                        <button type="button" class="btn btn-warning plist_delete_btn"><span class="glyphicon glyphicon-ok-sign"></span> Yes</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        </div>
+
+    </div>
+</div>
+
+<script type="text/javascript" src="{% static 'project/js/collaborator.js'%}"></script>
+<script type="text/javascript" src="{% static 'project/js/comment.js'%}"></script>
 {% endblock %}
