@@ -245,14 +245,14 @@ def add_comment(request, project_id):
             # Log project change actions
             log_addition(request, newComment)              
             
-            # Prepare the return json data
-            
-            
-            responseData = {'status':'success'}
+            # Prepare the return json data           
+            comments_json = load_project_comment_json(request, project_id)
+            responseData = {'status':'success', 'comments': comments_json}
+            return HttpResponse(json.dumps(responseData), content_type = "application/json")
         except Exception as e:
             raise Http404
                 
-    return HttpResponse(json.dumps(responseData), content_type = "application/json")
+    
     
 def delete_comment(request):
     if request.method == 'POST':
