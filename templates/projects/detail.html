@@ -3,7 +3,7 @@
 
 {% block content %}
 <div class="row">
-    <h3>Project Information</h3>
+    <!-- <h3>Project Information</h3> -->
 
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 ">
         <!-- basic information for a project -->
@@ -81,26 +81,25 @@
                             {% if not comment.is_deleted %}                                    
                                 <li class="list-group-item" id="comment_list_{{ comment.id }}">
                                     <div class="row">
-                                        <div class="col-xs-4 col-md-2 left_15_gap">
+                                        <div class="col-xs-3 col-md-1 left_15_gap">
                                             <img src="{% static 'common/imgs/default1.png' %}" class="img-circle img-responsive" alt="" />
                                         </div>
 
-                                        <div class="col-xs-7 col-md-9">
-                                            <div>
-                                                <a href="#" target="_blank">Placeholder for Comment Topics</a>
+                                        <div class="col-xs-7 col-md-10">
+                                            <div class="col-md-10">
                                                 <div class="mic-info">
-                                                    <p>By: <a href="#"> {{ comment.user }} </a> on {{ comment.create_time }}</p>
+                                                    By: <a href="#"> {{ comment.user }} </a> on {{ comment.create_time }}
                                                 </div>
-                                            </div>
 
-                                            <div class="comment-text">
-                                                <p id="comment_content_{{ comment.id }}">{{ comment }}</p>
+                                                <div class="comment-text">
+                                                    <p id="comment_content_{{ comment.id }}">{{ comment }}</p>
+                                                </div>                                                
                                             </div>
-                                            <div class="hide_this">
+<!--                                             <div class="hide_this">
                                                 <textarea id="comment_edit_area_{{ comment.id }}" class="form-control counted comment_edit_area" name="comment" placeholder="Type in your comment" rows="5" style="margin-bottom:10px;"></textarea>    
-                                            </div>                                            
+                                            </div>  -->                                           
 
-                                            <div class="action">
+                                            <div class="col-md-2 col-md-offset-0">
                                                 {% if comment.edit_enable %}
                                                 <button type="button" class="btn btn-primary btn-xs btn_comment_edit" title="Edit" value="{{ comment.id }}">
                                                     <span class="glyphicon glyphicon-pencil"></span>
