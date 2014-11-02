@@ -65,7 +65,16 @@ class Project(models.Model):
         return user == self.user #or user.has_perm('your_app.manage_object')
         
     def is_collaborator(self, user):
-        return user in self.collaborators.all()   
+        return user in self.collaborators.all()
+    
+    def add_collaborator(self, user):
+        """ 
+        Adds a new teacher to this course. Teachers are also teachers in all course 
+        instances that belong to this course. 
+        
+        @param userprofile: the user profile to add as a teacher
+        """
+        self.collaborators.add(user)
     
 class Comment(models.Model):
     project = models.ForeignKey(Project)
@@ -79,7 +88,7 @@ class Comment(models.Model):
     def __unicode__(self):
         return self.content   
     
-    def is_comment_creator(self, user):
+    def is_creator(self, user):
         return user == self.user
         
     def is_project_creator(self, user):

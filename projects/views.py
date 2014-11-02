@@ -149,26 +149,7 @@ def detail(request, project_id):
         else:
             comment.edit_enable = False
     
-    selectedComments = allComments.filter(user = request.user)
-    # if theproject.is_creator(request.user):
-        #List all comments of this project that are not deleted
-        # comments = Comment.objects.filter( project = theproject)
-        #comments = Comment.objects.filter( project = theproject).filter( is_deleted = '0' )
-        # iscreate = True
-    # else:
-        #List comments created by a user that are not deleted
-        # comments = Comment.objects.filter( user = request.user).filter(project = theproject)
-        #comments = Comment.objects.filter( user = request.user).filter( is_deleted = '0' )
-        # iscreate = False
-        
-    
-    # known_ids = set()
-    # comments = []
-    # for element in comments1:
-        # if element.id not in known_ids:
-                # known_ids.add(element.id)
-                # comments.append(element)
-               
+    allComments = allComments.filter(is_deleted = '0')               
     context = { 'user' : request.user, 'BASE_URL':settings.BASE_URL, 'project' : theproject, 'comments': allComments}
     return TemplateResponse(request, 'projects/detail.html', context)
     
@@ -187,6 +168,7 @@ def add_comment(request, project_id):
             # check if the project is delted
             if toUpdate.is_deleted:
                 responseData = {'status':'fail'}
+                return HttpResponse(json.dumps(responseData), content_type = "application/json")
             
             # Check user permission for adding a comment
             if not toUpdate.is_private:
@@ -196,7 +178,9 @@ def add_comment(request, project_id):
                 has_permission = toUpdate.is_creator(theUser) or toUpdate.is_collaborator(theUser) or theUser.is_superuser
 
             if not has_permission:
-                return HttpResponseForbidden("You dont' have the permission to edit this project!")  
+                responseData = {'status':'fail'}
+                return HttpResponse(json.dumps(responseData), content_type = "application/json")
+                #return HttpResponseForbidden("You dont' have the permission to edit this project!")  
             
             newComment = Comment(project = toUpdate, user = request.user, 
                     content = projectRaw['content'],
@@ -210,8 +194,69 @@ def add_comment(request, project_id):
             
             responseData = {'status':'success'}
         except Exception as e:
-            return HttpResponse(e)
-            responseData = {'status':'fail'}
+            raise Http404
                 
-    return HttpResponse(json.dumps(responseData), content_type = "application/json") 
-     
+    return HttpResponse(json.dumps(responseData), content_type = "application/json")
+    
+ def delete_comment(request):
+    if request.method == 'POST':
+        projectRaw = json.loads(request.body)
+        try:
+            project_id = projectRaw['project_id']
+            comment_id = projectRaw['comment_id']
+            theUser = request.user.id
+            # Load project data from the database                
+            theProject = get_object_or_404(Project, pk = project_id)
+            theComment = get_object_or_404(Comment, pk = comment_id)
+            # check if the project is delted
+            if theProject.is_deleted or theComment.is_deleted:
+                raise Http404
+    
+            # Only the project creator, super user and collaborators can delete comment of the project
+            has_permission = theProject.is_creator(theUser) or theProject.is_collaborator(theUser) or theUser.is_superuser or theComment.is_creator(theUser)
+
+            if not has_permission:
+                raise Http404
+    
+            theComment.is_deleted = True
+            theComment.save()
+            obj_display = force_text(theComment)
+            log_deletion(request, theComment, obj_display)
+            responseData = {'status':'success'}
+            return HttpResponse(json.dumps(responseData), content_type = "application/json")
+        except Exception as e:        
+            raise Http404
+    else:
+        raise Http404
+        
+def add_collaborator(request):
+    if request.method == 'POST':
+        projectRaw = json.loads(request.body)
+        try:
+            project_id = projectRaw['project_id']
+            collaborator_name = projectRaw['collaborator_name']
+            theUser = request.user.id
+            collaborator = get_object_or_404(User, username = collaborator_name)                
+            theProject = get_object_or_404(Project, pk = project_id)
+            # check if the project is delted
+            if theProject.is_deleted:
+                raise Http404
+    
+            # Only the project creator and supper user can add collaborators of the project
+            has_permission = theProject.is_creator(theUser) or theUser.is_superuser
+
+            if not has_permission:
+                raise Http404
+            
+            # Add the collaborator to the project
+            theProject.collaborators.add(collaborator)
+            theProject.save()
+                
+            # Log project change actions
+            # log_addition(request, collaborator)              
+            
+            responseData = {'status':'success'}
+        except Exception as e:        
+            raise Http404
+    else:
+        raise Http404
