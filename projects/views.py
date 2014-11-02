@@ -215,14 +215,13 @@ def add_comment(request):
         projectRaw = json.loads(request.body)
         try:
             theUser = request.user
-            project_id = projectRaw('project_id')
+            project_id = projectRaw['project_id']      
             # Load project data from the database                
             toUpdate = Project.objects.get(pk = projectRaw['project_id'])
             
             # check if the project is delted
             if toUpdate.is_deleted:
-                responseData = {'status':'fail'}
-                return HttpResponse(json.dumps(responseData), content_type = "application/json")
+                raise Http404
             
             # Check user permission for adding a comment
             if not toUpdate.is_private:
@@ -251,6 +250,7 @@ def add_comment(request):
             responseData = {'status':'success', 'comments': comments_json}
             return HttpResponse(json.dumps(responseData), content_type = "application/json")
         except Exception as e:
+            print e
             raise Http404
                 
     
