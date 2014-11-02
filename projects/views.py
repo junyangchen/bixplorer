@@ -7,6 +7,7 @@ from itertools import chain
 from django.views.decorators.csrf import csrf_protect
 from django.http import HttpResponse
 from django.utils import timezone
+from django.contrib.auth.models import User
 import json
 from home.utils import * 
     
@@ -136,6 +137,9 @@ def plist(request):
         # Retrieve projects list from database
         # Should use request.user.id to fix simpleLazyObject error
         projectList = Project.objects.filter(user = request.user.id).filter(is_deleted = '0')
+        
+        # TO-DO define three class of projects
+        
         context = { 'user' : request.user, 'BASE_URL':settings.BASE_URL, 'projects' : projectList}
     return TemplateResponse(request, 'projects/plist.html', context)
 
@@ -143,7 +147,7 @@ def plist(request):
 def detail(request, project_id):
     theproject = Project.objects.get(id = project_id)
     allComments =    theproject.comment_set.all();
-    allComments = allComments.filter(is_deleted = '0')  
+    allComments = allComments.filter(is_deleted = False)  
     for comment in allComments:
         if comment.user == request.user:
             comment.edit_enable = True
@@ -156,6 +160,27 @@ def detail(request, project_id):
 def addCollaborator(request, project_id):
     theproject = Project.objects.get(id = project_id)
 
+def load_project_comment_json(request, project_id):
+    ''' Helper function for loading comments'''
+    theproject = get_object_or_404(Project, pk = project_id)
+    allComments =    theproject.comment_set.all();
+    allComments = allComments.filter(is_deleted = False)
+    
+    comments_list = [] 
+    for comment in allComments:
+        comments_list.append({'user':request.user.username})
+        comments_list.append({'content':comment.content})
+        comments_list.append({'comment_id':comment.id})
+        comments_list.append({'project_id':project_id})
+        comments_list.append({'pub_date': str(comment.create_time)})
+        # check edit or delete permissions
+        if comment.user == request.user:            
+            comments_list.append({'edit_enable': True})
+        else:
+            comments_list.append({'edit_enable': False})
+    return comments_list  
+    
+    
 def add_comment(request, project_id):
     if request.method == 'POST':
         # parse from front end
@@ -192,6 +217,9 @@ def add_comment(request, project_id):
             # Log project change actions
             log_addition(request, newComment)              
             
+            # Prepare the return json data
+            
+            
             responseData = {'status':'success'}
         except Exception as e:
             raise Http404
@@ -204,30 +232,35 @@ def delete_comment(request):
         try:
             project_id = projectRaw['project_id']
             comment_id = projectRaw['comment_id']
-            theUser = request.user.id
+            theUser = request.user
             # Load project data from the database                
             theProject = get_object_or_404(Project, pk = project_id)
             theComment = get_object_or_404(Comment, pk = comment_id)
+            
             # check if the project is delted
             if theProject.is_deleted or theComment.is_deleted:
                 raise Http404
-    
             # Only the project creator, super user and collaborators can delete comment of the project
-            has_permission = theProject.is_creator(theUser) or theProject.is_collaborator(theUser) or theUser.is_superuser or theComment.is_creator(theUser)
+            has_permission = theProject.is_creator(theUser) # or theProject.is_collaborator(theUser) or theUser.is_superuser or theComment.is_creator(theUser)
 
             if not has_permission:
                 raise Http404
-    
             theComment.is_deleted = True
-            theComment.save()
+            theComment.save()    
             obj_display = force_text(theComment)
             log_deletion(request, theComment, obj_display)
-            responseData = {'status':'success'}
+            
+            
+            # Reload the comments from the database
+            comments_json = load_project_comment_json(request, project_id)
+            responseData = {'status':'success', 'comments': comments_json}
             return HttpResponse(json.dumps(responseData), content_type = "application/json")
         except Exception as e:        
             raise Http404
     else:
         raise Http404
+
+        
         
 def add_collaborator(request):
     if request.method == 'POST':
@@ -235,8 +268,8 @@ def add_collaborator(request):
         try:
             project_id = projectRaw['project_id']
             collaborator_name = projectRaw['collaborator_name']
-            theUser = request.user.id
-            collaborator = get_object_or_404(User, username = collaborator_name)                
+            theUser = request.user
+            collaborator = get_object_or_404(User, username = collaborator_name)
             theProject = get_object_or_404(Project, pk = project_id)
             # check if the project is delted
             if theProject.is_deleted:
@@ -247,7 +280,6 @@ def add_collaborator(request):
 
             if not has_permission:
                 raise Http404
-            
             # Add the collaborator to the project
             theProject.collaborators.add(collaborator)
             theProject.save()
@@ -256,6 +288,7 @@ def add_collaborator(request):
             # log_addition(request, collaborator)              
             
             responseData = {'status':'success'}
+            return HttpResponse(json.dumps(responseData), content_type = "application/json")
         except Exception as e:        
             raise Http404
     else:

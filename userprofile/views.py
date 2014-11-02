@@ -60,7 +60,6 @@ def view_profile(request):
             
         # for act in newList:
             # print str(act['logEntry'].user)
-        return HttpResponse()
         profile = thisuser.userprofile    
         context = { "profile":profile, "user":thisuser, 'active_tag': 'userprofile', 'BASE_URL':settings.BASE_URL, 'history_actions': actions_list}
         return TemplateResponse(request, 'userprofile/view_profile.html', context) 
