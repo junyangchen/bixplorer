@@ -316,7 +316,9 @@ def add_collaborator(request):
             # Log project change actions
             # log_addition(request, collaborator)              
             
-            responseData = {'status':'success'}
+            # Reload the collaborators from the database
+            collaborators_list = load_project_collaborators_json(request, project_id)
+            responseData = {'status':'success', 'collaborators': collaborators_list}
             return HttpResponse(json.dumps(responseData), content_type = "application/json")
         except Exception as e:        
             raise Http404
@@ -359,7 +361,6 @@ def delete_collaborator(request):
             # Reload the collaborators from the database
             collaborators_list = load_project_collaborators_json(request, project_id)
             responseData = {'status':'success', 'collaborators': collaborators_list}
-            return HttpResponse( json.dumps(responseData) )
             return HttpResponse(json.dumps(responseData), content_type = "application/json")
         except Exception as e:
             print e
