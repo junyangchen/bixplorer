@@ -28,7 +28,6 @@ $('#add_new_comment').click(function(){
             //     window.location = window.SERVER_PATH + "projects/plist/";
             // }
             $('#comment_list').prepend('<li class="list-group-item"><div class="row"><div class="col-xs-4 col-md-2 left_15_gap"><img src="' + window.PUBLIC_PATH + 'common/imgs/default1.png" class="img-circle img-responsive" alt="" /></div><div class="col-xs-7 col-md-9"><div><a href="#" target="_blank">Placeholder for Comment Topics</a><div class="mic-info"><p>By: <a href="#"> A FAKE USER</a> on TODYA </p></div></div><div class="comment-text">'+ comment +'</div><div class="action"><button type="button" class="btn btn-primary btn-xs" title="Edit"><span class="glyphicon glyphicon-pencil"></span></button><button type="button" class="btn btn-danger btn-xs btn_comment_delete" title="Delete"><span class="glyphicon glyphicon-remove"></span></button></div></div></div></li>');
-
         },
         beforeSend: function(xhr, settings) {
             if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
@@ -84,4 +83,18 @@ $('#btn_comment_delete_confirm').click(function(){
             }
         }
     });                
+});
+
+$('.btn_comment_edit').click(function(){
+
+    var commentID = $(this).val(),
+        commentContent = $('#comment_content_' + commentID).html();
+
+    console.log(commentContent);
+
+    $('#comment_edit_area_' + commentID).html();   
+
+    $('#comment_content_' + commentID).addClass('hide_this');
+    $('#comment_edit_area_' + commentID).removeClass('hide_this');
+
 })
