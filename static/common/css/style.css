@@ -155,4 +155,8 @@ div.shade-container{
 /*hide a div*/
 .hide_this { display: none; }
 
+/*change mosue for delete sign*/
 .remove_collaborators:hover { cursor: pointer; }
+
+/*set the size of the message board*/
+#comment_message_board { margin-bottom: 0px !important; }
