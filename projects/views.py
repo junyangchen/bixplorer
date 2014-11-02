@@ -198,7 +198,7 @@ def add_comment(request, project_id):
                 
     return HttpResponse(json.dumps(responseData), content_type = "application/json")
     
- def delete_comment(request):
+def delete_comment(request):
     if request.method == 'POST':
         projectRaw = json.loads(request.body)
         try:
