@@ -88,7 +88,7 @@
                 </div>
                 <!-- a list of comment -->
                 <div class="panel-body">
-                    <ul class="list-group">
+                    <ul class="list-group" id="comment_list">
                         {% for comment in comments %}                                
                             {% if not comment.is_deleted %}                                    
                                 <li class="list-group-item">
