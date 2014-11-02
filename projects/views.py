@@ -143,13 +143,13 @@ def plist(request):
 def detail(request, project_id):
     theproject = Project.objects.get(id = project_id)
     allComments =    theproject.comment_set.all();
+    allComments = allComments.filter(is_deleted = '0')  
     for comment in allComments:
         if comment.user == request.user:
             comment.edit_enable = True
         else:
             comment.edit_enable = False
-    
-    allComments = allComments.filter(is_deleted = '0')               
+            
     context = { 'user' : request.user, 'BASE_URL':settings.BASE_URL, 'project' : theproject, 'comments': allComments}
     return TemplateResponse(request, 'projects/detail.html', context)
     
