@@ -137,8 +137,16 @@ def plist(request):
         # Retrieve projects list from database
         # Should use request.user.id to fix simpleLazyObject error
         projectList = Project.objects.filter(user = request.user.id).filter(is_deleted = '0')
+        theUser = request.user
         
         # TO-DO define three class of projects
+        # userProjectList = Project.objects.filter(user = theUser)
+        
+        # collaboratorsProjectList = User.project_set.all()
+        
+        # print collaboratorsProjectList
+        #publicProjectList = 
+        
         
         context = { 'user' : request.user, 'BASE_URL':settings.BASE_URL, 'projects' : projectList}
     return TemplateResponse(request, 'projects/plist.html', context)
@@ -149,6 +157,7 @@ def detail(request, project_id):
     allComments =    theproject.comment_set.all();
     allComments = allComments.filter(is_deleted = False)  
     for comment in allComments:
+        # TO-DO
         if comment.user == request.user:
             comment.edit_enable = True
         else:
@@ -172,16 +181,18 @@ def load_project_comment_json(request, project_id):
     
     comments_list = [] 
     for comment in allComments:
-        comments_list.append({'user':request.user.username})
-        comments_list.append({'content':comment.content})
-        comments_list.append({'comment_id':comment.id})
-        comments_list.append({'project_id':project_id})
-        comments_list.append({'pub_date': str(comment.create_time)})
+        tmp = []
+        tmp.append({'user':request.user.username})
+        tmp.append({'content':comment.content})
+        tmp.append({'comment_id':comment.id})
+        tmp.append({'project_id':project_id})
+        tmp.append({'pub_date': str(comment.create_time)})
         # check edit or delete permissions
         if comment.user == request.user:            
-            comments_list.append({'edit_enable': True})
+            tmp.append({'edit_enable': True})
         else:
-            comments_list.append({'edit_enable': False})
+            tmp.append({'edit_enable': False})
+        comments_list.append(tmp)    
     return comments_list  
 
 def load_project_collaborators_json(request, project_id):
@@ -203,9 +214,11 @@ def load_project_collaborators_json(request, project_id):
     
     collaborators_list = [] 
     for collaborator in collaborators:
-        collaborators_list.append({'collaborator': collaborator.username})
-        collaborators_list.append({'collaborator_id': collaborator.id})
-        collaborators_list.append({'project_id':project_id})
+        tmp = []        
+        tmp.append({'collaborator': collaborator.username})
+        tmp.append({'collaborator_id': collaborator.id})
+        tmp.append({'project_id':project_id})
+        collaborators_list.append(tmp)
         
     return collaborators_list      
     
