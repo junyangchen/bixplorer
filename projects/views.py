@@ -134,7 +134,8 @@ def delete(request, project_id):
 def plist(request):
     if request.method == 'GET':
         # Retrieve projects list from database
-        projectList = Project.objects.filter(user = request.user).filter(is_deleted = '0')
+        # Should use request.user.id to fix simpleLazyObject error
+        projectList = Project.objects.filter(user = request.user.id).filter(is_deleted = '0')
         context = { 'user' : request.user, 'BASE_URL':settings.BASE_URL, 'projects' : projectList}
     return TemplateResponse(request, 'projects/plist.html', context)
 
@@ -174,4 +175,43 @@ def detail(request, project_id):
 def addCollaborator(request, project_id):
     theproject = Project.objects.get(id = project_id)
 
+def add_comment(request, project_id):
+    if request.method == 'POST':
+        # parse from front end
+        projectRaw = json.loads(request.body)
+        try:
+            theUser = request.user
+            # Load project data from the database                
+            toUpdate = Project.objects.get(pk = projectRaw['project_id'])
+            
+            # check if the project is delted
+            if toUpdate.is_deleted:
+                responseData = {'status':'fail'}
+            
+            # Check user permission for adding a comment
+            if not toUpdate.is_private:
+                has_permission = True            
+            else:
+                # Only the project creator, super user and collaborators can add comment to the project
+                has_permission = toUpdate.is_creator(theUser) or toUpdate.is_collaborator(theUser) or theUser.is_superuser
+
+            if not has_permission:
+                return HttpResponseForbidden("You dont' have the permission to edit this project!")  
+            
+            newComment = Comment(project = toUpdate, user = request.user, 
+                    content = projectRaw['content'],
+                    create_time = timezone.now(),
+                    is_deleted = 0)
+            
+            newComment.save()
+                
+            # Log project change actions
+            log_addition(request, newComment)              
+            
+            responseData = {'status':'success'}
+        except Exception as e:
+            return HttpResponse(e)
+            responseData = {'status':'fail'}
+                
+    return HttpResponse(json.dumps(responseData), content_type = "application/json") 
      
