@@ -8,7 +8,7 @@ $('#add_new_comment').click(function(){
 
     var requestJSON = {
 		"project_id": commentedProjectID,
-    	"content": comment,
+    	"content": comment
         // "csrfmiddlewaretoken": csrftoken
     }
 
@@ -18,7 +18,7 @@ $('#add_new_comment').click(function(){
     }
 
     $.ajax({
-        url: window.SERVER_PATH + "projects/" + commentedProjectID + "/comment/add/",
+        url: window.SERVER_PATH + "projects/comment/add/",
         type: "POST",
         data: JSON.stringify(requestJSON),
         contentType: "application/json",
