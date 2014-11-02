@@ -55,27 +55,33 @@ $('#btn_comment_delete_confirm').click(function(){
         "project_id": commentedProjectID,
         "comment_id": commentIDForDelete
     }
-    // hide the popup
-    $('#comment_delete_alert').modal('hide');
-    // remove the selected item
-    $('#comment_list_' + commentIDForDelete).remove();
 
-    // $.ajax({
-    //     url: window.SERVER_PATH + "projects/comment/delete/",
-    //     type: "POST",
-    //     data: JSON.stringify(requestJSON),
-    //     contentType: "application/json",
-    //     success: function(data){
-    //         console.log(data);
-    //         // if(data['status'] == 'success') {
-    //         //     window.location = window.SERVER_PATH + "projects/plist/";
-    //         // }
+    function csrfSafeMethod(method) {
+        // these HTTP methods do not require CSRF protection
+        return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+    }
 
-    //     },
-    //     beforeSend: function(xhr, settings) {
-    //         if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
-    //             xhr.setRequestHeader("X-CSRFToken", csrftoken);
-    //         }
-    //     }
-    // });                
+    $.ajax({
+        url: window.SERVER_PATH + "projects/comment/delete/",
+        type: "POST",
+        data: JSON.stringify(requestJSON),
+        contentType: "application/json",
+        success: function(data){
+            console.log(data);
+            // if(data['status'] == 'success') {
+            //     window.location = window.SERVER_PATH + "projects/plist/";
+            // }
+
+            // hide the popup
+            $('#comment_delete_alert').modal('hide');
+            // remove the selected item
+            $('#comment_list_' + commentIDForDelete).remove();
+
+        },
+        beforeSend: function(xhr, settings) {
+            if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                xhr.setRequestHeader("X-CSRFToken", csrftoken);
+            }
+        }
+    });                
 })
