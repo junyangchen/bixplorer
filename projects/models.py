@@ -54,10 +54,13 @@ class Project(models.Model):
     is_deleted = models.BooleanField(default = 0)
     
     # Relations
-    collaborators = models.ManyToManyField(User, 
-                                                 related_name=u"user_projects", 
+    # collaborators = models.ManyToManyField(User, 
+                                                 # related_name=u"user_projects", 
+                                                 # blank=True)
+                                                 
+    collaborators = models.ManyToManyField(User, related_name=u"user_projects", 
+                                                  through='Collaborationship', through_fields=('project', 'user'), 
                                                  blank=True)
-    
     def __unicode__(self):
         return self.name   
         
@@ -75,7 +78,14 @@ class Project(models.Model):
         @param userprofile: the user profile to add as a teacher
         """
         self.collaborators.add(user)
+
+class Collaborationship(models.Model): 
+    project = models.ForeignKey(Project)
+    user = models.ForeignKey(User)   
     
+    class Meta:
+        unique_together = (('project', 'user'),)
+        
 class Comment(models.Model):
     project = models.ForeignKey(Project)
     user = models.ForeignKey(User)
