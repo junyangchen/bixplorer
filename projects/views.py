@@ -209,12 +209,13 @@ def load_project_collaborators_json(request, project_id):
         
     return collaborators_list      
     
-def add_comment(request, project_id):
+def add_comment(request):
     if request.method == 'POST':
         # parse from front end
         projectRaw = json.loads(request.body)
         try:
             theUser = request.user
+            project_id = projectRaw('project_id')
             # Load project data from the database                
             toUpdate = Project.objects.get(pk = projectRaw['project_id'])
             
