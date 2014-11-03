@@ -48,8 +48,13 @@ def view_profile(request):
         newList = []
         # rebuild the logEntry
         for item in actions_list:
-            logContentType = item.content_type            
-            logObject = logContentType.get_object_for_this_type(pk=item.object_id)
+            logContentType = item.content_type 
+            logAction = item.action_flag
+            logObject = None
+            if not logAction == 3:
+                print logAction
+                return HttpResponse(logAction)
+                logObject = logContentType.get_object_for_this_type(pk=item.object_id)
             logAction = item.action_flag
             # TO-DO Get comment's project
             if logContentType.name == 'project':
