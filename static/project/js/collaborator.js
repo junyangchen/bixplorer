@@ -4,16 +4,11 @@ $('.remove_collaborators').click(function() {
     var csrftoken = $('#csrf_token').val();
     var projectID = $('#projectID_token').val();
     var selectedColUser = $(this).prop('title');
-    var selectedColID = $(this)
+    var selectedColID = $(this);
 
     var requestJSON = {
         "project_id": projectID,
         "collaborator_name": selectedColUser
-    }
-
-    function csrfSafeMethod(method) {
-        // these HTTP methods do not require CSRF protection
-        return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
     }
 
     $.ajax({
@@ -23,12 +18,11 @@ $('.remove_collaborators').click(function() {
         contentType: "application/json",
         success: function(data){
             console.log(data);
-            // if(data['status'] == 'success') {
-            //     window.location = window.SERVER_PATH + "projects/plist/";
-            // }
-
-            // hide the popup
-            $(selectedColID).remove();
+            if(data['status'] == 'success') {
+                // hide the popup
+                // $(selectedColID).remove();
+                refreshColList('#list_collaborator', data['collaborators']);
+            }
         },
         beforeSend: function(xhr, settings) {
             if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
@@ -49,11 +43,6 @@ $('#btn_collaborator_add').click(function(){
     	"collaborator_name": collaborator_name,
     }
 
-    function csrfSafeMethod(method) {
-        // these HTTP methods do not require CSRF protection
-        return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
-    }
-
     $.ajax({
         url: window.SERVER_PATH + "projects/collaborator/add/",
         type: "POST",
@@ -61,12 +50,9 @@ $('#btn_collaborator_add').click(function(){
         contentType: "application/json",
         success: function(data){
             var resData = eval(data);
-            console.log(resData);
             if(data['status'] == 'success') {
-                console.log('here');
-            //     window.location = window.SERVER_PATH + "projects/plist/";
+                refreshColList('#list_collaborator', data['collaborators']);
             }
-            $('#list_collaborator').prepend('<li class="list-group-item" id="col_list_id"><div class="row"><div class="col-xs-3 col-md-2 left_15_gap"><img src="' + window.PUBLIC_PATH + 'common/imgs/default.jpg" class="img-circle img-responsive" alt="" /></div></div></li>');
         },
         beforeSend: function(xhr, settings) {
             if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
@@ -75,3 +61,28 @@ $('#btn_collaborator_add').click(function(){
         }
     });	
 })
+
+// these HTTP methods do not require CSRF protection
+function csrfSafeMethod(method) {
+    return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+}
+
+function refreshColList(colListID, collaborators) {
+    // remove previous element
+    $(colListID).empty();
+    // refresh the elements
+    for (var i = 0; i < collaborators.length; i++)
+        $(colListID).prepend('<li class="list-group-item" id="col_list_id">'+
+            '<div class="row">'+
+                '<div class="col-xs-3 col-md-2 left_15_gap">'+
+                    '<img src="' + window.PUBLIC_PATH + 'common/imgs/default.jpg" class="img-circle img-responsive" alt="" />'+
+                '</div>'+
+                '<div class="col-xs-6 col-md-8">'+
+                    '<p>' + collaborators[i][0]['collaborator'] + '</p>'+
+                '</div>'+
+                '<div class="col-xs-2 col-md-1">'+
+                    '<span class="glyphicon glyphicon-remove remove_collaborators" title="{{ collaborator.username }}"></span>'+
+                '</div>'+
+            '</div>'+
+        '</li>');
+}
