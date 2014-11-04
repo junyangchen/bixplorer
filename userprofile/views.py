@@ -53,7 +53,7 @@ def view_profile(request):
             logObject = None
             if not logAction == 3:
                 print logAction
-                return HttpResponse(logAction)
+                #return HttpResponse(logAction)
                 logObject = logContentType.get_object_for_this_type(pk=item.object_id)
             logAction = item.action_flag
             # TO-DO Get comment's project

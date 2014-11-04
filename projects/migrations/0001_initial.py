@@ -8,10 +8,20 @@ from django.conf import settings
 class Migration(migrations.Migration):
 
     dependencies = [
+        ('dataset', '0001_initial'),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 
     operations = [
+        migrations.CreateModel(
+            name='Collaborationship',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+            ],
+            options={
+            },
+            bases=(models.Model,),
+        ),
         migrations.CreateModel(
             name='Comment',
             fields=[
@@ -26,17 +36,6 @@ class Migration(migrations.Migration):
             bases=(models.Model,),
         ),
         migrations.CreateModel(
-            name='DataSet',
-            fields=[
-                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('name', models.CharField(max_length=100)),
-                ('create_time', models.DateTimeField(verbose_name=b'date published')),
-            ],
-            options={
-            },
-            bases=(models.Model,),
-        ),
-        migrations.CreateModel(
             name='Project',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
@@ -45,7 +44,8 @@ class Migration(migrations.Migration):
                 ('create_time', models.DateTimeField(verbose_name=b'date published')),
                 ('is_private', models.BooleanField(default=1)),
                 ('is_deleted', models.BooleanField(default=0)),
-                ('dataset', models.ForeignKey(to='projects.DataSet')),
+                ('collaborators', models.ManyToManyField(related_name='user_projects', through='projects.Collaborationship', to=settings.AUTH_USER_MODEL, blank=True)),
+                ('dataset', models.ForeignKey(to='dataset.DataSet')),
                 ('user', models.ForeignKey(to=settings.AUTH_USER_MODEL)),
             ],
             options={
@@ -63,5 +63,21 @@ class Migration(migrations.Migration):
             name='user',
             field=models.ForeignKey(to=settings.AUTH_USER_MODEL),
             preserve_default=True,
+        ),
+        migrations.AddField(
+            model_name='collaborationship',
+            name='project',
+            field=models.ForeignKey(to='projects.Project'),
+            preserve_default=True,
+        ),
+        migrations.AddField(
+            model_name='collaborationship',
+            name='user',
+            field=models.ForeignKey(to=settings.AUTH_USER_MODEL),
+            preserve_default=True,
+        ),
+        migrations.AlterUniqueTogether(
+            name='collaborationship',
+            unique_together=set([('project', 'user')]),
         ),
     ]

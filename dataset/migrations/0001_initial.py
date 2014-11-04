@@ -7,10 +7,20 @@ from django.db import models, migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('projects', '0002_auto_20141102_1545'),
     ]
 
     operations = [
+        migrations.CreateModel(
+            name='DataSet',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('name', models.CharField(max_length=100)),
+                ('create_time', models.DateTimeField(verbose_name=b'date published')),
+            ],
+            options={
+            },
+            bases=(models.Model,),
+        ),
         migrations.CreateModel(
             name='Doc',
             fields=[
@@ -21,7 +31,7 @@ class Migration(migrations.Migration):
                 ('organization', models.CharField(max_length=200)),
                 ('misc', models.CharField(max_length=200)),
                 ('text', models.CharField(max_length=200)),
-                ('dataset', models.ForeignKey(to='projects.DataSet')),
+                ('dataset', models.ForeignKey(to='dataset.DataSet')),
             ],
             options={
             },

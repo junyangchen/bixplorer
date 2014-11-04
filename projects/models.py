@@ -3,13 +3,8 @@ from django.contrib.auth.models import User
 from django.utils.text import get_text_list
 from django.utils.encoding import force_text
 from django.utils.translation import ugettext as _
+from dataset.models import DataSet
 
-class DataSet(models.Model):
-    name = models.CharField(max_length=100)
-    create_time = models.DateTimeField('date published')
-    
-    def __unicode__(self):
-        return self.name
     
 # Create your models here.
 class Project(models.Model):
@@ -107,11 +102,3 @@ class Comment(models.Model):
     class Meta:
         ordering = ['-create_time']
         
-class Doc(models.Model):
-    dataset = models.ForeignKey(DataSet)
-    people = models.CharField(max_length=200)
-    location = models.CharField(max_length=200)
-    phone = models.CharField(max_length=200)
-    organization = models.CharField(max_length=200)
-    misc = models.CharField(max_length=200)
-    text = models.CharField(max_length=200)

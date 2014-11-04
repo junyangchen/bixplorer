@@ -40,6 +40,7 @@ INSTALLED_APPS = (
     'userprofile',
     'home',
     'projects',
+    'dataset',
 )
 
 MIDDLEWARE_CLASSES = (

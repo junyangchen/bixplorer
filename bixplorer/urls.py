@@ -11,4 +11,5 @@ urlpatterns = patterns('',
     url(r'^accounts/', include('registration.backends.simple.urls')),
     url(r'^$', include('home.urls', namespace="home")),
     url(r'^projects/', include('projects.urls', namespace="projects")),
+    url(r'^datasets/', include('dataset.urls', namespace="datasets")),
 ) + staticfiles_urlpatterns()
