@@ -1,13 +1,10 @@
 from django.shortcuts import render
 
-# Create your views here.
-
 def index(request):
-    context = 'Test the response to index page'
-    return TemplateResponse(request, 'projects/index.html', context)
+	context = 'Test the response to index page'
+	return TemplateResponse(request, 'projects/index.html', context)
 
-
-def createhit():
+def createhit(request):
 	context = 'Test the response to createhit page'
-    return TemplateResponse(context)
+	return TemplateResponse(context)
 
