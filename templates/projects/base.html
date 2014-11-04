@@ -34,10 +34,10 @@
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav navbar-right">
                     <!-- home menu -->
-                    <li class=" {% if active_tag == 'home'  %} active {% endif %}"><a href="{{ BASE_URL }} home/index/"><span class="glyphicon glyphicon-home"></span> Home</a></li>
+                    <li class=" {% if active_tag == 'home'  %} active {% endif %}"><a href="{{ BASE_URL }}projects/"><span class="glyphicon glyphicon-home"></span> Home</a></li>
                     
                     <!-- project management menu -->
-                    <li class="dropdown">
+                    <li class="dropdown {% if active_tag == 'projects'  %} active {% endif %}">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-tasks"></span> Project Management <span class="caret"></span></a>
                         <ul class="dropdown-menu" role="menu">
                             <li><a href="{{BASE_URL}}projects/add/"><span class="glyphicon glyphicon-plus"></span> Create a new project</a></li>
@@ -52,13 +52,13 @@
                     <li class="dropdown {% if active_tag == 'analytics'  %} active {% endif %}"><a href="{{ BASE_URL }}dataviz/index/"><span class="glyphicon glyphicon-eye-open"></span> Analytical Workspace</a></li>
                     
                     <!-- profile menu -->
-                    <li class="{% if active_tag == 'profile'  %} active {% endif %}"><a href="{{ BASE_URL }}accounts/profile/"><span class="glyphicon glyphicon-user"></span> My Profile</a></li>                
+                    <li class="{% if active_tag == 'userprofile'  %} active {% endif %}"><a href="{{ BASE_URL }}accounts/profile/"><span class="glyphicon glyphicon-user"></span> My Profile</a></li>                
                     
                     <!-- about menu -->
                     <li class="dropdown {% if active_tag == 'about'  %} active {% endif %}"><a href="{{ BASE_URL }}home/about/"><span class="glyphicon glyphicon-info-sign"></span> About</a></li>
                     
                     <!-- logout menu -->
-                    <li><a href="{{ BASE_URL}}accounts/logout/"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>            
+                    <li class="{% if active_tag == 'logout'  %} active {% endif %}"><a href="{{ BASE_URL}}accounts/logout/"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>            
                 </ul>
             </div>
         </div>

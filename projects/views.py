@@ -19,7 +19,7 @@ def index(request):
 def add(request):
     if request.method == 'GET':
         dataset = DataSet.objects.all()
-        context = { 'active_tag': 'home', 'BASE_URL':settings.BASE_URL, 'dataset': dataset}
+        context = { 'active_tag': 'projects', 'BASE_URL':settings.BASE_URL, 'dataset': dataset}
         return TemplateResponse(request, 'projects/add.html', context)  
     elif request.method == 'POST':
         # parse from front end
@@ -148,7 +148,7 @@ def plist(request):
         #publicProjectList = 
         
         
-        context = { 'user' : request.user, 'BASE_URL':settings.BASE_URL, 'projects' : projectList}
+        context = { 'active_tag': 'projects', 'user' : request.user, 'BASE_URL':settings.BASE_URL, 'projects' : projectList}
     return TemplateResponse(request, 'projects/plist.html', context)
 
     
