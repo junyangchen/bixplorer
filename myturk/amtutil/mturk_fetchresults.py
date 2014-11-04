@@ -11,7 +11,7 @@ print('how many hits in allHits')
 print(len(allHits))
 
 ## todo get hit content
-print('------before looping through allHits')
+print('------before looping through allHits--------\n')
 for hit in allHits:
     assignments=mtc.get_assignments(hit.HITId)
     print(hit)
@@ -37,6 +37,6 @@ for hit in allHits:
                 print(value)
 
 
-        print ("--------------------")
+        print ("\n--------------------")
 print('------after looping through allHits')
 

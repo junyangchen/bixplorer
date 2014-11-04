@@ -14,12 +14,18 @@ from home.utils import *
 
 
 
-
 def index(request):
 	context = 'Test the response to index page'
 	return TemplateResponse(request, 'myturk/index.html', context)
 
 def createhit(request):
 	context = 'Test the response to createhit page'
+
+
 	return TemplateResponse(request, 'myturk/createhit.html', context)
+
+def testcreatehit(request):
+	context = 'Test the response to createhit page'
+	return TemplateResponse(request, 'myturk/createhit.html', context)
+
 
