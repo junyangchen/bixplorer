@@ -17,9 +17,9 @@ from home.utils import *
 
 def index(request):
 	context = 'Test the response to index page'
-	return TemplateResponse(request, 'mturk/index.html', context)
+	return TemplateResponse(request, 'myturk/index.html', context)
 
 def createhit(request):
 	context = 'Test the response to createhit page'
-	return TemplateResponse(request, 'mturk/createhit.html', context)
+	return TemplateResponse(request, 'myturk/createhit.html', context)
 
