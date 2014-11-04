@@ -41,6 +41,7 @@ INSTALLED_APPS = (
     'home',
     'projects',
     'dataset',
+	'myturk',
 )
 
 MIDDLEWARE_CLASSES = (
