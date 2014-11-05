@@ -171,16 +171,42 @@ def plist(request):
         projectList = Project.objects.filter(user = request.user.id).filter(is_deleted = '0')
         theUser = request.user
         
-        # TO-DO define three class of projects
-        # userProjectList = Project.objects.filter(user = theUser)
+        # Load the total number of projects for the user
+        collaborationShip = Collaborationship.objects.filter(user = theUser)
+        my_projects_queryset = Project.objects.filter(user = theUser, is_private = 1)
+        public_projects_queryset = Project.objects.filter(is_private = 0)
         
-        # collaboratorsProjectList = User.project_set.all()
+        # Calculate the number of projects for the user
+        project_set = set()
+        shared_projects = []
+        public_projects = []
+        count = 0 
         
-        # print collaboratorsProjectList
-        #publicProjectList = 
+        try:
+            for item in my_projects_queryset:
+                if not item.id in project_set:
+                    project_set.add(item.id)
+                    count += 1
+            
+            for item in collaborationShip:
+                if str(item.project.id) not in project_set:
+                    project_set.add(str(item.project.id))
+                    shared_projects.append(item.project)
+                    count += 1
+                    
+            for item in public_projects_queryset:
+                if item.id not in project_set:
+                    project_set.add(str(item.id))
+                    public_projects.append(item)
+                    count += 1
+                    
+        except Exception as e:
+            return HttpResponse(e)
+            print e
         
         
-        context = { 'active_tag': 'projects', 'user' : request.user, 'BASE_URL':settings.BASE_URL, 'projects' : projectList}
+    context = { 'active_tag': 'projects', 'user' : request.user, 'BASE_URL':settings.BASE_URL, 
+        'my_projects' : my_projects_queryset, 'shared_projects' : shared_projects, 'public_projects': public_projects}
     return TemplateResponse(request, 'projects/plist.html', context)
 
     
@@ -247,7 +273,7 @@ def load_project_collaborators_json(request, project_id):
             raise Http404
 
         collaborators =    theproject.collaborators.all();
-        collaboratorShip = Collaborationship.objects.filter(is_deleted = 0, project = theproject)
+        collaboratorShip = Collaborationship.objects.filter(is_deleted = 0, project = theproject).exclude(user = theUser)
         collaborators = []
         for collaborator in collaboratorShip:
             if collaborator.user.is_active:

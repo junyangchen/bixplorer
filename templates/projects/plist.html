@@ -24,7 +24,7 @@
 					<th>Delete</th>
 				</thead>
 				<tbody>
-					{% for project in projects %}
+					{% for project in my_projects %}
 							<tr value="{{ project.id }}">
 								<td><a href = "{% url 'projects:detail' project.id %}">{{ project.name }}</a></td>
 								<td>{{ project.dataset }}</td>
@@ -75,6 +75,30 @@
         </div>
 
         <div class="panel-body">
+        <table id="project_list" class="table table-bordred table-striped">
+				<!-- head of the table -->
+				<!-- TO DO: dynamically generate table head -->
+				<thead>
+					<th>Project name</th>
+					<th>Dataset</th>
+					<th>Project description</th>
+					<th>Last modifed time</th>
+					<th>Edit</th>
+					<th>Delete</th>
+				</thead>
+				<tbody>
+					{% for project in shared_projects %}
+							<tr value="{{ project.id }}">
+								<td><a href = "{% url 'projects:detail' project.id %}">{{ project.name }}</a></td>
+								<td>{{ project.dataset }}</td>
+								<td>{{ project.description }}</td>
+								<td>{{ project.create_time }}</td>
+							    <td><p><button class="btn btn-primary btn-xs plist_update" data-title="Edit" data-toggle="modal" data-target="#edit" value="{{ project.id }}"><span class="glyphicon glyphicon-pencil"></span></button></p></td>
+    							<td><p><button class="btn btn-danger btn-xs p_delete_icon" data-title="Delete" data-toggle="modal" data-target="#delete" value="{{ project.id }}"><span class="glyphicon glyphicon-trash" ></span></button></p></td>
+							</tr>
+					{% endfor %}		
+				</tbody>
+			</table>
         </div>
     </div>
 </div>
@@ -102,6 +126,30 @@
         </div>
 
         <div class="panel-body">
+        <table id="project_list" class="table table-bordred table-striped">
+				<!-- head of the table -->
+				<!-- TO DO: dynamically generate table head -->
+				<thead>
+					<th>Project name</th>
+					<th>Dataset</th>
+					<th>Project description</th>
+					<th>Last modifed time</th>
+					<th>Edit</th>
+					<th>Delete</th>
+				</thead>
+				<tbody>
+					{% for project in public_projects %}
+							<tr value="{{ project.id }}">
+								<td><a href = "{% url 'projects:detail' project.id %}">{{ project.name }}</a></td>
+								<td>{{ project.dataset }}</td>
+								<td>{{ project.description }}</td>
+								<td>{{ project.create_time }}</td>
+							    <td><p><button class="btn btn-primary btn-xs plist_update" data-title="Edit" data-toggle="modal" data-target="#edit" value="{{ project.id }}"><span class="glyphicon glyphicon-pencil"></span></button></p></td>
+    							<td><p><button class="btn btn-danger btn-xs p_delete_icon" data-title="Delete" data-toggle="modal" data-target="#delete" value="{{ project.id }}"><span class="glyphicon glyphicon-trash" ></span></button></p></td>
+							</tr>
+					{% endfor %}		
+				</tbody>
+			</table>
         </div>
     </div>
 </div>
