@@ -293,17 +293,11 @@ def load_project_collaborators_json(request, project_id):
                 
         collaborators_list = [] 
         for collaborator in collaborators:
-            tmp = []        
-            tmp.append({'collaborator': collaborator.username})
-            tmp.append({'email': collaborator.email})
-            tmp.append({'collaborator_id': collaborator.id})
-            tmp.append({'project_id':project_id})
-            collaborators_list.append(tmp)
+            collaborators_list.append({'collaborator': collaborator.username, 'email': collaborator.email
+                ,'collaborator_id': collaborator.id, 'project_id':project_id})
     except Exception as e:
         print e       
-    
-    #print collaborators_list
-    #return HttpResponse(collaborators_list)
+        
     return collaborators_list      
     
 def add_comment(request):
