@@ -11,71 +11,7 @@ $('#add_new_comment').click(function(){
     	"content": comment
     }
 
-    $.ajax({
-        url: window.SERVER_PATH + "projects/comment/add/",
-        type: "POST",
-        data: JSON.stringify(requestJSON),
-        contentType: "application/json",
-        success: function(data){
-            if(data['status'] == 'success') {
-                // empty the list
-                $('#comment_list').empty();
-
-                for (var i = 0; i < data['comments'].length; i++) {
-                    // with edit and delete button
-                    if (data['comments'][i]['edit_enable'] == true)
-                        $('#comment_list').append('<li class="list-group-item">' + 
-                            '<div class="row">' + 
-                                '<div class="col-xs-3 col-md-1 left_15_gap">' + 
-                                    '<img src="' + window.PUBLIC_PATH + 'common/imgs/default1.png" class="img-circle img-responsive" alt="" />'+ 
-                                '</div>' +
-                                '<div class="col-xs-7 col-md-10">'+ 
-                                    '<div class="col-md-10">'+ 
-                                        '<div class="mic-info">'+ 
-                                            'By: <a href="#">' + data['comments'][i]['user'] + '</a> On ' + data['comments'][i]['pub_date']+  
-                                        '</div>'+
-                                        '<div class="comment-text">'+ 
-                                            '<p>' + data['comments'][i]['content'] + '</p>'+ 
-                                        '</div>'+                                          
-                                    '</div>'+
-                                    '<div class="col-md-2 col-md-offset-0">'+ 
-                                        '<button type="button" class="btn btn-primary btn-xs btn_comment_edit" title="Edit" value=" ">'+ 
-                                            '<span class="glyphicon glyphicon-pencil"></span>'+
-                                        '</button>'+ 
-                                        '<button type="button" class="btn btn-danger btn-xs btn_comment_delete btn_appended" title="Delete" value=" ">'+ 
-                                            '<span class="glyphicon glyphicon-remove"></span>'+
-                                        '</button>'+
-                                    '</div>'+
-                                '</div>'+
-                            '</div>'+ 
-                        '</li>');
-                    else
-                        $('#comment_list').append('<li class="list-group-item">' + 
-                            '<div class="row">' + 
-                                '<div class="col-xs-3 col-md-1 left_15_gap">' + 
-                                    '<img src="' + window.PUBLIC_PATH + 'common/imgs/default1.png" class="img-circle img-responsive" alt="" />'+ 
-                                '</div>' +
-                                '<div class="col-xs-7 col-md-10">'+ 
-                                    '<div class="col-md-10">'+ 
-                                        '<div class="mic-info">'+ 
-                                            'By: <a href="#">' + data['comments'][i]['user'] + '</a> On ' + data['comments'][i]['pub_date']+  
-                                        '</div>'+
-                                        '<div class="comment-text">'+ 
-                                            '<p>' + data['comments'][i]['content'] + '</p>'+ 
-                                        '</div>'+                                          
-                                    '</div>'+
-                                '</div>'+
-                            '</div>'+ 
-                        '</li>');              
-                }
-            }
-        },
-        beforeSend: function(xhr, settings) {
-            if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
-                xhr.setRequestHeader("X-CSRFToken", csrftoken);
-            }
-        }
-    });	
+    commentUpdateRequest('add', requestJSON, csrftoken);	
 });
 
 
@@ -87,7 +23,7 @@ $('.btn_comment_delete').on('click', function(){
     commentIDForDelete = $(this).val();
 });
 
-
+// delete a comment
 $('#btn_comment_delete_confirm').click(function(){
     var csrftoken = $('#csrf_token').val();
     var commentedProjectID = $('#projectID_token').val();
@@ -97,30 +33,9 @@ $('#btn_comment_delete_confirm').click(function(){
         "comment_id": commentIDForDelete
     }
 
-    $.ajax({
-        url: window.SERVER_PATH + "projects/comment/delete/",
-        type: "POST",
-        data: JSON.stringify(requestJSON),
-        contentType: "application/json",
-        success: function(data){
-            console.log(data);
-            // if(data['status'] == 'success') {
-            //     window.location = window.SERVER_PATH + "projects/plist/";
-            // }
-
-            // hide the popup
-            $('#comment_delete_alert').modal('hide');
-            // remove the selected item
-            $('#comment_list_' + commentIDForDelete).remove();
-
-        },
-        beforeSend: function(xhr, settings) {
-            if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
-                xhr.setRequestHeader("X-CSRFToken", csrftoken);
-            }
-        }
-    });                
+    commentUpdateRequest('delete', requestJSON, csrftoken);               
 });
+
 
 $('.btn_comment_edit').click(function(){
 
@@ -140,4 +55,95 @@ $('.btn_comment_edit').click(function(){
 function csrfSafeMethod(method) {
     // these HTTP methods do not require CSRF protection
     return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+}
+
+/*
+* Refresh the comment list
+* @param commentListID, ID of the comment list
+* @param Comments, the array of comments
+*/
+function refreshCommentList(commentListID, comments) {
+    // cancel ajax
+    $.ajaxSetup({async:false});   
+    // empty the list
+    $(commentListID).empty();
+
+    for (var i = 0; i < comments.length; i++) {
+        // with edit and delete button
+        if (comments[i]['edit_enable'] == true)
+            $(commentListID).append('<li class="list-group-item">' + 
+                '<div class="row">' + 
+                    '<div class="col-xs-3 col-md-1 left_15_gap">' + 
+                        '<img src="' + window.PUBLIC_PATH + 'common/imgs/default1.png" class="img-circle img-responsive" alt="" />'+ 
+                    '</div>' +
+                    '<div class="col-xs-7 col-md-10">'+ 
+                        '<div class="col-md-10">'+ 
+                            '<div class="mic-info">'+ 
+                                'By: <a href="#">' + comments[i]['user'] + '</a> On ' + comments[i]['pub_date']+  
+                            '</div>'+
+                            '<div class="comment-text">'+ 
+                                '<p>' + comments[i]['content'] + '</p>'+ 
+                            '</div>'+                                          
+                        '</div>'+
+                        '<div class="col-md-2 col-md-offset-0">'+ 
+                            '<button type="button" class="btn btn-primary btn-xs btn_comment_edit" title="Edit" value="' + comments[i]['comment_id'] + '">'+ 
+                                '<span class="glyphicon glyphicon-pencil"></span>'+
+                            '</button>'+ 
+                            '<button type="button" class="btn btn-danger btn-xs btn_comment_delete btn_appended" title="Delete" value="' + comments[i]['comment_id'] + '">'+ 
+                                '<span class="glyphicon glyphicon-remove"></span>'+
+                            '</button>'+
+                        '</div>'+
+                    '</div>'+
+                '</div>'+ 
+            '</li>');
+        else
+            $(commentListID).append('<li class="list-group-item">' + 
+                '<div class="row">' + 
+                    '<div class="col-xs-3 col-md-1 left_15_gap">' + 
+                        '<img src="' + window.PUBLIC_PATH + 'common/imgs/default1.png" class="img-circle img-responsive" alt="" />'+ 
+                    '</div>' +
+                    '<div class="col-xs-7 col-md-10">'+ 
+                        '<div class="col-md-10">'+ 
+                            '<div class="mic-info">'+ 
+                                'By: <a href="#">' + comments[i]['user'] + '</a> On ' + comments[i]['pub_date']+  
+                            '</div>'+
+                            '<div class="comment-text">'+ 
+                                '<p>' + comments[i]['content'] + '</p>'+ 
+                            '</div>'+                                          
+                        '</div>'+
+                    '</div>'+
+                '</div>'+ 
+            '</li>');              
+    }
+
+    // $('#comment_num').html(comments.length);
+
+    // show popup for confirming deletion
+    $('.btn_comment_delete').on('click', function(){
+        // show confirm deletion popup
+        $('#comment_delete_alert').modal('toggle');
+        commentIDForDelete = $(this).val();
+    });   
+}
+
+
+function commentUpdateRequest(type, request, csrftoken) {
+    $.ajax({
+        url: window.SERVER_PATH + 'projects/comment/' + type + '/',
+        type: "POST",
+        data: JSON.stringify(request),
+        contentType: "application/json",
+        success: function(data){
+            if(data['status'] == 'success') {
+                refreshCommentList('#comment_list', data['comments']);
+            }
+            if (type == 'delete')
+                $('#comment_delete_alert').modal('hide');
+        },
+        beforeSend: function(xhr, settings) {
+            if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                xhr.setRequestHeader("X-CSRFToken", csrftoken);
+            }
+        }
+    });
 }
