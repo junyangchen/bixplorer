@@ -210,7 +210,7 @@ def plist(request):
         'my_projects' : my_projects_queryset, 'shared_projects' : shared_projects, 'public_projects': public_projects}
     return TemplateResponse(request, 'projects/plist.html', context)
 
-    
+@login_required    
 def detail(request, project_id):
     theproject = Project.objects.get(id = project_id)
     allComments =    theproject.comment_set.all();
@@ -221,17 +221,31 @@ def detail(request, project_id):
             comment.edit_enable = True
         else:
             comment.edit_enable = False
-            
-    # Load collaborators
-    # collaborators = theproject.collaborators.all()
-    collaboratorShip = Collaborationship.objects.filter(is_deleted = 0, project = theproject)
+    
     collaborators = []
-    for collaborator in collaboratorShip:
-        collaborators.append(collaborator.user)
+    # Only project creator, collaborator and super user can
+    # have access to the collaborators
+    # perm = 0, user will not see the collaborator view
+    # perm = 1, a user will see the collaborator view, but can not edit or add
+    # perm = 2, a user will be able to edit or add collaborators
+    perm = 0
+    theUser = request.user
+    if theproject.is_creator(theUser) or theUser.is_superuser:
+        perm = 2
+    elif theproject.is_collaborator(theUser):
+        perm = 1
+    else:
+        perm = 0
     
-    
+    # Load collaborators
+    if not perm == 0:
+        collaboratorShip = Collaborationship.objects.filter(is_deleted = 0, project = theproject)    
+        for collaborator in collaboratorShip:
+            collaborators.append(collaborator.user)
             
-    context = { 'user' : request.user, 'BASE_URL':settings.BASE_URL, 'project' : theproject, 'comments': allComments, 'collaborators':collaborators}
+    context = { 'user' : request.user, 'BASE_URL':settings.BASE_URL, 
+        'project' : theproject, 'comments': allComments, 
+        'collaborators':collaborators, 'permisson' : perm}
     return TemplateResponse(request, 'projects/detail.html', context)
     
 def addCollaborator(request, project_id):
@@ -245,17 +259,14 @@ def load_project_comment_json(request, project_id):
     
     comments_list = [] 
     for comment in allComments:
-        tmp = []
-        tmp.append({'user':request.user.username})
-        tmp.append({'content':comment.content})
-        tmp.append({'comment_id':comment.id})
-        tmp.append({'project_id':project_id})
-        tmp.append({'pub_date': str(comment.create_time)})
+        tmp = {}
+        tmp = {'user':request.user.username,'content':comment.content,
+                'comment_id':comment.id, 'project_id':project_id, 'pub_date': str(comment.create_time)}
         # check edit or delete permissions
         if comment.user == request.user:            
-            tmp.append({'edit_enable': True})
+            tmp['edit_enable'] = True
         else:
-            tmp.append({'edit_enable': False})
+            tmp['edit_enable'] = False
         comments_list.append(tmp)    
     return comments_list  
 
@@ -378,7 +389,12 @@ def delete_comment(request):
         
         
 def add_collaborator(request):
+    '''
+    Handles request for adding a collaborator to a project.
+    Request data is sent by POST.
+    '''
     if request.method == 'POST':
+        # request json data
         projectRaw = json.loads(request.body)
         try:
             project_id = projectRaw['project_id']
