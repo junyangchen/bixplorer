@@ -257,6 +257,7 @@ def load_project_collaborators_json(request, project_id):
         for collaborator in collaborators:
             tmp = []        
             tmp.append({'collaborator': collaborator.username})
+            tmp.append({'email': collaborator.email})
             tmp.append({'collaborator_id': collaborator.id})
             tmp.append({'project_id':project_id})
             collaborators_list.append(tmp)
