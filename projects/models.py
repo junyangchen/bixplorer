@@ -73,6 +73,9 @@ class Project(models.Model):
         @param userprofile: the user profile to add as a teacher
         """
         self.collaborators.add(user)
+        
+    def get_absolute_url(self):
+        return "/projects/%i/" % self.id    
 
 class Collaborationship(models.Model): 
     project = models.ForeignKey(Project)

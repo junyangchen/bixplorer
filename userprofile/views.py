@@ -33,40 +33,43 @@ def view_profile(request):
     try:
         #hist_actions = user_history_actions(request)
         from django.contrib.admin.models import LogEntry
-        data = LogEntry.objects.all() #.select_related('user', 'content_type').only('content_type', 'user')[:]
-
-        users = lambda data: list(set([(d.user_id, d.user.get_full_name() if d.user.get_full_name() else d.user.username) \
-                                       for d in data]))
-        content_types = lambda data: list(set([(d.content_type_id, d.content_type.name) for d in data]))
-        
+      
         hist_actions = LogEntry.objects.filter(user = request.user)
         actions_list = list(hist_actions)
         
-        
-        choices=users(data)
         temp = ''
         newList = []
+        action_dict = { '1' : "add", '2' : 'update', '3' : 'delete'}
         # rebuild the logEntry
         for item in actions_list:
+            newItem = []
             logContentType = item.content_type 
             logAction = item.action_flag
             logObject = None
-            if not logAction == 3:
-                print logAction
-                #return HttpResponse(logAction)
+            targetObject = None
+            
+            try:    
                 logObject = logContentType.get_object_for_this_type(pk=item.object_id)
-            logAction = item.action_flag
-            # TO-DO Get comment's project
-            if logContentType.name == 'project':
-                print logContentType
-            else:
-                print "Don't know"
-            newList.append({'logEntry':item, 'logObject':logObject})
+            except Exception as e:
+                logObject = None
+            
+            
+            logAction = action_dict[str(logAction)]
+            
+            #print logAction
+            
+            
+            #newItem.append({'logEntry':item, 'logObject':logObject, 'logAction' : logAction})
+            newList.append({'action_time':item.action_time, 
+                'change_message':item.change_message, 
+                'logObject':logObject, 
+                'logAction' : logAction,
+                'logContentType': logContentType.name})
             
         # for act in newList:
             # print str(act['logEntry'].user)
         profile = thisuser.userprofile    
-        context = { "profile":profile, "user":thisuser, 'active_tag': 'userprofile', 'BASE_URL':settings.BASE_URL, 'history_actions': actions_list}
+        context = { "profile":profile, "user":thisuser, 'active_tag': 'userprofile', 'BASE_URL':settings.BASE_URL, 'history_actions': newList}
         return TemplateResponse(request, 'userprofile/view_profile.html', context) 
     except Exception as e:    
         #profile = thisuser.userprofile

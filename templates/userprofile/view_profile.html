@@ -17,18 +17,6 @@ first name: {{ user.firstname }}
 {% block sidebar %}{% endblock %}
 
 {% block content %}
-        Activity Feeds <br>
-        {% for item in history_actions%}
-            (Action type: {{ item.action_flag }}),
-            (Content type: {{ item.content_type }}),
-            (Object name: TO-DO)
-            {% if item.change_message != '' %}
-            (Change message: {{ item.change_message }}),        
-            {% endif %}
-            (Log time: {{ item.action_time }})
-            <br>
-            Test:  {{item.logObject}}<br>
-        {% endfor %}
 		<h1>My Profile</h1>
 		<hr>
 		<div class="col-md-7">
@@ -147,9 +135,22 @@ first name: {{ user.firstname }}
                                 	</div>
                                 	<div class="col-xs-7 col-md-9">
                                 		<p>
-                                		(Action type: {{ item.action_flag }}): 
+                                		{{ item.logAction }} 
+                                        {% if item.logContentType == 'comment' %}
+                                            a comment
+                                            To project <a href = '{% url 'projects:detail' item.logObject.pk %}'>{{ item.logObject.project}}</a>
+                                        {% elif  item.logContentType == 'collaborationship'%}
+                                            a collaborator                                        
+                                            {% if item.logObject != None %}
+                                                at <a href = '#'>{{ item.logObject }}</a>                                                
+                                            {% endif %}
+                                        {% elif item.logContentType == 'project'%}    
+                                           project <a href = '{% url 'projects:detail' item.logObject.pk %}'>{{ item.logObject.name}}</a>
+                                        
+                                        {% endif %}
+                                            
 							            {% if item.change_message != '' %}
-							            Change message: {{ item.change_message }},        
+                                           , {{ item.change_message }}        
 							            {% endif %}
                                 		</p>
                                 		<div class="mic-info">On {{ item.action_time }}</div>
