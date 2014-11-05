@@ -138,7 +138,7 @@ first name: {{ user.firstname }}
                                 		{{ item.logAction }} 
                                         {% if item.logContentType == 'comment' %}
                                             a comment
-                                            To project <a href = '{% url 'projects:detail' item.logObject.pk %}'>{{ item.logObject.project}}</a>
+                                            To project <a href = '{% url 'projects:detail' item.logObject.project.pk %}'>{{ item.logObject.project}}</a>
                                         {% elif  item.logContentType == 'collaborationship'%}
                                             a collaborator                                        
                                             {% if item.logObject != None %}

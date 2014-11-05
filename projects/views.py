@@ -78,7 +78,9 @@ def add(request):
                 toUpdate.name = projectRaw['project_name']
                 toUpdate.description = projectRaw['project_description']
                 is_private_front_end = projectRaw['project_privacy']
-                if is_private_front_end == 'True':
+                
+                if is_private_front_end == '1':
+                    print is_private_front_end                    
                     toUpdate.is_private = True
                 else:
                     toUpdate.is_private = False
@@ -109,7 +111,6 @@ def add(request):
             except Exception as e:
                 return HttpResponse(e)
                 responseData = {'status':'fail'}
-        
         # return status back to front end
         return HttpResponse(json.dumps(responseData), content_type = "application/json")
         #return HttpResponse(json.dumps(responseData))
@@ -172,8 +173,8 @@ def plist(request):
         theUser = request.user
         
         # Load the total number of projects for the user
-        collaborationShip = Collaborationship.objects.filter(user = theUser)
-        my_projects_queryset = Project.objects.filter(user = theUser, is_private = 1)
+        collaborationShip = Collaborationship.objects.filter(user = theUser).filter(is_deleted = '0')
+        my_projects_queryset = Project.objects.filter(user = theUser)
         public_projects_queryset = Project.objects.filter(is_private = 0)
         
         # Calculate the number of projects for the user
@@ -272,7 +273,7 @@ def load_project_collaborators_json(request, project_id):
             theproject.is_collaborator(theUser)):
             raise Http404
 
-        collaborators =    theproject.collaborators.all();
+            
         collaboratorShip = Collaborationship.objects.filter(is_deleted = 0, project = theproject).exclude(user = theUser)
         collaborators = []
         for collaborator in collaboratorShip:

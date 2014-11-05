@@ -11,66 +11,53 @@ from django.template.response import TemplateResponse
 from home.utils import * 
 from types import *
 
-def log_addition(self, request, object):
-    """
-    Log that an object has been successfully added.
-    The default implementation creates an admin LogEntry object.
-    """
-    from django.contrib.admin.models import LogEntry, ADDITION
-    LogEntry.objects.log_action(
-        user_id=request.user.pk,
-        content_type_id=get_content_type_for_model(object).pk,
-        object_id=object.pk,
-        object_repr=force_text(object),
-        action_flag=ADDITION
-    )
-
 @login_required
-def view_profile(request, **kwargs):    
-    #if request.user.is_authenticated():
-    # uname = request.user.username
+def view_profile(request, **kwargs):
+    '''
+    Display a user's profile. If user_id if provided, then the user 
+    will be the user of the user id. Otherwise, the user will be the
+    login user.
+    '''
+    
     if 'user_id' in kwargs:
         user_id = kwargs['user_id']
         thisuser = User.objects.get(pk = user_id)
     else:
-        thisuser = request.user    
-    try:
-        #hist_actions = user_history_actions(request)
-        from django.contrib.admin.models import LogEntry
-      
-        hist_actions = LogEntry.objects.filter(user = request.user)
-        actions_list = list(hist_actions)
+        thisuser = request.user
         
-        temp = ''
-        newList = []
-        action_dict = { '1' : "add", '2' : 'update', '3' : 'delete'}
-        # rebuild the logEntry
-        for item in actions_list:
-            newItem = []
-            logContentType = item.content_type 
-            logAction = item.action_flag
-            logObject = None
-            targetObject = None
+    try:        
+        from django.contrib.admin.models import LogEntry
+        
+        new_logging_list = []
+        # Dispay the logActions only when "this user" is the loggin user. 
+        if thisuser == request.user:
+            hist_actions = LogEntry.objects.filter(user = request.user)
+            actions_list = list(hist_actions)           
+            action_dict = { '1' : "add", '2' : 'update', '3' : 'delete'}
             
-            try:    
-                logObject = logContentType.get_object_for_this_type(pk=item.object_id)
-            except Exception as e:
-                logObject = None    
-            
-            
-            logAction = action_dict[str(logAction)]            
-            
-            newList.append({'action_time':item.action_time, 
-                'change_message':item.change_message, 
-                'logObject':logObject, 
-                'logAction' : logAction,
-                'logContentType': logContentType.name})
-        print thisuser
-        profile = thisuser.userprofile    
-        context = { "profile":profile, "this_user":thisuser, 'active_tag': 'userprofile', 'BASE_URL':settings.BASE_URL, 'history_actions': newList}
-        return TemplateResponse(request, 'userprofile/view_profile.html', context) 
-    except Exception as e:    
-        #profile = thisuser.userprofile
-        return HttpResponse(e)
+            # rebuild the logging list
+            for item in actions_list:
+                logContentType = item.content_type 
+                logAction = item.action_flag
+                logObject = None
+                targetObject = None
+                
+                try:    
+                    logObject = logContentType.get_object_for_this_type(pk=item.object_id)
+                except Exception as e:
+                    logObject = None                
+                
+                logAction = action_dict[str(logAction)]
+                
+                new_logging_list.append({'action_time':item.action_time, 
+                    'change_message':item.change_message, 
+                    'logObject':logObject, 
+                    'logAction' : logAction,
+                    'logContentType': logContentType.name})
 
-# List recent actions for the user       
+        profile = thisuser.userprofile    
+        context = { "profile":profile, "this_user":thisuser, 'active_tag': 'userprofile', 
+            'BASE_URL':settings.BASE_URL, 'history_actions': new_logging_list}
+        return TemplateResponse(request, 'userprofile/view_profile.html', context) 
+    except Exception as e:
+        return HttpResponse(e)    
