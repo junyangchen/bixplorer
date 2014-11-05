@@ -190,13 +190,13 @@ def plist(request):
                     count += 1
             
             for item in collaborationShip:
-                if str(item.project.id) not in project_set:
+                if not item.project.id  in project_set:
                     project_set.add(str(item.project.id))
                     shared_projects.append(item.project)
                     count += 1
                     
             for item in public_projects_queryset:
-                if item.id not in project_set:
+                if not item.id in project_set:
                     project_set.add(str(item.id))
                     public_projects.append(item)
                     count += 1
@@ -239,7 +239,7 @@ def detail(request, project_id):
     
     # Load collaborators
     if not perm == 0:
-        collaboratorShip = Collaborationship.objects.filter(is_deleted = 0, project = theproject)    
+        collaboratorShip = Collaborationship.objects.filter(is_deleted = 0, project = theproject).exclude(user = theUser)    
         for collaborator in collaboratorShip:
             collaborators.append(collaborator.user)
             
@@ -397,6 +397,10 @@ def add_collaborator(request):
             
             # TO-DO handle situations when collaborator_name does not exist
             collaborator = get_object_or_404(User, username = collaborator_name)
+            
+            if collaborator == theUser:
+                raise Http404
+            
             theProject = get_object_or_404(Project, pk = project_id)
             # check if the project is delted
             if theProject.is_deleted:
@@ -413,7 +417,6 @@ def add_collaborator(request):
                 sc = Collaborationship.objects.get(project = theProject, user = collaborator, is_deleted = True)
             except:
                 pass
-            print sc
             if not sc == None:                
                 newCollaborationship = sc
                 newCollaborationship.is_deleted = False
