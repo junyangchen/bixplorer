@@ -18,7 +18,6 @@ $('.remove_collaborators').click(function() {
         data: JSON.stringify(requestJSON),
         contentType: "application/json",
         success: function(data){
-            console.log(data);
             if(data['status'] == 'success') {
                 refreshColList('#list_collaborator', data['collaborators']);
             }
@@ -32,7 +31,9 @@ $('.remove_collaborators').click(function() {
 });
 
 $('#btn_collaborator_add').click(function(){
-    btnClickEvent('add');	
+    btnClickEvent('add');
+    // empty the input
+    $('#collaborator_name').val('');	
 });
 
 
@@ -42,25 +43,29 @@ function csrfSafeMethod(method) {
 }
 
 
+/*
+* Refresh the collaborator list
+* @param colListID, ID of the collaborator list
+* @param collaborators, the array of collaborators
+*/
 function refreshColList(colListID, collaborators) {
-
+    // cancel ajax
     $.ajaxSetup({async:false});
 
     // remove previous element
     $(colListID).empty();
-    console.log(collaborators);
 
     // refresh the elements
     for (var i = 0; i < collaborators.length; i++) {
-        var del = '<span class="glyphicon glyphicon-remove remove_collaborators" title="' + collaborators[i][0]['collaborator'] + '"></span>';
+        var del = '<span class="glyphicon glyphicon-remove remove_collaborators" title="' + collaborators[i]['collaborator'] + '"></span>';
         $(colListID).prepend('<li class="list-group-item" id="col_list_id">'+
             '<div class="row">'+
                 '<div class="col-xs-3 col-md-2 left_15_gap">'+
                     '<img src="' + window.PUBLIC_PATH + 'common/imgs/default.jpg" class="img-circle img-responsive" alt="" />'+
                 '</div>'+
                 '<div class="col-xs-6 col-md-8">'+
-                    '<p>' + collaborators[i][0]['collaborator'] + '</p>'+
-                    '<div class="mic-info">' + collaborators[i][1]['email'] + '</div>'+
+                    '<p>' + collaborators[i]['collaborator'] + '</p>'+
+                    '<div class="mic-info">' + collaborators[i]['email'] + '</div>'+
                 '</div>'+
                 '<div class="col-xs-2 col-md-1">'+
                     del + 
@@ -68,11 +73,11 @@ function refreshColList(colListID, collaborators) {
             '</div>'+
         '</li>');    
     }
+
     // update the number of collaborators
     $('#col_num').html(collaborators.length);
 
-    console.log($('.remove_collaborators').length);
-
+    // rebinde the click event for those new appended elements
     $('.remove_collaborators').click(function(){
         var csrftoken = $('#csrf_token').val();
         var projectID = $('#projectID_token').val();
@@ -115,10 +120,10 @@ function btnClickEvent(btn) {
 
     if (btn == 'add')
         collaboratorName = $('#collaborator_name').val();
-    else if (btn == 'delete') {
-        console.log('here');
-        collaboratorName = $(this).prop('title');
-    }
+    // else if (btn == 'delete') {
+    //     console.log('here');
+    //     collaboratorName = $(this).prop('title');
+    // }
 
     var requestJSON = {
         "project_id": projectID,
@@ -131,7 +136,6 @@ function btnClickEvent(btn) {
         data: JSON.stringify(requestJSON),
         contentType: "application/json",
         success: function(data){
-            var resData = eval(data);
             if(data['status'] == 'success') {
                 refreshColList('#list_collaborator', data['collaborators']);
             }

@@ -17,29 +17,27 @@ $('#add_new_comment').click(function(){
         data: JSON.stringify(requestJSON),
         contentType: "application/json",
         success: function(data){
-            console.log(data);
             if(data['status'] == 'success') {
                 // empty the list
                 $('#comment_list').empty();
 
                 for (var i = 0; i < data['comments'].length; i++) {
                     // with edit and delete button
-                    if (data['comments'][i][5]['edit_enable'] == true)
+                    if (data['comments'][i]['edit_enable'] == true)
                         $('#comment_list').append('<li class="list-group-item">' + 
                             '<div class="row">' + 
                                 '<div class="col-xs-3 col-md-1 left_15_gap">' + 
                                     '<img src="' + window.PUBLIC_PATH + 'common/imgs/default1.png" class="img-circle img-responsive" alt="" />'+ 
-                                '</div>' + 
-
+                                '</div>' +
                                 '<div class="col-xs-7 col-md-10">'+ 
                                     '<div class="col-md-10">'+ 
                                         '<div class="mic-info">'+ 
-                                            'By: <a href="#">' + data['comments'][i][0]['user'] + '</a> On ' + data['comments'][i][4]['pub_date']+  
+                                            'By: <a href="#">' + data['comments'][i]['user'] + '</a> On ' + data['comments'][i]['pub_date']+  
                                         '</div>'+
                                         '<div class="comment-text">'+ 
-                                            '<p>' + data['comments'][i][0]['user'] + '</p>'+ 
+                                            '<p>' + data['comments'][i]['content'] + '</p>'+ 
                                         '</div>'+                                          
-                                    '</div>' +
+                                    '</div>'+
                                     '<div class="col-md-2 col-md-offset-0">'+ 
                                         '<button type="button" class="btn btn-primary btn-xs btn_comment_edit" title="Edit" value=" ">'+ 
                                             '<span class="glyphicon glyphicon-pencil"></span>'+
@@ -51,9 +49,24 @@ $('#add_new_comment').click(function(){
                                 '</div>'+
                             '</div>'+ 
                         '</li>');
-
-                //     // without delete and edit button                    
-                //     else                
+                    else
+                        $('#comment_list').append('<li class="list-group-item">' + 
+                            '<div class="row">' + 
+                                '<div class="col-xs-3 col-md-1 left_15_gap">' + 
+                                    '<img src="' + window.PUBLIC_PATH + 'common/imgs/default1.png" class="img-circle img-responsive" alt="" />'+ 
+                                '</div>' +
+                                '<div class="col-xs-7 col-md-10">'+ 
+                                    '<div class="col-md-10">'+ 
+                                        '<div class="mic-info">'+ 
+                                            'By: <a href="#">' + data['comments'][i]['user'] + '</a> On ' + data['comments'][i]['pub_date']+  
+                                        '</div>'+
+                                        '<div class="comment-text">'+ 
+                                            '<p>' + data['comments'][i]['content'] + '</p>'+ 
+                                        '</div>'+                                          
+                                    '</div>'+
+                                '</div>'+
+                            '</div>'+ 
+                        '</li>');              
                 }
             }
         },
