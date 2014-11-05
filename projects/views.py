@@ -17,7 +17,7 @@ from django.contrib.auth.decorators import login_required
 def index(request):
     theUser = request.user
     # Load the total number of projects for the user
-    coll = Collaborationship.objects.filter(user = theUser)
+    collaborationShip = Collaborationship.objects.filter(user = theUser)
     private_projects = Project.objects.filter(user = theUser, is_private = 1)
     public_projects = Project.objects.filter(is_private = 0)
     
@@ -26,7 +26,7 @@ def index(request):
     count = 0 
     
     try:
-        for item in coll:
+        for item in collaborationShip:
             if str(item.project.id) not in project_set:
                 project_set.add(str(item.project.id))
                 count += 1
