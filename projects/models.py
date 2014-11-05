@@ -62,8 +62,12 @@ class Project(models.Model):
     def is_creator(self, user):
         return user == self.user #or user.has_perm('your_app.manage_object')
         
-    def is_collaborator(self, user):
-        return user in self.collaborators.all()
+    def is_collaborator(self, theUser):
+        colla_set = Collaborationship.objects.filter(project = self, user = theUser, is_deleted = 0)        
+        if colla_set.count() > 0:
+            return True #user in self.Collaborationship.all()
+        else:
+            return False
     
     def add_collaborator(self, user):
         """ 

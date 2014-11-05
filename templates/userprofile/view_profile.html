@@ -138,7 +138,12 @@ first name: {{ user.firstname }}
                                 		{{ item.logAction }} 
                                         {% if item.logContentType == 'comment' %}
                                             a comment
-                                            To project <a href = '{% url 'projects:detail' item.logObject.project.pk %}'>{{ item.logObject.project}}</a>
+                                            To project 
+                                            {% if item.logObject.project.is_deleted %}
+                                                    '{{ item.logObject.project }}'
+                                                {% else %}
+                                                    <a href = '{% url 'projects:detail' item.logObject.project.pk %}'>{{ item.logObject.project }}</a> 
+                                                {% endif %} 
                                         {% elif  item.logContentType == 'collaborationship'%}
                                             a collaborator                                        
                                             {% if item.logObject != None %}
@@ -150,8 +155,8 @@ first name: {{ user.firstname }}
                                                 {% endif %}    
                                             {% endif %}
                                         {% elif item.logContentType == 'project'%}    
-                                           project 
-                                           {% if item.logObject.is_deleted %}
+                                           project                                           
+                                           {% if item.logObject.is_deleted == True%}
                                                 '{{ item.logObject.name}}'
                                            {% else %}
                                                 <a href = '{% url 'projects:detail' item.logObject.pk %}'>{{ item.logObject.name}}</a>
@@ -168,34 +173,7 @@ first name: {{ user.firstname }}
                             	</div>
                         	</li>                        	
 				        {% endfor %}
-						<li class="list-group-item">
-                            <div class="row">
-                                <div class="col-xs-4 col-md-2 left_15_gap">
-                                    <img src="{% static 'common/imgs/default.jpg' %}" class="img-circle img-responsive" alt="" />
-                                </div>
-                                <div class="col-xs-6 col-md-8">
-                                    <p>FAKE: Delete <a href="#">project</a></p>
-                                    <div class="mic-info">On a fake time</div>
-                                </div>
-                                <div class="col-xs-1 col-md-1">
-                                    <span class="glyphicon glyphicon-repeat"></span>
-                                </div>
-                            </div>
-                        </li>
-						<li class="list-group-item">
-                            <div class="row">
-                                <div class="col-xs-4 col-md-2 left_15_gap">
-                                    <img src="{% static 'common/imgs/default.jpg' %}" class="img-circle img-responsive" alt="" />
-                                </div>
-                                <div class="col-xs-6 col-md-8">
-                                    <p>FAKE: Update <a href="#">project</a></p>
-                                    <div class="mic-info">On another fake time</div>
-                                </div>
-                                <div class="col-xs-1 col-md-1">
-                                    <span class="glyphicon glyphicon-repeat"></span>
-                                </div>
-                            </div>
-                        </li>                        				        
+						                        				        
                     </ul>
                     <!-- placeholder for more activities -->
                     <a href="#" class="btn btn-info btn-sm btn-block" role="button"><span class="glyphicon glyphicon-refresh"></span> More</a>

@@ -47,7 +47,7 @@ def index(request):
     context = { 'active_tag': 'home', 'BASE_URL':settings.BASE_URL, 'count': count}
     return TemplateResponse(request, 'projects/index.html', context)
 
-@csrf_protect   
+@login_required    
 def add(request):
     if request.method == 'GET':
         dataset = DataSet.objects.all()
@@ -115,7 +115,7 @@ def add(request):
         return HttpResponse(json.dumps(responseData), content_type = "application/json")
         #return HttpResponse(json.dumps(responseData))
         
-@csrf_protect
+@login_required
 def edit(request, project_id):
     if request.method == 'GET':
         datasets = DataSet.objects.all()
@@ -141,8 +141,9 @@ def edit(request, project_id):
         return HttpResponse(has_permission)
     
     else:
-        return HttpResponseForbidden("Error 405. Only GET and POST allowed for this view.")
+        return HttpResponseForbidden("Error 405. Only GET and POST allowed for this view.")        
 
+@login_required 
 def delete(request, project_id):
     theUser = request.user
     # Load project data from the database                
@@ -164,18 +165,18 @@ def delete(request, project_id):
         return HttpResponse(e) 
     
     
-        
+@login_required     
 def plist(request):
     if request.method == 'GET':
         # Retrieve projects list from database
         # Should use request.user.id to fix simpleLazyObject error
-        projectList = Project.objects.filter(user = request.user.id).filter(is_deleted = '0')
+        
         theUser = request.user
         
         # Load the total number of projects for the user
-        collaborationShip = Collaborationship.objects.filter(user = theUser).filter(is_deleted = '0')
-        my_projects_queryset = Project.objects.filter(user = theUser)
-        public_projects_queryset = Project.objects.filter(is_private = 0)
+        collaborationShip = Collaborationship.objects.filter(user = theUser, is_deleted = '0')
+        my_projects_queryset = Project.objects.filter(user = theUser, is_deleted = '0')
+        public_projects_queryset = Project.objects.filter(is_private = 0, is_deleted = '0')
         
         # Calculate the number of projects for the user
         project_set = set()
@@ -191,9 +192,10 @@ def plist(request):
             
             for item in collaborationShip:
                 if not item.project.id  in project_set:
-                    project_set.add(str(item.project.id))
-                    shared_projects.append(item.project)
-                    count += 1
+                    if not item.project.is_deleted:
+                        project_set.add(str(item.project.id))
+                        shared_projects.append(item.project)
+                        count += 1
                     
             for item in public_projects_queryset:
                 if not item.id in project_set:
@@ -213,14 +215,23 @@ def plist(request):
 @login_required    
 def detail(request, project_id):
     theproject = Project.objects.get(id = project_id)
+    
+    if theproject.is_deleted:
+        raise Http404
+    
     allComments =    theproject.comment_set.all();
     allComments = allComments.filter(is_deleted = False)  
     for comment in allComments:
-        # TO-DO
+        # check edit or delete permissions
         if comment.user == request.user:
             comment.edit_enable = True
+            comment.delete_enable = True
+        elif comment.project.user == request.user:        
+            comment.edit_enable = False
+            comment.delete_enable = True
         else:
             comment.edit_enable = False
+            comment.delete_enable = False
     
     collaborators = []
     # Only project creator, collaborator and super user can
@@ -239,18 +250,28 @@ def detail(request, project_id):
     
     # Load collaborators
     if not perm == 0:
-        collaboratorShip = Collaborationship.objects.filter(is_deleted = 0, project = theproject).exclude(user = theUser)    
+        collaboratorShip = Collaborationship.objects.filter(is_deleted = 0, project = theproject)    
+        
+        is_theUser_collaborate = False
         for collaborator in collaboratorShip:
-            collaborators.append(collaborator.user)
-            
+            if theUser == collaborator.user:
+                is_theUser_collaborate = True
+            else:
+                collaborators.append(collaborator.user)
+        
+        if (not theproject.user == theUser) and is_theUser_collaborate:
+            collaborators.append(theproject.user)        
+        
     context = { 'user' : request.user, 'BASE_URL':settings.BASE_URL, 
         'project' : theproject, 'comments': allComments, 
-        'collaborators':collaborators, 'permisson' : perm}
+        'collaborators':collaborators, 'collaborate_permisson' : perm}
     return TemplateResponse(request, 'projects/detail.html', context)
-    
+ 
+@login_required  
 def addCollaborator(request, project_id):
     theproject = Project.objects.get(id = project_id)
-
+    
+@login_required 
 def load_project_comment_json(request, project_id):
     ''' Helper function for loading comments'''
     theproject = get_object_or_404(Project, pk = project_id)
@@ -262,14 +283,22 @@ def load_project_comment_json(request, project_id):
         tmp = {}
         tmp = {'user':request.user.username,'content':comment.content,
                 'comment_id':comment.id, 'project_id':project_id, 'pub_date': str(comment.create_time)}
+                
         # check edit or delete permissions
         if comment.user == request.user:            
             tmp['edit_enable'] = True
+            tmp['delete_enable'] = True
+        elif comment.project.user == request.user:
+            tmp['edit_enable'] = False
+            tmp['delete_enable'] = True
         else:
             tmp['edit_enable'] = False
+            tmp['delete_enable'] = False
+            
         comments_list.append(tmp)    
     return comments_list  
-
+    
+@login_required 
 def load_project_collaborators_json(request, project_id):
     ''' Helper function for loading collaborators
         Only the project owner, collaborators and
@@ -299,7 +328,8 @@ def load_project_collaborators_json(request, project_id):
         print e       
         
     return collaborators_list      
-    
+ 
+@login_required  
 def add_comment(request):
     if request.method == 'POST':
         # parse from front end
@@ -345,7 +375,7 @@ def add_comment(request):
             raise Http404
                 
     
-    
+@login_required     
 def delete_comment(request):
     if request.method == 'POST':
         projectRaw = json.loads(request.body)
@@ -381,7 +411,7 @@ def delete_comment(request):
         raise Http404
 
         
-        
+@login_required         
 def add_collaborator(request):
     '''
     Handles request for adding a collaborator to a project.
@@ -437,6 +467,7 @@ def add_collaborator(request):
     else:
         raise Http404
         
+@login_required         
 def delete_collaborator(request):    
     if request.method == 'POST':
         collaboratorRaw = json.loads(request.body)
