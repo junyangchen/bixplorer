@@ -26,10 +26,14 @@ def log_addition(self, request, object):
     )
 
 @login_required
-def view_profile(request):    
+def view_profile(request, **kwargs):    
     #if request.user.is_authenticated():
     # uname = request.user.username
-    thisuser = request.user    
+    if 'user_id' in kwargs:
+        user_id = kwargs['user_id']
+        thisuser = User.objects.get(pk = user_id)
+    else:
+        thisuser = request.user    
     try:
         #hist_actions = user_history_actions(request)
         from django.contrib.admin.models import LogEntry
@@ -53,8 +57,7 @@ def view_profile(request):
             except Exception as e:
                 logObject = None    
             
-            print logContentType.name
-            print logObject
+            
             logAction = action_dict[str(logAction)]            
             
             newList.append({'action_time':item.action_time, 
@@ -62,9 +65,9 @@ def view_profile(request):
                 'logObject':logObject, 
                 'logAction' : logAction,
                 'logContentType': logContentType.name})
-            
+        print thisuser
         profile = thisuser.userprofile    
-        context = { "profile":profile, "user":thisuser, 'active_tag': 'userprofile', 'BASE_URL':settings.BASE_URL, 'history_actions': newList}
+        context = { "profile":profile, "this_user":thisuser, 'active_tag': 'userprofile', 'BASE_URL':settings.BASE_URL, 'history_actions': newList}
         return TemplateResponse(request, 'userprofile/view_profile.html', context) 
     except Exception as e:    
         #profile = thisuser.userprofile

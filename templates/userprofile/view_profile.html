@@ -40,14 +40,14 @@ first name: {{ user.firstname }}
 			                <div class="form-group">
 			                    <label class="col-md-3 control-label">Username:</label>
 			                    <div class="col-md-8">
-			                        <p class="p_aligh_lable">{{ user.username }}</p>
+			                        <p class="p_aligh_lable">{{ this_user.username }}</p>
 			                    </div>
 			                </div>
 
 			                <div class="form-group">
 			                    <label class="col-lg-3 control-label">First name:</label>
 			                    <div class="col-lg-8">
-			                        <p class="p_aligh_lable active_this" id="profile_first_name">{{ user.first_name }}</p>
+			                        <p class="p_aligh_lable active_this" id="profile_first_name">{{ this_user.first_name }}</p>
 	            					<div class="hide_this">
 										<input type="text" name="firstName" placeholder="First Name" id="edit_first_name" data-toggle="tooltip"><br />
 									</div>			                        
@@ -57,7 +57,7 @@ first name: {{ user.firstname }}
 			                <div class="form-group">
 			                    <label class="col-lg-3 control-label">Last name:</label>
 			                    <div class="col-lg-8">
-			                        <p class="p_aligh_lable active_this" id="profile_last_name">{{ user.last_name }}</p>
+			                        <p class="p_aligh_lable active_this" id="profile_last_name">{{ this_user.last_name }}</p>
 	            					<div class="hide_this">
 										<input type="text" name="lastName" placeholder="Last Name" id="edit_last_name" data-toggle="tooltip"><br />
 									</div>			                        
@@ -67,7 +67,7 @@ first name: {{ user.firstname }}
 			                <div class="form-group">
 			                    <label class="col-lg-3 control-label">Email:</label>
 			                    <div class="col-lg-8">
-			                        <p class="p_aligh_lable active_this" id="profile_email">{{ user.email }}</p>
+			                        <p class="p_aligh_lable active_this" id="profile_email">{{ this_user.email }}</p>
 	            					<div class="hide_this">
 										<input type="text" name="email" placeholder="Email" id="edit_email" data-toggle="tooltip"><br />
 									</div>			                        
@@ -77,14 +77,14 @@ first name: {{ user.firstname }}
 			                <div class="form-group">
 			                    <label class="col-lg-3 control-label">Career:</label>
 			                    <div class="col-lg-8">
-			                        <p class="p_aligh_lable active_this">Graduate Students</p>
+			                        <p class="p_aligh_lable active_this">{{ profile.career }}</p>
 			                    </div>
 			                </div>			                
 
 			                <div class="form-group">
 			                    <label class="col-lg-3 control-label">Location:</label>
 			                    <div class="col-lg-8">
-			                        <p class="p_aligh_lable active_this" id="profile_location">My Location</p>
+			                        <p class="p_aligh_lable active_this" id="profile_location">{{ profile.location }}</p>
 	            					<div class="hide_this">
 										<input type="text" name="location" placeholder="Location" id="edit_location" data-toggle="tooltip"><br />
 									</div>			                        

@@ -11,8 +11,40 @@ from django.contrib.auth.models import User
 import json
 from home.utils import * 
     
+from django.contrib.auth.decorators import login_required 
+
+@login_required   
 def index(request):
-    context = { 'active_tag': 'home', 'BASE_URL':settings.BASE_URL}
+    theUser = request.user
+    # Load the total number of projects for the user
+    coll = Collaborationship.objects.filter(user = theUser)
+    private_projects = Project.objects.filter(user = theUser, is_private = 1)
+    public_projects = Project.objects.filter(is_private = 0)
+    
+    # Calculate the number of projects for the user
+    project_set = set()
+    count = 0 
+    
+    try:
+        for item in coll:
+            if str(item.project.id) not in project_set:
+                project_set.add(str(item.project.id))
+                count += 1
+        for item in private_projects:
+            print item.name
+            if not item.name in project_set:
+                project_set.add(item.name)
+                count += 1
+        for item in public_projects:
+            if item.id not in project_set:
+                project_set.add(str(item.id))
+                count += 1
+                
+    except Exception as e:
+        return HttpResponse(e)
+        print e
+        
+    context = { 'active_tag': 'home', 'BASE_URL':settings.BASE_URL, 'count': count}
     return TemplateResponse(request, 'projects/index.html', context)
 
 @csrf_protect   
@@ -164,7 +196,12 @@ def detail(request, project_id):
             comment.edit_enable = False
             
     # Load collaborators
-    collaborators = theproject.collaborators.all()
+    # collaborators = theproject.collaborators.all()
+    collaboratorShip = Collaborationship.objects.filter(is_deleted = 0, project = theproject)
+    collaborators = []
+    for collaborator in collaboratorShip:
+        collaborators.append(collaborator.user)
+    
     
             
     context = { 'user' : request.user, 'BASE_URL':settings.BASE_URL, 'project' : theproject, 'comments': allComments, 'collaborators':collaborators}
@@ -210,8 +247,12 @@ def load_project_collaborators_json(request, project_id):
             raise Http404
 
         collaborators =    theproject.collaborators.all();
-        collaborators = collaborators.filter(is_active = True)
-        print theproject
+        collaboratorShip = Collaborationship.objects.filter(is_deleted = 0, project = theproject)
+        collaborators = []
+        for collaborator in collaboratorShip:
+            if collaborator.user.is_active:
+                collaborators.append(collaborator.user)
+                
         collaborators_list = [] 
         for collaborator in collaborators:
             tmp = []        
@@ -329,7 +370,17 @@ def add_collaborator(request):
             if not has_permission:
                 raise Http404
             # Add the collaborator to the project
-            newCollaborationship = Collaborationship(project = theProject, user = collaborator)
+            sc = None
+            try:
+                sc = Collaborationship.objects.get(project = theProject, user = collaborator, is_deleted = True)
+            except:
+                pass
+            print sc
+            if not sc == None:                
+                newCollaborationship = sc
+                newCollaborationship.is_deleted = False
+            else:    
+                newCollaborationship = Collaborationship(project = theProject, user = collaborator)
             newCollaborationship.save()
                 
             # Log project change actions
@@ -371,13 +422,17 @@ def delete_collaborator(request):
             if not has_permission:
                 raise Http404
             
-            toDelete = Collaborationship.objects.get(project = theProject, user = collaborator)
-            obj_display = force_text(toDelete)
-            log_deletion(request, toDelete, obj_display)
-            toDelete.delete()
+            collaborationship = Collaborationship.objects.get(project = theProject, user = collaborator)
+            collaborationship.is_deleted = True
+            collaborationship.save()  
+            obj_display = force_text(collaborationship)
+            log_deletion(request, collaborationship, obj_display)
             
-            
-            
+            '''
+            theComment.is_deleted = True
+            theComment.save()    
+            obj_display = force_text(theComment)
+            log_deletion(request, theComment, obj_display)'''           
             
             
             # Reload the collaborators from the database

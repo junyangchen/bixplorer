@@ -17,6 +17,7 @@ class Migration(migrations.Migration):
             name='Collaborationship',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('is_deleted', models.BooleanField(default=0)),
             ],
             options={
             },
