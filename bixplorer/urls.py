@@ -12,4 +12,5 @@ urlpatterns = patterns('',
     url(r'^$', include('home.urls', namespace="home")),
     url(r'^projects/', include('projects.urls', namespace="projects")),
     url(r'^datasets/', include('dataset.urls', namespace="datasets")),
+    url(r'^myturk/', include('myturk.urls', namespace="myturk")),
 ) + staticfiles_urlpatterns()
