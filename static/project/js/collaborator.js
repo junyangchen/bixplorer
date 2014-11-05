@@ -4,7 +4,6 @@ $('.remove_collaborators').click(function() {
     var csrftoken = $('#csrf_token').val();
     var projectID = $('#projectID_token').val();
     var selectedColUser = $(this).prop('title');
-    var selectedColID = $(this);
 
     var requestJSON = {
         "project_id": projectID,
@@ -19,8 +18,6 @@ $('.remove_collaborators').click(function() {
         success: function(data){
             console.log(data);
             if(data['status'] == 'success') {
-                // hide the popup
-                // $(selectedColID).remove();
                 refreshColList('#list_collaborator', data['collaborators']);
             }
         },
@@ -30,7 +27,7 @@ $('.remove_collaborators').click(function() {
             }
         }
     });  
-})
+});
 
 
 $('#btn_collaborator_add').click(function(){
@@ -60,16 +57,19 @@ $('#btn_collaborator_add').click(function(){
             }
         }
     });	
-})
+});
+
 
 // these HTTP methods do not require CSRF protection
 function csrfSafeMethod(method) {
     return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
 }
 
+
 function refreshColList(colListID, collaborators) {
     // remove previous element
     $(colListID).empty();
+    console.log(collaborators);
     // refresh the elements
     for (var i = 0; i < collaborators.length; i++)
         $(colListID).prepend('<li class="list-group-item" id="col_list_id">'+
@@ -79,10 +79,20 @@ function refreshColList(colListID, collaborators) {
                 '</div>'+
                 '<div class="col-xs-6 col-md-8">'+
                     '<p>' + collaborators[i][0]['collaborator'] + '</p>'+
+                    '<div class="mic-info">' + collaborators[i][1]['email'] + '</div>'+
                 '</div>'+
                 '<div class="col-xs-2 col-md-1">'+
                     '<span class="glyphicon glyphicon-remove remove_collaborators" title="{{ collaborator.username }}"></span>'+
                 '</div>'+
             '</div>'+
         '</li>');
+}
+
+
+/*
+* Click event for add and remove button
+* @param btn, the function of the button
+*/
+function clickEvent(btn) {
+    
 }
