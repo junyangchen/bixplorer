@@ -79,7 +79,8 @@ class Project(models.Model):
 
 class Collaborationship(models.Model): 
     project = models.ForeignKey(Project)
-    user = models.ForeignKey(User)   
+    user = models.ForeignKey(User)
+    is_deleted = models.BooleanField(default = 0)
     
     class Meta:
         unique_together = (('project', 'user'),)

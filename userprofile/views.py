@@ -51,23 +51,18 @@ def view_profile(request):
             try:    
                 logObject = logContentType.get_object_for_this_type(pk=item.object_id)
             except Exception as e:
-                logObject = None
+                logObject = None    
             
+            print logContentType.name
+            print logObject
+            logAction = action_dict[str(logAction)]            
             
-            logAction = action_dict[str(logAction)]
-            
-            #print logAction
-            
-            
-            #newItem.append({'logEntry':item, 'logObject':logObject, 'logAction' : logAction})
             newList.append({'action_time':item.action_time, 
                 'change_message':item.change_message, 
                 'logObject':logObject, 
                 'logAction' : logAction,
                 'logContentType': logContentType.name})
             
-        # for act in newList:
-            # print str(act['logEntry'].user)
         profile = thisuser.userprofile    
         context = { "profile":profile, "user":thisuser, 'active_tag': 'userprofile', 'BASE_URL':settings.BASE_URL, 'history_actions': newList}
         return TemplateResponse(request, 'userprofile/view_profile.html', context) 

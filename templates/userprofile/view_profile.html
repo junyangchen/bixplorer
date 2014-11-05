@@ -142,10 +142,20 @@ first name: {{ user.firstname }}
                                         {% elif  item.logContentType == 'collaborationship'%}
                                             a collaborator                                        
                                             {% if item.logObject != None %}
-                                                at <a href = '#'>{{ item.logObject }}</a>                                                
+                                                at 
+                                                {% if item.logObject.project.is_deleted %}
+                                                    '{{ item.logObject.project }}'
+                                                {% else %}
+                                                    <a href = '{% url 'projects:detail' item.logObject.project.pk %}'>{{ item.logObject.project }}</a> 
+                                                {% endif %}    
                                             {% endif %}
                                         {% elif item.logContentType == 'project'%}    
-                                           project <a href = '{% url 'projects:detail' item.logObject.pk %}'>{{ item.logObject.name}}</a>
+                                           project 
+                                           {% if item.logObject.is_deleted %}
+                                                '{{ item.logObject.name}}'
+                                           {% else %}
+                                                <a href = '{% url 'projects:detail' item.logObject.pk %}'>{{ item.logObject.name}}</a>
+                                           {% endif %}
                                         
                                         {% endif %}
                                             
