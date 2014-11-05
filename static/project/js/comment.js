@@ -42,8 +42,6 @@ $('.btn_comment_edit').click(function(){
     var commentID = $(this).val(),
         commentContent = $('#comment_content_' + commentID).html();
 
-    console.log(commentContent);
-
     $('#comment_edit_area_' + commentID).html();   
 
     $('#comment_content_' + commentID).addClass('hide_this');
@@ -116,7 +114,8 @@ function refreshCommentList(commentListID, comments) {
             '</li>');              
     }
 
-    // $('#comment_num').html(comments.length);
+    // update the comment number
+    $('#comlist_num').html(comments.length);
 
     // show popup for confirming deletion
     $('.btn_comment_delete').on('click', function(){
