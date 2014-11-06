@@ -62,11 +62,38 @@ def createhitsubmit(request):
     overview.append_field('Title', task_title)
     overview.append(FormattedContent('<p>' + task_description + '</p>'))
 
-    overview.append(FormattedContent('<table>'))
-    for docID in task_selected_docs:
-        docText = Doc.objects.get(pk = docID)
-        overview.append(FormattedContent('<tr><td>' + docText.text + '</td></tr>')) 
-    overview.append(FormattedContent('</table>'))    
+    # overview.append(FormattedContent('<table>'))
+    # # for docID in task_selected_docs:
+    # #     docText = Doc.objects.get(pk = docID)
+    # #     overview.append(FormattedContent('<tr><td>' + docText.text + '</td></tr>')) 
+    # overview.append(FormattedContent('</table>'))    
+
+
+    qc2 = QuestionContent()
+    qc2.append_field('Title','What is the plan?')
+     
+    fta2 = FreeTextAnswer()
+     
+    q2 = Question(identifier="comments",
+                  content=qc2,
+                  answer_spec=AnswerSpecification(fta2))
+     
+    #--------------- BUILD THE QUESTION FORM -------------------
+     
+    question_form = QuestionForm()
+    question_form.append(overview)
+    question_form.append(q2)
+     
+    #--------------- CREATE THE HIT -------------------
+     
+    creathitReturnValue = mtc.create_hit(questions=question_form,
+                                                       max_assignments=10,
+                                                       title=task_title,
+                                                       description=task_description,
+                                                       keywords='SomeKeywords',
+                                                       duration = 60*5,
+                                                       reward=0.05)
+
     
     
     return HttpResponse(json.dumps({'data' : mtc.get_account_balance()}), content_type = "application/json")
