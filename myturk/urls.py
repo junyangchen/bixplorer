@@ -7,5 +7,5 @@ urlpatterns = patterns('',
 						url(r'^$', views.index, name='index'),
                         url(r'^createhit/$', views.createhit, name='createhit'),
                         url(r'^createhitsubmit/$',views.createhitsubmit, name='createhitsubmit'),
-                        url(r'^hit_result/$',views.hitresult, name='hitresult'),
+                        url(r'^hitresult/$',views.hitresult, name='hitresult'),
                         )
