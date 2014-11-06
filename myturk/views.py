@@ -34,7 +34,6 @@ def createhit(request):
 def createhitsubmit(request):
     from boto.mturk.connection import MTurkConnection
     from boto.mturk.question import QuestionContent,Question,QuestionForm,Overview,AnswerSpecification,SelectionAnswer,FormattedContent,FreeTextAnswer
-    import connectMturk as mtconnection
     print 'Ok'
     # Get request data from the front-end
     requestJson = json.loads(request.body)    
@@ -70,9 +69,9 @@ def createhitsubmit(request):
     overview.append(FormattedContent('</table>'))    
     
     
-    return HttpResponse(json.dumps({'data' : mtc.get_account_balance():}), content_type = "application/json")
+    return HttpResponse(json.dumps({'data' : mtc.get_account_balance()}), content_type = "application/json")
 
-	# return TemplateResponse(request, 'myturk/createhit.html', context)
+    # return TemplateResponse(request, 'myturk/createhit.html', context)
 
 
 
