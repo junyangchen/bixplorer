@@ -111,6 +111,15 @@ def createhitsubmit(request):
 
 
 def hitresult(request):
+ 
+    context = { 'active_tag': 'myturk', 'BASE_URL':settings.BASE_URL}  
+    return TemplateResponse(request, 'myturk/hitResult.html', context)
+
+
+def hitresultfetch(request):
+ 
+
+    # return TemplateResponse(request, 'myturk/hitResult.html', context)
 
     return HttpResponse({'hitresult key':'thevaluefromhitresult'}, content_type = "application/json")
 
