@@ -56,7 +56,7 @@ def load_docs_by_datasetId(request):
             # raise Http404
         docs_list = [] 
         for doc in docs:
-            docs_list.append({'doc_id':doc.id, 'doc_people':doc.people, 'doc_location': doc.location,
+            docs_list.append({'DT_RowId':doc.id, 'doc_id':doc.id, 'doc_people':doc.people, 'doc_location': doc.location,
                 'doc_organization': doc.organization, 'doc_phone':doc.phone, 
                 'doc_misc':doc.misc, 'doc_text':doc.text})     
         responseData = {'status':'success', 'docs': docs_list}            
