@@ -96,22 +96,24 @@
 
                                                 <div class="comment-text">
                                                     <p id="comment_content_{{ comment.id }}">{{ comment }}</p>
-                                                </div>                                                
-                                            </div>
-<!--                                             <div class="hide_this">
-                                                <textarea id="comment_edit_area_{{ comment.id }}" class="form-control counted comment_edit_area" name="comment" placeholder="Type in your comment" rows="5" style="margin-bottom:10px;"></textarea>    
-                                            </div>  -->                                           
+                                                </div>
+
+                                                <div class="hide_this" id="comment_edit_area_{{ comment.id }}">
+                                                    <textarea class="form-control counted comment_edit_area" name="comment" placeholder="Change your comment" rows="3" style="margin-bottom:10px;"></textarea>    
+                                                </div>                            
+                                            </div>                                           
 
                                             <div class="col-md-2 col-md-offset-0">
                                                 {% if comment.edit_enable %}
-                                                <button type="button" class="btn btn-primary btn-xs btn_comment_edit" title="Edit" value="{{ comment.id }}">
+                                                    <button type="button" class="btn btn-primary btn-xs btn_comment_edit" title="Edit" value="{{ comment.id }}">
                                                     <span class="glyphicon glyphicon-pencil"></span>
-                                                </button>
+                                                    </button>
                                                 {% endif %}
+
                                                 {% if comment.delete_enable %}
-                                                <button type="button" class="btn btn-danger btn-xs btn_comment_delete" title="Delete" value="{{ comment.id }}">
+                                                    <button type="button" class="btn btn-danger btn-xs btn_comment_delete" title="Delete" value="{{ comment.id }}">
                                                     <span class="glyphicon glyphicon-remove"></span>
-                                                </button>
+                                                    </button>
                                                 {% endif %}
                                             </div>
                                         </div>

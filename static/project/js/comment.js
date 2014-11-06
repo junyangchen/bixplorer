@@ -37,6 +37,7 @@ $('#btn_comment_delete_confirm').click(function(){
 });
 
 
+// edit a comment
 $('.btn_comment_edit').click(function(){
 
     var commentID = $(this).val(),
@@ -48,6 +49,7 @@ $('.btn_comment_edit').click(function(){
     $('#comment_edit_area_' + commentID).removeClass('hide_this');
 
 });
+
 
 
 function csrfSafeMethod(method) {
