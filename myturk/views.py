@@ -32,46 +32,60 @@ def createhit(request):
     
     
 def createhitsubmit(request):
-    from boto.mturk.connection import MTurkConnection
-    from boto.mturk.question import QuestionContent,Question,QuestionForm,Overview,AnswerSpecification,SelectionAnswer,FormattedContent,FreeTextAnswer
-    print 'Ok'
-    # Get request data from the front-end
-    requestJson = json.loads(request.body)    
     
-    user_aws_secret_key = requestJson['aws_secret_key']    
-    user_aws_access_key_id = requestJson['aws_access_key_id']
-    task_selected_docs = requestJson['task_selected_docs'] #id
-    task_title = requestJson['task_title']
-    #task_dataset = requestJson['task_dataset'] # id   
-    task_description = requestJson['task_description']    
-        
-    # adjust host setting, depending on whether HIT is live (production) or in testing mode (sandbox)
-    mode = "sandbox"
-    # mode ="production"
+     from boto.mturk.connection import MTurkConnection
+     from boto.mturk.question import QuestionContent,Question,QuestionForm,Overview,AnswerSpecification,SelectionAnswer,FormattedContent,FreeTextAnswer
+     print 'Ok'
+     # Get request data from the front-end
+     requestJson = json.loads(request.body)    
+     
+     mtc = MTurkConnection(aws_access_key_id= user_aws_access_key_id,
+                       aws_secret_access_key= user_aws_secret_key,
+                       host=HOST)
+    
+    print(mtc.get_account_balance())
 
-    if mode=="production":
-        HOST='mechanicalturk.amazonaws.com'
-    else:
-        HOST='mechanicalturk.sandbox.amazonaws.com'
 
-    mtc = MTurkConnection(aws_access_key_id= user_aws_access_key_id,
-                      aws_secret_access_key= user_aws_secret_key,
-                      host=HOST)
-                      
     overview = Overview()
     overview.append_field('Title', task_title)
     overview.append(FormattedContent('<p>' + task_description + '</p>'))
-
-    overview.append(FormattedContent('<table>'))
-    for docID in task_selected_docs:
-        docText = Doc.objects.get(pk = docID)
-        overview.append(FormattedContent('<tr><td>' + docText.text + '</td></tr>')) 
+ 
+    # overview.append(FormattedContent('<table>'))
+    # for docID in task_selected_docs:
+    #     docText = Doc.objects.get(pk = docID)
+    #     overview.append(FormattedContent('<tr><td>' + docText.text + '</td></tr>')) 
     overview.append(FormattedContent('</table>'))    
-    
-    
+     
+
+
+
+
+    #---------------  BUILD QUESTION -------------------
+     
+    qc2 = QuestionContent()
+    qc2.append_field('Title','Nov6 new question')
+     
+    fta2 = FreeTextAnswer()
+     
+    q2 = Question(identifier="comments",
+                  content=qc2,
+                  answer_spec=AnswerSpecification(fta2))
+     
+    #--------------- BUILD THE QUESTION FORM -------------------
+     
+    question_form = QuestionForm()
+    # question_form.append(overview)
+    question_form.append(q2)
+     
+    #--------------- CREATE THE HIT -------------------
+    print('Before create_hit')
+    creathitReturnValue = mtc.create_hit(questions=question_form,max_assignments=10, reward=0.05)
+
+    print(creathitReturnValue)
+
+
     return HttpResponse(json.dumps({'data' : mtc.get_account_balance()}), content_type = "application/json")
 
-    # return TemplateResponse(request, 'myturk/createhit.html', context)
 
 
 
