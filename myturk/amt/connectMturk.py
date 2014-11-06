@@ -1,10 +1,8 @@
 from boto.mturk.connection import MTurkConnection
 
 
-# AWSAccessKeyId='AKIAIIECFUFRBXEHXCOA'
-# AWSSecretKey='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'
-AWSAccessKeyId='AKIAJBT42GOBYK3Q3GLA'
-AWSSecretKey='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'
+AWSAccessKeyId=''
+AWSSecretKey=''
 
 
 ACCESS_ID = AWSAccessKeyId
