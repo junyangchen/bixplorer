@@ -19,6 +19,10 @@
               	<label>AWSSecretKey:</label><br />
               	<input type="text" id="myturk_secretkey">
             </div>
+            
+            <div>
+	            <input id="csrf_token" type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
+			</div>
 
             <div class="panel-body">
             </div>
