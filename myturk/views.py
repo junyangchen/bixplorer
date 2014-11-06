@@ -110,8 +110,7 @@ def createhitsubmit(request):
     # return TemplateResponse(request, 'myturk/createhit.html', context)
 
 
-def hitresult(request):
-
+def hit_result(request):
 
     return HttpResponse({'hitresult key':'thevaluefromhitresult'}), content_type = "application/json")
 
