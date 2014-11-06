@@ -11,7 +11,6 @@
 
             <div class="panel-body">
                 <div>
-                    <div>
                 	<!-- project selection -->
                 	<label>Select Project:</label><br />                
                     <select id="hit_project_selection" class="selectpicker" data-live-search="true" data-width="80%" required>
@@ -21,65 +20,28 @@
                     </select>
                 </div>
 
-				<div>
-
-<table id="example" class="display" cellspacing="0" width="100%">
-	<thead>
-		<tr>
-			<th>Doc ID</th>
-			<th>Content</th>
-		</tr>
-	</thead>
-	<tfoot>
-		<tr>
-			<td>Doc ID</td>
-			<td>Content</td>
-		</tr>
-	</tfoot>	
-	<tbody>
-		<tr>
-			<td>doc1</td>
-			<td>test1</td>
-		</tr>
-		<tr>
-			<td>doc2</td>
-			<td>test2</td>
-		</tr>		
-		<tr>
-			<td>doc3</td>
-			<td>test3</td>
-		</tr>		
-		<tr>
-			<td>doc4</td>
-			<td>test4</td>
-		</tr>		
-	</tbody>	
-</table>
-
-					
-				</div>
-
                 <div>
                 	<label>Task Description:</label><br />
                 	<textarea name="tast_description" placeholder="Task Description" rows="3" style="margin-bottom:10px;"></textarea> 
-                    </div>
+                </div>
+
+                <div>
                 	<!-- dataset selection -->
                     <label>Select Dataset:</label><br />
-                    <div>
-                        <select id="project_dataset" class="selectpicker" data-live-search="true" data-width="80%" required>
-							{% for dataset in datasets %}
-                                <option value = "{{dataset.id}}">{{ dataset.name }}</option>
-							{% endfor %}
-                        </select>
-                    </div>
+                    <select id="project_dataset" class="selectpicker" data-live-search="true" data-width="80%" required>
+						{% for dataset in datasets %}
+                            <option value = "{{dataset.id}}">{{ dataset.name }}</option>
+						{% endfor %}
+                    </select>
+                </div>
                     
                     <!-- data view -->
-                    <div class="col-lg-10">
+                <div class="col-lg-10">
                     <div class="row" id="main_data_preview">
                         <fieldset class="field-border">
                             <legend class="field-border">Data View</legend>
                             <div id="main_table_view">             
-                                <table id="data_view" class="display">
+                                <table id="myturk_doc_list" class="display">
                                     <!-- TO DO: dynamically generate table head -->
                                     <thead>
                                         <tr>
@@ -91,10 +53,10 @@
                             </div>
                         </fieldset>
                     </div>
-            </div>
-                </div>
+            	</div>
 
                 <input id="csrf_token" type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
+                
                 <div>
                 	<button class="btn btn-primay" type="button" id="btn_submit_turk">submit</button>
                 </div>

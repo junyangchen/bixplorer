@@ -29,9 +29,9 @@ function requestDataset(datasetId){
             console.log(data);
             if(data['status'] == 'success') {
                 // delete the previous table
-                $('#data_view').dataTable().fnDestroy();
+                $('#myturk_doc_list').dataTable().fnDestroy();
                 // initialize the table
-                $('#data_view').dataTable( {
+                var table = $('#myturk_doc_list').dataTable( {
                     "data": data['docs'],
                     "bLengthChange": false,
                     "paging": true,
@@ -42,6 +42,14 @@ function requestDataset(datasetId){
                         { "data": "doc_text", "orderable": false }
                     ]
                 });
+
+			    $('#myturk_doc_list tbody').on( 'click', 'tr', function () {
+			        $(this).toggleClass('selected');
+			    } );
+			 
+			    $('#button').click( function () {
+			        alert( table.rows('.selected').data().length +' row(s) selected' );
+			    } );
             }
         },
         beforeSend: function(xhr, settings) {
@@ -89,13 +97,3 @@ function csrfSafeMethod(method) {
 }
 
 
-
-var table = $('#example').DataTable();
- 
-    $('#example tbody').on( 'click', 'tr', function () {
-        $(this).toggleClass('selected');
-    } );
- 
-    $('#button').click( function () {
-        alert( table.rows('.selected').data().length +' row(s) selected' );
-    } );
