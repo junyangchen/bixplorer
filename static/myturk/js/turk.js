@@ -110,7 +110,7 @@ $('#hit_result_fetch').click(function(){
     console.log(requestJSON); 
 
     $.ajax({
-        url: window.SERVER_PATH + 'myturk/hitresult/',
+        url: window.SERVER_PATH + 'myturk/hitresultfetch/',
         type: "POST",
         data: JSON.stringify(requestJSON),
         contentType: "application/json",
