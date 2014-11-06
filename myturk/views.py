@@ -15,17 +15,23 @@ from home.utils import *
 
 
 def index(request):
-	context = 'Test the response to index page'
+	context = 'The index method is called'
 	return TemplateResponse(request, 'myturk/index.html', context)
 
-def createhit(request):
-    # Load dataset from database
-    datasets = DataSet.objects.all()    
-    context = { 'active_tag': 'myturk', 'BASE_URL':settings.BASE_URL, 'datasets':datasets}
-    return TemplateResponse(request, 'myturk/createhit.html', context)
+# def createhit(request):
+#     # Load dataset from database
+#     datasets = DataSet.objects.all()    
+#     context = { 'active_tag': 'myturk', 'BASE_URL':settings.BASE_URL, 'datasets':datasets}
+#     return TemplateResponse(request, 'myturk/createhit.html', context)
 
-def testcreatehit(request):
-	context = 'Test the response to createhit page'
+def createhitsubmit(request):
+
+	context = 'Called the createhit method'
+
+	print('----------------------------')
+	print(context)
+
 	return TemplateResponse(request, 'myturk/createhit.html', context)
+
 
 

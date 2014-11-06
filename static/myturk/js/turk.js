@@ -80,22 +80,22 @@ $('#btn_submit_turk').click(function(){
 
     console.log(requestJSON); 
 
-    // $.ajax({
-    //     url: window.SERVER_PATH + 'myturk/createhit/',
-    //     type: "POST",
-    //     data: JSON.stringify(requestJSON),
-    //     contentType: "application/json",
-    //     success: function(data){
-    //         if(data['status'] == 'success') {
-    //         	console.log('success!');
-    //         }
-    //     },
-    //     beforeSend: function(xhr, settings) {
-    //         if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
-    //             xhr.setRequestHeader("X-CSRFToken", csrftoken);
-    //         }
-    //     }
-    // });
+    $.ajax({
+        url: window.SERVER_PATH + 'myturk/createhitsubmit/',
+        type: "POST",
+        data: JSON.stringify(requestJSON),
+        contentType: "application/json",
+        success: function(data){
+            if(data['status'] == 'success') {
+            	console.log('success!');
+            }
+        },
+        beforeSend: function(xhr, settings) {
+            if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                xhr.setRequestHeader("X-CSRFToken", csrftoken);
+            }
+        }
+    });
 
 });
 
