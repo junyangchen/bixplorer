@@ -102,9 +102,11 @@ $('#btn_submit_turk').click(function(){
 $('#hit_result_fetch').click(function(){
     var csrftoken = $('#csrf_token').val();
     
-
+    var accessKeyID = $('#myturk_accesskeyid').val();
+    var secretKey = $('#myturk_secretkey').val();
     var requestJSON = {
-        "test": 'testdata'
+        "myturk_accesskeyid": accessKeyID,
+        "myturk_secretkey": secretKey
     }
 
     console.log(requestJSON); 
