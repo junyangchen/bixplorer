@@ -99,6 +99,31 @@ $('#btn_submit_turk').click(function(){
 
 });
 
+$('#hit_result_fetch').click(function(){
+    var csrftoken = $('#csrf_token').val();
+    
+
+    var requestJSON = {
+        "test": 'testdata'
+    }
+
+    console.log(requestJSON); 
+
+    $.ajax({
+        url: window.SERVER_PATH + 'myturk/hit_result/',
+        type: "POST",
+        data: JSON.stringify(requestJSON),
+        contentType: "application/json",
+        success: function(data){            
+            console.log(data);
+        },
+        beforeSend: function(xhr, settings) {
+            if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                xhr.setRequestHeader("X-CSRFToken", csrftoken);
+            }
+        }
+    });
+});
 
 // these HTTP methods do not require CSRF protection
 function csrfSafeMethod(method) {
