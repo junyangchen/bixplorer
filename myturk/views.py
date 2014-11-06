@@ -24,14 +24,40 @@ def index(request):
 #     context = { 'active_tag': 'myturk', 'BASE_URL':settings.BASE_URL, 'datasets':datasets}
 #     return TemplateResponse(request, 'myturk/createhit.html', context)
 
-def createhitsubmit(request):
+def createhit(request):
+
+
+
+
+
+
+
+
+
+
+
+	
 
 	context = 'Called the createhit method'
-
 	print('----------------------------')
 	print(context)
 
 	return TemplateResponse(request, 'myturk/createhit.html', context)
+
+
+
+
+def createhitsubmit(request):
+
+	context = 'Called the createhitSSSSubmit method'
+
+	print('----------------------------')
+
+	context.append(request.body)
+	print(context)
+	return HttpResponse(json.dumps(theresponse), content_type = "application/json")
+
+	# return TemplateResponse(request, 'myturk/createhit.html', context)
 
 
 
