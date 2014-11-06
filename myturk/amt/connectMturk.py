@@ -4,7 +4,7 @@ from boto.mturk.connection import MTurkConnection
 AWSAccessKeyId=''
 AWSSecretKey=''
 
-print('See whether this will be ignored')
+print('You should not see this')
 
 
 ACCESS_ID = AWSAccessKeyId

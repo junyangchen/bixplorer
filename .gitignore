@@ -1,2 +1,2 @@
 *.pyc
-/myturk/amt/connectMturk.py
+connectMturk.py
