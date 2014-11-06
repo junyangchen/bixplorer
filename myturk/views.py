@@ -112,6 +112,6 @@ def createhitsubmit(request):
 
 def hit_result(request):
 
-    return HttpResponse({'hitresult key':'thevaluefromhitresult'}), content_type = "application/json")
+    return HttpResponse({'hitresult key':'thevaluefromhitresult'}, content_type = "application/json")
 
 

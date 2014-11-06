@@ -8,5 +8,4 @@ urlpatterns = patterns('',
                         url(r'^createhit/$', views.createhit, name='createhit'),
                         url(r'^createhitsubmit/$',views.createhitsubmit, name='createhitsubmit'),
                         url(r'^hit_result/$',views.hitresult, name='hitresult'),
-                        
                         )
