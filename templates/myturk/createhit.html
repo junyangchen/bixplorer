@@ -14,11 +14,13 @@
 					<label>Task Title:</label><br />
 					<input type="text" id="myturk_task_title">
 				</div>
+				<hr>
 
                 <div>
                 	<label>Task Description:</label><br />
                 	<textarea name="tast_description" placeholder="Task Description" rows="3" style="margin-bottom:10px;" id="myturk_task_description"></textarea> 
                 </div>
+                <hr>
 
 <!--                 <div>
                 	<label>Select Project:</label><br />                
@@ -56,6 +58,7 @@
                         </div>
                     </fieldset>
                 </div>
+                <hr>
 				
 				<div>
 	                <input id="csrf_token" type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
@@ -65,11 +68,13 @@
                 	<label>AWSAccessKeyId:</label><br />
                 	<input type="text" id="myturk_accesskeyid">
                 </div>
+                <hr>
 
                 <div>
                 	<label>AWSSecretKey:</label><br />
                 	<input type="text" id="myturk_secretkey">
                 </div>
+                <hr>
                 
                 <div>
                 	<button class="btn btn-primay" type="button" id="btn_submit_turk">submit</button>
