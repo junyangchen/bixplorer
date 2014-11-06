@@ -6,15 +6,17 @@
 $(document).ready(function(){		
 	
 	// refresh the data view when changing selected dataset
-	/*$('.selectpicker').on('change', function(){
+	$('.selectpicker').on('change', function(){
 		requestDataset($('.selectpicker').selectpicker('val'));
 	});
 
-    */
+    
 	// Get the default dataset id
 	var selected_dataset_id = $('.selectpicker').selectpicker('val');
-	// display the content of the default dataset
-	//requestDataset(selected_dataset_id);
+	// display the content of the dataset for edit view
+    if($('#add_template').html() != 'YES'){
+        requestDataset(selected_dataset_id);
+    }
 });
 
 // add a new project and save it in the add view
@@ -50,27 +52,74 @@ $('#btn_restart').click(function() {
 * @param datasetId, the ID of a dataset
 */
 function requestDataset(datasetId){
-	$.post(window.SERVER_PATH + "project/load_doc_action/", {'dataset_id': datasetId}, function(data){
-		// delete the previous table
-		$('#data_view').dataTable().fnDestroy();
+    // cancel ajax to get values from all inputs
+    $.ajaxSetup({async:false});
+    var csrftoken = $('#csrf_token').val();
+    
+    function csrfSafeMethod(method) {
+        // these HTTP methods do not require CSRF protection
+        return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+    }
+    $.ajax({
+        url: window.SERVER_PATH + "datasets/load_doc_data/",
+        type: "POST",
+        data: JSON.stringify({'dataset_id': datasetId}),
+        contentType: "application/json",
+        success: function(data){
+            console.log(data);
+            if(data['status'] == 'success') {
+                // delete the previous table
+                $('#data_view').dataTable().fnDestroy();
+                // initialize the table
+                $('#data_view').dataTable( {
+                    "data": data['docs'],
+                    "bLengthChange": false,
+                    "paging": true,
+                    "info": true,
+                    "bFilter": false, //Disable search function
+                    "columns": [
+                        { "data": "doc_id", "width": "8%" },
+                        { "data": "doc_people", "orderable": false },
+                        { "data": "doc_location", "orderable": false },
+                        { "data": "doc_organization", "orderable": false },
+                        { "data": "doc_phone", "orderable": false },
+                        { "data": "doc_misc", "orderable": false }
+                    ]
+                });
+            }
+        },
+        beforeSend: function(xhr, settings) {
+            if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                xhr.setRequestHeader("X-CSRFToken", csrftoken);
+            }
+        }
+    });	
 
-		// initialize the table
-		$('#data_view').dataTable( {
-			"data": data['docs'],
-			"bLengthChange": false,
-			"paging": true,
-			"info": true,
-			"bFilter": false, //Disable search function
-			"columns": [
-				{ "data": "doc_id", "width": "8%" },
-				{ "data": "doc_people", "orderable": false },
-				{ "data": "doc_location", "orderable": false },
-				{ "data": "doc_organization", "orderable": false },
-				{ "data": "doc_phone", "orderable": false },
-				{ "data": "doc_misc", "orderable": false }
-			]
-		});
-	});
+	// $.post(window.SERVER_PATH + "datasets/load_doc_data/", {'dataset_id': datasetId}, function(data){
+        
+        // console.log(data);
+        // return;
+        
+		//delete the previous table
+		// $('#data_view').dataTable().fnDestroy();
+
+		//initialize the table
+		// $('#data_view').dataTable( {
+			// "data": data['docs'],
+			// "bLengthChange": false,
+			// "paging": true,
+			// "info": true,
+			// "bFilter": false, //Disable search function
+			// "columns": [
+				// { "data": "doc_id", "width": "8%" },
+				// { "data": "doc_people", "orderable": false },
+				// { "data": "doc_location", "orderable": false },
+				// { "data": "doc_organization", "orderable": false },
+				// { "data": "doc_phone", "orderable": false },
+				// { "data": "doc_misc", "orderable": false }
+			// ]
+		// });
+	// });
 }
 
  

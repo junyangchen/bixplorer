@@ -44,7 +44,10 @@ def load_docs_by_datasetId(request):
         # raise Http404
         
     try:
-        datasetID = 2 #request['dataset_id']
+        requestJson = json.loads(request.body)
+        datasetID = requestJson['dataset_id']
+        
+        print datasetID
         docs = get_list_or_404(Doc, dataset_id = datasetID)
         # Check permission
         # theUser = request.user
@@ -53,11 +56,8 @@ def load_docs_by_datasetId(request):
             # raise Http404
         docs_list = [] 
         for doc in docs:
-            tmp = []        
-            tmp.append({'name': doc.people})
-            tmp.append({'dataset_id': doc.location})
-            tmp.append({'create_time': doc.organization})
-            docs_list.append(tmp)     
+            docs_list.append({'doc_id':doc.id, 'doc_people':doc.people, 'doc_location': doc.location,
+                'doc_organization': doc.organization, 'doc_phone':doc.phone, 'doc_misc':doc.misc})     
         responseData = {'status':'success', 'docs': docs_list}            
     except Exception as e:
         print e
