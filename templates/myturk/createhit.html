@@ -20,6 +20,44 @@
                     </select>
                 </div>
 
+				<div>
+
+<table id="example" class="display" cellspacing="0" width="100%">
+	<thead>
+		<tr>
+			<th>Doc ID</th>
+			<th>Content</th>
+		</tr>
+	</thead>
+	<tfoot>
+		<tr>
+			<td>Doc ID</td>
+			<td>Content</td>
+		</tr>
+	</tfoot>	
+	<tbody>
+		<tr>
+			<td>doc1</td>
+			<td>test1</td>
+		</tr>
+		<tr>
+			<td>doc2</td>
+			<td>test2</td>
+		</tr>		
+		<tr>
+			<td>doc3</td>
+			<td>test3</td>
+		</tr>		
+		<tr>
+			<td>doc4</td>
+			<td>test4</td>
+		</tr>		
+	</tbody>	
+</table>
+
+					
+				</div>
+
                 <div>
                 	<label>Task Description:</label><br />
                 	<textarea name="tast_description" placeholder="Task Description" rows="3" style="margin-bottom:10px;"></textarea> 
@@ -48,5 +86,6 @@
 	</div>	
 </div>
 
+<script type="text/javascript" src="{% static 'common/js/lib/jquery.dataTables.min.js' %}"></script> 
 <script type="text/javascript" src="{% static 'myturk/js/turk.js' %}"></script>
 {% endblock %}
