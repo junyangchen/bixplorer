@@ -10,14 +10,25 @@
             </div>
 
             <div class="panel-body">
-                <!-- project selection -->
-                <label>Select Project:</label><br />
                 <div>
+                	<!-- project selection -->
+                	<label>Select Project:</label><br />                
                     <select id="hit_project_selection" class="selectpicker" data-live-search="true" data-width="80%" required>
 						{% for item in project %}
                             <option value = "{{project.id}}">{{ project.name }}</option>
 						{% endfor %}
                     </select>
+                </div>
+
+                <div>
+                	<label>Task Description:</label><br />
+                	<textarea name="tast_description" placeholder="Task Description" rows="3" style="margin-bottom:10px;"></textarea> 
+                </div>
+
+                <input id="csrf_token" type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
+
+                <div>
+                	<button class="btn btn-primay" type="button" id="btn_submit_turk">submit</button>
                 </div>
             </div>
 		</div>
