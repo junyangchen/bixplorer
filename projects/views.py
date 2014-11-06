@@ -169,8 +169,7 @@ def delete(request, project_id):
 def plist(request):
     if request.method == 'GET':
         # Retrieve projects list from database
-        # Should use request.user.id to fix simpleLazyObject error
-        
+        # Should use request.user.id to fix simpleLazyObject error        
         theUser = request.user
         
         # Load the total number of projects for the user
@@ -193,7 +192,7 @@ def plist(request):
             for item in collaborationShip:
                 if not item.project.id  in project_set:
                     if not item.project.is_deleted:
-                        project_set.add(str(item.project.id))
+                        project_set.add(item.project.id)
                         shared_projects.append(item.project)
                         count += 1
                     
