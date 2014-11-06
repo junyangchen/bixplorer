@@ -16,8 +16,8 @@ from home.utils import *
 
 
 def index(request):
-	context = 'The index method is called'
-	return TemplateResponse(request, 'myturk/index.html', context)
+    context = 'The index method is called'
+    return TemplateResponse(request, 'myturk/index.html', context)
 
 # def createhit(request):
 #     # Load dataset from database
@@ -27,7 +27,7 @@ def index(request):
 
 def createhit(request):
     datasets = DataSet.objects.all()   
-    context = { 'active_tag': 'myturk', 'BASE_URL':settings.BASE_URL, 'datasets':datasets}	
+    context = { 'active_tag': 'myturk', 'BASE_URL':settings.BASE_URL, 'datasets':datasets}  
     return TemplateResponse(request, 'myturk/createhit.html', context)
     
     
@@ -62,14 +62,21 @@ def createhitsubmit(request):
     overview.append_field('Title', task_title)
     overview.append(FormattedContent('<p>' + task_description + '</p>'))
 
-    overview.append(FormattedContent('<table><tr><td>test</td><td>try</td></tr><tr><td>5</td><td>7</td></tr></table>'))
+    # overview.append(FormattedContent('<table><tr><td>test</td><td>try</td></tr><tr><td>5</td><td>7</td></tr></table>'))
+
+    tableStr = '<table>'
+    for docID in task_selected_docs:
+        docText = Doc.objects.get(pk = docID)
+        tableStr += '<tr><td>' + docText.text + '</td></tr>'
+    tableStr += '</table>' 
+
+    overview.append(FormattedContent(tableStr))
 
     # overview.append(FormattedContent('<table>'))
-    # # for docID in task_selected_docs:
-    # #     docText = Doc.objects.get(pk = docID)
-    # #     overview.append(FormattedContent('<tr><td>' + docText.text + '</td></tr>')) 
+    # # # for docID in task_selected_docs:
+    # # #     docText = Doc.objects.get(pk = docID)
+    # # #     overview.append(FormattedContent('<tr><td>' + docText.text + '</td></tr>')) 
     # overview.append(FormattedContent('</table>'))    
-
 
     qc2 = QuestionContent()
     qc2.append_field('Title','What is the plan?')
@@ -102,5 +109,9 @@ def createhitsubmit(request):
 
     # return TemplateResponse(request, 'myturk/createhit.html', context)
 
+
+def hit_result(request):
+
+    return HttpResponse({'hitresult key':'thevaluefromhitresult'}), content_type = "application/json")
 
 
