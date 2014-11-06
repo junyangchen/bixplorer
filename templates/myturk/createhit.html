@@ -10,20 +10,24 @@
             </div>
 
             <div class="panel-body">
+				<div>
+					<label>Task Title:</label><br />
+					<input type="text" id="myturk_task_title">
+				</div>
+
                 <div>
-                	<!-- project selection -->
+                	<label>Task Description:</label><br />
+                	<textarea name="tast_description" placeholder="Task Description" rows="3" style="margin-bottom:10px;" id="myturk_task_description"></textarea> 
+                </div>
+
+<!--                 <div>
                 	<label>Select Project:</label><br />                
                     <select id="hit_project_selection" class="selectpicker" data-live-search="true" data-width="80%" required>
 						{% for item in project %}
                             <option value = "{{project.id}}">{{ project.name }}</option>
 						{% endfor %}
                     </select>
-                </div>
-
-                <div>
-                	<label>Task Description:</label><br />
-                	<textarea name="tast_description" placeholder="Task Description" rows="3" style="margin-bottom:10px;"></textarea> 
-                </div>
+                </div> -->
 
                 <div>
                 	<!-- dataset selection -->
@@ -35,27 +39,37 @@
                     </select>
                 </div>
                     
-                    <!-- data view -->
-                <div class="col-lg-10">
-                    <div class="row" id="main_data_preview">
-                        <fieldset class="field-border">
-                            <legend class="field-border">Data View</legend>
-                            <div id="main_table_view">             
-                                <table id="myturk_doc_list" class="display">
-                                    <!-- TO DO: dynamically generate table head -->
-                                    <thead>
-                                        <tr>
-                                            <th>Doc ID</th>
-                                            <th>Doc Text</th>
-                                        </tr>
-                                    </thead>
-                                </table>
-                            </div>
-                        </fieldset>
-                    </div>
-            	</div>
+                <!-- data view -->
+                <div>
+                    <fieldset class="field-border">
+                        <!-- <legend class="field-border">Data View</legend> -->
+                        <div id="main_table_view">             
+                            <table id="myturk_doc_list" class="display">
+                                <!-- TO DO: dynamically generate table head -->
+                                <thead>
+                                    <tr>
+                                        <th>Doc ID</th>
+                                        <th>Doc Text</th>
+                                    </tr>
+                                </thead>
+                            </table>
+                        </div>
+                    </fieldset>
+                </div>
+				
+				<div>
+	                <input id="csrf_token" type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
+				</div>
 
-                <input id="csrf_token" type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
+                <div>
+                	<label>AWSAccessKeyId:</label><br />
+                	<input type="text" id="myturk_accesskeyid">
+                </div>
+
+                <div>
+                	<label>AWSSecretKey:</label><br />
+                	<input type="text" id="myturk_secretkey">
+                </div>
                 
                 <div>
                 	<button class="btn btn-primay" type="button" id="btn_submit_turk">submit</button>

@@ -7,6 +7,8 @@ $('.selectpicker').on('change', function(){
 
 });
 
+selectedDocID = [];
+
 /*
 * show the content of a certain dataset
 * @param datasetId, the ID of a dataset
@@ -43,13 +45,11 @@ function requestDataset(datasetId){
                     ]
                 });
 
-			    $('#myturk_doc_list tbody').on( 'click', 'tr', function () {
+			    $('#myturk_doc_list tbody').on('click', 'tr', function (){
 			        $(this).toggleClass('selected');
-			    } );
+			        selectedDocID.push($(this).attr('id'));
+			    });
 			 
-			    $('#button').click( function () {
-			        alert( table.rows('.selected').data().length +' row(s) selected' );
-			    } );
             }
         },
         beforeSend: function(xhr, settings) {
@@ -62,31 +62,40 @@ function requestDataset(datasetId){
 
 $('#btn_submit_turk').click(function(){
 
-
     var csrftoken = $('#csrf_token').val();
-    var projectID = $('#projectID_token').val();
+    var taskTitle = $('#myturk_task_title').val(),
+    	taskDescription = $('#myturk_task_description').val(),
+    	dataset = $('.selectpicker').selectpicker('val'),
+    	accessKeyID = $('#myturk_accesskeyid').val(),
+    	secretKey = $('#myturk_secretkey').val();
 
     var requestJSON = {
-        "project_id": projectID,
-        "collaborator_name": colName
-    } 
+        "task_title": taskTitle,
+        "task_description": taskDescription,
+        "task_dataset": dataset,
+        "task_selected_docs": selectedDocID,
+        "aws_access_key_id": accessKeyID,
+        "aws_secret_key": secretKey,
+    }
 
-    $.ajax({
-        url: window.SERVER_PATH + 'myturk/createhit/',
-        type: "POST",
-        data: JSON.stringify(requestJSON),
-        contentType: "application/json",
-        success: function(data){
-            if(data['status'] == 'success') {
-            	console.log('success!');
-            }
-        },
-        beforeSend: function(xhr, settings) {
-            if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
-                xhr.setRequestHeader("X-CSRFToken", csrftoken);
-            }
-        }
-    });
+    console.log(requestJSON); 
+
+    // $.ajax({
+    //     url: window.SERVER_PATH + 'myturk/createhit/',
+    //     type: "POST",
+    //     data: JSON.stringify(requestJSON),
+    //     contentType: "application/json",
+    //     success: function(data){
+    //         if(data['status'] == 'success') {
+    //         	console.log('success!');
+    //         }
+    //     },
+    //     beforeSend: function(xhr, settings) {
+    //         if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+    //             xhr.setRequestHeader("X-CSRFToken", csrftoken);
+    //         }
+    //     }
+    // });
 
 });
 
