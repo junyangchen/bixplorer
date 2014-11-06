@@ -57,7 +57,8 @@ def load_docs_by_datasetId(request):
         docs_list = [] 
         for doc in docs:
             docs_list.append({'doc_id':doc.id, 'doc_people':doc.people, 'doc_location': doc.location,
-                'doc_organization': doc.organization, 'doc_phone':doc.phone, 'doc_misc':doc.misc})     
+                'doc_organization': doc.organization, 'doc_phone':doc.phone, 
+                'doc_misc':doc.misc, 'doc_text':doc.text})     
         responseData = {'status':'success', 'docs': docs_list}            
     except Exception as e:
         print e

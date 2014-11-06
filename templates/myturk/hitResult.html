@@ -15,35 +15,6 @@
                 	<label>Task Description:</label><br />
                 	<textarea name="tast_description" placeholder="Task Description" rows="3" style="margin-bottom:10px;"></textarea> 
                     </div>
-                	<!-- dataset selection -->
-                    <label>Select Dataset:</label><br />
-                    <div>
-                        <select id="project_dataset" class="selectpicker" data-live-search="true" data-width="80%" required>
-							{% for dataset in datasets %}
-                                <option value = "{{dataset.id}}">{{ dataset.name }}</option>
-							{% endfor %}
-                        </select>
-                    </div>
-                    
-                    <!-- data view -->
-                    <div class="col-lg-10">
-                    <div class="row" id="main_data_preview">
-                        <fieldset class="field-border">
-                            <legend class="field-border">Data View</legend>
-                            <div id="main_table_view">             
-                                <table id="data_view" class="display">
-                                    <!-- TO DO: dynamically generate table head -->
-                                    <thead>
-                                        <tr>
-                                            <th>Doc ID</th>
-                                            <th>Doc Text</th>
-                                        </tr>
-                                    </thead>
-                                </table>
-                            </div>
-                        </fieldset>
-                    </div>
-            </div>
                 </div>
 
                 <input id="csrf_token" type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
