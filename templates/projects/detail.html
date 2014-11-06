@@ -105,15 +105,19 @@
 
                                             <div class="col-md-2 col-md-offset-0">
                                                 {% if comment.edit_enable %}
+                                                <div class="col-md-1">
                                                     <button type="button" class="btn btn-primary btn-xs btn_comment_edit" title="Edit" value="{{ comment.id }}">
                                                     <span class="glyphicon glyphicon-pencil"></span>
-                                                    </button>
+                                                    </button>     
+                                                </div>
                                                 {% endif %}
 
                                                 {% if comment.delete_enable %}
+                                                <div class="col-md-1">
                                                     <button type="button" class="btn btn-danger btn-xs btn_comment_delete" title="Delete" value="{{ comment.id }}">
                                                     <span class="glyphicon glyphicon-remove"></span>
-                                                    </button>
+                                                    </button>     
+                                                </div>
                                                 {% endif %}
                                             </div>
                                         </div>
@@ -134,7 +138,7 @@
                                                        
                     <!-- <form accept-charset="UTF-8" action="" method="POST"> -->
                     <textarea id="comment_message_area" class="form-control counted" name="message" placeholder="Type in your message" rows="5" style="margin-bottom:10px;"></textarea>
-                    <h6 class="pull-right" id="counter">320 characters remaining</h6>
+                    <!-- <h6 class="pull-right" id="counter">320 characters remaining</h6> -->
                     <button class="btn btn-info" id="add_new_comment">Post New Comment</button>
                     <!-- </form> -->
                 </div>

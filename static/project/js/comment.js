@@ -69,51 +69,50 @@ function refreshCommentList(commentListID, comments) {
     $(commentListID).empty();
 
     for (var i = 0; i < comments.length; i++) {
-        // with edit and delete button
-        if (comments[i]['edit_enable'] == true)
-            $(commentListID).append('<li class="list-group-item">' + 
-                '<div class="row">' + 
-                    '<div class="col-xs-3 col-md-1 left_15_gap">' + 
-                        '<img src="' + window.PUBLIC_PATH + 'common/imgs/default1.png" class="img-circle img-responsive" alt="" />'+ 
-                    '</div>' +
-                    '<div class="col-xs-7 col-md-10">'+ 
-                        '<div class="col-md-10">'+ 
-                            '<div class="mic-info">'+ 
-                                'By: <a href="#">' + comments[i]['user'] + '</a> On ' + comments[i]['pub_date']+  
-                            '</div>'+
-                            '<div class="comment-text">'+ 
-                                '<p>' + comments[i]['content'] + '</p>'+ 
-                            '</div>'+                                          
-                        '</div>'+
-                        '<div class="col-md-2 col-md-offset-0">'+ 
+        var commentInfoStart = '<li class="list-group-item">' + 
+                                    '<div class="row">' + 
+                                        '<div class="col-xs-3 col-md-1 left_15_gap">' + 
+                                            '<img src="' + window.PUBLIC_PATH + 'common/imgs/default1.png" class="img-circle img-responsive" alt="" />'+ 
+                                        '</div>' +
+                                        '<div class="col-xs-7 col-md-10">'+ 
+                                            '<div class="col-md-10">'+ 
+                                                '<div class="mic-info">'+ 
+                                                    'By: <a href="#">' + comments[i]['user'] + '</a> On ' + comments[i]['pub_date']+  
+                                                '</div>'+
+                                                '<div class="comment-text">'+ 
+                                                    '<p>' + comments[i]['content'] + '</p>'+ 
+                                                '</div>'+                                          
+                                            '</div>';
+
+        var btnEditDel = '<div class="col-md-2 col-md-offset-0">'+ 
                             '<button type="button" class="btn btn-primary btn-xs btn_comment_edit" title="Edit" value="' + comments[i]['comment_id'] + '">'+ 
                                 '<span class="glyphicon glyphicon-pencil"></span>'+
                             '</button>'+ 
                             '<button type="button" class="btn btn-danger btn-xs btn_comment_delete btn_appended" title="Delete" value="' + comments[i]['comment_id'] + '">'+ 
                                 '<span class="glyphicon glyphicon-remove"></span>'+
                             '</button>'+
-                        '</div>'+
-                    '</div>'+
-                '</div>'+ 
-            '</li>');
-        else
-            $(commentListID).append('<li class="list-group-item">' + 
-                '<div class="row">' + 
-                    '<div class="col-xs-3 col-md-1 left_15_gap">' + 
-                        '<img src="' + window.PUBLIC_PATH + 'common/imgs/default1.png" class="img-circle img-responsive" alt="" />'+ 
-                    '</div>' +
-                    '<div class="col-xs-7 col-md-10">'+ 
-                        '<div class="col-md-10">'+ 
-                            '<div class="mic-info">'+ 
-                                'By: <a href="#">' + comments[i]['user'] + '</a> On ' + comments[i]['pub_date']+  
-                            '</div>'+
-                            '<div class="comment-text">'+ 
-                                '<p>' + comments[i]['content'] + '</p>'+ 
-                            '</div>'+                                          
-                        '</div>'+
-                    '</div>'+
-                '</div>'+ 
-            '</li>');              
+                        '</div>';
+
+        var btnDel = '<div class="col-md-2 col-md-offset-0">'+
+                            '<button type="button" class="btn btn-danger btn-xs btn_comment_delete btn_appended" title="Delete" value="' + comments[i]['comment_id'] + '">'+ 
+                                '<span class="glyphicon glyphicon-remove"></span>'+
+                            '</button>'+
+                        '</div>';
+
+        var commentInfoEnd = '</div>'+
+                        '</div>'+ 
+                    '</li>';                                   
+
+        // with edit and delete button
+        if (comments[i]['edit_enable'] == true)
+            $(commentListID).append(commentInfoStart + btnEditDel + commentInfoEnd);
+        // just delete
+        else if (comments[i]['edit_enable'] == false && comments[i]['edit_enable'] == true)
+            $(commentListID).append(commentInfoStart + btnDel + commentInfoEnd);
+        // no edit or delete
+        else if (comments[i]['edit_enable'] == false && comments[i]['edit_enable'] == false)
+            $(commentListID).append(commentInfoStart + commentInfoEnd);
+             
     }
 
     // update the comment number
