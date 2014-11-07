@@ -124,8 +124,8 @@ def hitresultfetch(request):
 
     requestJson = json.loads(request.body)    
     
-    user_aws_secret_key = requestJson['myturk_accesskeyid']    
-    user_aws_access_key_id = requestJson['myturk_secretkey']
+    user_aws_secret_key = requestJson['myturk_secretkey']    
+    user_aws_access_key_id = requestJson['myturk_accesskeyid']
 
     # return TemplateResponse(request, 'myturk/hitResult.html', context)
 
