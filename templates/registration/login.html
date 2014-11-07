@@ -1,9 +1,9 @@
 {% extends "registration/base_test.html" %}
 {% load i18n %}
 {% block content %}
-<ul class="nav nav-tabs">
+<!-- <ul class="nav nav-tabs">
                             <li><a href="#create" data-toggle="tab">Login</a></li>
-                        </ul>
+                        </ul> -->
                         <div id="myTabContent" class="tab-content">
                             <!-- login tab -->
                             <div class="tab-pane active in" id="login">
@@ -33,7 +33,7 @@
                                             <!-- Button -->
                                             <div class="controls">
     											<input id="login_submit" class="btn btn-success" type="submit" name="submit" value="Sign in" />
-                                                <span class="pull-right" id="forgetPass"><a href="#">Forget password?</a></span>
+                                                <span class="pull-right" id="forgetPass"><a href="{% url 'registration_register:register' %}">Sign Up</a></span>
                                             </div>
     										<!-- login error message -->
                                             
