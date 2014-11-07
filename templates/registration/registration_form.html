@@ -1,130 +1,17 @@
 {% extends "registration/base_test.html" %}
 {% load i18n %}
 {% block content %}
-<ul class="nav nav-tabs">
-                            <li><a href="#create" data-toggle="tab">Sign up</a></li>
-                        </ul>
-                        <div id="myTabContent" class="tab-content">
-
-                            <div class="tab-pane active in" id="create">
-                                <!--<form method="POST" action="">
-                                    {% csrf_token %}
-                                    <fieldset>
-                                        <div class="control-group">
-                                            <div class="input-group">
-                                                <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
-												<p class="username_message">
-                                                    <a href="#" data-toggle="tooltip" class="message_tooltip">
-                                                    <label for="id_username">Username:</label>
-                                                        <input id="id_username" maxlength="30" name="username" type="text">
-                                                    </a>
-                                                </p>
-											</div>
-                                        </div>
-
-                                        <div class="control-group">
-                                            <div class="input-group">
-                                                <span class="input-group-addon"><i class="glyphicon glyphicon-envelope"></i></span>
-                                                <p class="email_message">
-                                                    <a href="#" data-toggle="tooltip" class="message_tooltip">
-                                                        <label for="id_email">E-mail:</label>
-                                                        <input id="id_email" name="email" type="email">
-                                                    </a>
-                                                </p>
-                                            </div>
-                                        </div>                               
-
-                                       <div class="control-group">
-                                            <div class="input-group">
-                                                <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
-                                                <p class="password1_message">
-                                                    <a href="#" data-toggle="tooltip" class="message_tooltip">
-                                                        <label for="id_password1">Password:</label>
-                                                        <input id="id_password1" name="password1" type="password">
-                                                    </a>
-                                                </p>  
-                                            </div>
-                                        </div>
-
-                                        <div class="control-group">
-                                            <div class="input-group">
-                                                <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
-                                                <p class="password2_message">
-                                                    <a href="#" data-toggle="tooltip" class="message_tooltip">
-                                                        <label for="id_password2">Password (again):</label>
-                                                        <input id="id_password2" name="password2" type="password">
-                                                    </a>
-                                                </p>
-                                            </div>
-                                        </div>
-                                        
-                                        <div class="control-group">
-                                            <div class="input-group">
-                                                <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
-                                                <p class="password2_message">
-                                                    <a href="#" data-toggle="tooltip" class="message_tooltip">
-
-                                                    <label for="id_first_name">Your first name:</label>
-                                                    <input id="id_first_name" maxlength="100" name="first_name" type="text">
-                                                    </a>
-                                                </p>
-                                            </div>
-                                        </div>
-                                        
-                                        <div class="control-group">
-                                            <div class="input-group">
-                                                <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
-                                                <p class="password2_message">
-                                                    <a href="#" data-toggle="tooltip" class="message_tooltip">
-
-                                                    <label for="id_last_name">Your last name:</label>
-                                                    <input id="id_last_name" maxlength="100" name="last_name" type="text">
-                                                    </a>
-                                                </p>
-                                            </div>
-                                        </div>
-                                        
-                                        <div class="control-group">
-                                            <div class="input-group">
-                                                <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
-                                                <p class="password2_message">
-                                                    <a href="#" data-toggle="tooltip" class="message_tooltip">
-
-                                                    <label for="id_location">Your location:</label>
-                                                    <input id="id_location" maxlength="100" name="location" type="text">
-                                                    </a>
-                                                </p>
-                                            </div>
-                                        </div>
-                                        
-                                        <div class="control-group">
-                                            <div class="input-group">
-                                                <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
-                                                <p class="password2_message">
-                                                    <a href="#" data-toggle="tooltip" class="message_tooltip">
-                                                    <label for="id_career">Your career:</label>
-                                                    <select id="id_career" name="career">
-                                                    <option value="F">Falcuty</option>
-                                                    <option value="U">Under Graduate</option>
-                                                    <option value="G">Graduate</option>
-                                                    <option value="O">Others</option>
-                                                    </select>
-                                                    </a>
-                                                </p>
-                                            </div>
-                                        </div>
-
-                                        <div class="control-group">
-                                            <div class="controls">
-                                                <input type="submit" value="Submit">
-                                            </div>
-                                        </div>
-                                        
-                                    </fieldset>
-                                </form>-->
-                                <form method='post' action=''>{% csrf_token %}
+<!-- <ul class="nav nav-tabs">
+    <li><a href="#create" data-toggle="tab">Sign up</a></li>
+</ul> -->
+                        
+<div id="myTabContent" class="tab-content">
+    <div class="tab-pane active in" id="create">
+        <form method='post' action=''>{% csrf_token %}
         {{ form }}
-        <tr><td></td><td><input type="submit" value="{% trans "Submit" %}" /></td>
-    </form>
-                            </div>                           
-                            {% endblock %}
+        <input type="submit" value="{% trans "Sign Up" %}" />
+        <a href="{{BASE_URL}}account/login/" id="reg_login"> Login</a>
+        </form>
+    </div>
+</div>                           
+{% endblock %}

@@ -18,7 +18,7 @@
 
                 <div>
                 	<label>Task Description:</label><br />
-                	<textarea name="tast_description" placeholder="Task Description" rows="3" style="margin-bottom:10px;" id="myturk_task_description"></textarea> 
+                	<textarea name="tast_description" placeholder="Task Description" rows="3" style="margin-bottom:10px; width: 100%;" id="myturk_task_description"></textarea> 
                 </div>
                 <hr>
 
@@ -93,6 +93,39 @@
             </div>
 
             <div class="panel-body">
+            	<ul class="list-group">
+            		<li class="list-group-item" id="hit_result_list_{{ comment.id }}">
+            			<div class="row">
+            				<div class="col-xs-7 col-md-10">
+            					<div class="col-md-10">
+            						<div class="mic-info">
+                                        By: <a href="#"> A FAKE USER </a> on A FAKE TIME
+                                    </div>
+
+                                    <div>
+                                        <p>This is a fake result!</p>
+                                    </div>
+            					</div>
+            				</div>
+            			</div>
+            		</li>
+
+					<li class="list-group-item" id="hit_result_list_{{ comment.id }}">
+            			<div class="row">
+            				<div class="col-xs-7 col-md-10">
+            					<div class="col-md-10">
+            						<div class="mic-info">
+                                        By: <a href="#"> A FAKE USER </a> on A FAKE TIME
+                                    </div>
+
+                                    <div>
+                                        <p>This is a fake result!</p>
+                                    </div>
+            					</div>
+            				</div>
+            			</div>
+            		</li>            		
+            	</ul>
             </div>
 		</div>		
 	</div>	
