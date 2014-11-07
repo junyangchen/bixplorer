@@ -72,12 +72,6 @@ def createhitsubmit(request):
 
     overview.append(FormattedContent(tableStr))
 
-    # overview.append(FormattedContent('<table>'))
-    # # # for docID in task_selected_docs:
-    # # #     docText = Doc.objects.get(pk = docID)
-    # # #     overview.append(FormattedContent('<tr><td>' + docText.text + '</td></tr>')) 
-    # overview.append(FormattedContent('</table>'))    
-
     qc2 = QuestionContent()
     qc2.append_field('Title','What is the plan?')
      
