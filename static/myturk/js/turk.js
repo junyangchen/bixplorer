@@ -73,15 +73,21 @@ $('#btn_submit_turk').click(function(){
     	taskDescription = $('#myturk_task_description').val(),
     	dataset = $('.selectpicker').selectpicker('val'),
     	accessKeyID = $('#myturk_accesskeyid').val(),
-    	secretKey = $('#myturk_secretkey').val();
+    	secretKey = $('#myturk_secretkey').val(),
+    	taskDuration = $('#myturk_duration').val(),
+    	taskMaxAssignment = $('#myturk_max_assignment').val()
+    	taskReward = $('#myturk_reward').val();
 
     var requestJSON = {
         "task_title": taskTitle,
         "task_description": taskDescription,
         "task_dataset": dataset,
+        "task_duration": taskDuration,
+        "task_max_assignment": taskMaxAssignment,
+        "task_reward": taskReward,
         "task_selected_docs": selectedDocID,
         "aws_access_key_id": accessKeyID,
-        "aws_secret_key": secretKey,
+        "aws_secret_key": secretKey
     }
 
     console.log(requestJSON); 
