@@ -39,14 +39,17 @@ $('#btn_comment_delete_confirm').click(function(){
 
 // edit a comment
 $('.btn_comment_edit').click(function(){
-
+    // cancel ajax
+    $.ajaxSetup({async:false}); 
     var commentID = $(this).val(),
-        commentContent = $('#comment_content_' + commentID).html();
+        commentContent = $('#comment_content_' + commentID).html().toString();
 
-    $('#comment_edit_area_' + commentID).html();   
+    console.log(commentContent);
+
+    $('#comment_edit_area_' + commentID).html(commentContent); 
 
     $('#comment_content_' + commentID).addClass('hide_this');
-    $('#comment_edit_area_' + commentID).removeClass('hide_this');
+    $('#comment_edit_' + commentID).removeClass('hide_this');
 
 });
 

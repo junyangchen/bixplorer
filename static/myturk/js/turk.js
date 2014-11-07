@@ -14,8 +14,7 @@ selectedDocID = [];
 * @param datasetId, the ID of a dataset
 */
 function requestDataset(datasetId){
-    // cancel ajax to get values from all inputs
-    $.ajaxSetup({async:false});
+
     var csrftoken = $('#csrf_token').val();
     
     function csrfSafeMethod(method) {
@@ -30,10 +29,14 @@ function requestDataset(datasetId){
         success: function(data){
             console.log(data);
             if(data['status'] == 'success') {
+			    // cancel ajax to get values from all inputs
+			    $.ajaxSetup({async:false});            	
                 // delete the previous table
                 $('#myturk_doc_list').dataTable().fnDestroy();
+                $('#myturk_doc_list').empty();
+                
                 // initialize the table
-                var table = $('#myturk_doc_list').dataTable( {
+                table = $('#myturk_doc_list').dataTable({
                     "data": data['docs'],
                     "bLengthChange": false,
                     "paging": true,
@@ -46,6 +49,9 @@ function requestDataset(datasetId){
                 });
 
 			    $('#myturk_doc_list tbody').on('click', 'tr', function (){
+
+			    	console.log('click!');
+
 			        $(this).toggleClass('selected');
 			        selectedDocID.push($(this).attr('id'));
 			    });
