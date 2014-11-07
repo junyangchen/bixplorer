@@ -1,5 +1,8 @@
 
+// initialize bootstrap select plugin
 $('.selectpicker').selectpicker();
+// set initial value be none
+$('.selectpicker').selectpicker('val', ' ');
 
 // refresh the data view when changing selected dataset
 $('.selectpicker').on('change', function(){
@@ -49,9 +52,6 @@ function requestDataset(datasetId){
                 });
 
 			    $('#myturk_doc_list tbody').on('click', 'tr', function (){
-
-			    	console.log('click!');
-
 			        $(this).toggleClass('selected');
 			        selectedDocID.push($(this).attr('id'));
 			    });
