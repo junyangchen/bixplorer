@@ -117,14 +117,15 @@ def hitresult(request):
 
 
 def hitresultfetch(request):
+    from boto.mturk.connection import MTurkConnection
     from boto.mturk.question import QuestionContent,Question,QuestionForm,Overview,AnswerSpecification,SelectionAnswer,FormattedContent,FreeTextAnswer
-
+  
     import mturk_getallreviewablehits as getAllHits
 
     requestJson = json.loads(request.body)    
     
-    user_aws_secret_key = requestJson['aws_secret_key']    
-    user_aws_access_key_id = requestJson['aws_access_key_id']
+    user_aws_secret_key = requestJson['myturk_accesskeyid']    
+    user_aws_access_key_id = requestJson['myturk_secretkey']
 
     # return TemplateResponse(request, 'myturk/hitResult.html', context)
 
