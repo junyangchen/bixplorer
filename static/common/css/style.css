@@ -168,13 +168,13 @@ div.shade-container{
 #comment_message_board { margin-bottom: 0px !important; }
 
 /*style for registration*/
-#id_username { width: 100%;}
-#id_email { width: 100%;}
-#id_password1 { width: 100%;}
-#id_password2 { width: 100%;}
-#id_first_name { width: 100%;}
-#id_last_name { width: 100%;}
-#id_location { width: 100%;}
+#id_username { width: 100%; margin-bottom: 10px;}
+#id_email { width: 100%; margin-bottom: 10px;}
+#id_password1 { width: 100%; margin-bottom: 10px;}
+#id_password2 { width: 100%; margin-bottom: 10px;}
+#id_first_name { width: 100%; margin-bottom: 10px;}
+#id_last_name { width: 100%; margin-bottom: 10px;}
+#id_location { width: 100%; margin-bottom: 10px;}
 #id_career { width: 100%; margin-bottom: 15px;}
 .errorlist > li { color: red;}
 #reg_login {margin-left: 20px;}
