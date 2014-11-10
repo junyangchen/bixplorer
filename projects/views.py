@@ -16,28 +16,35 @@ from django.contrib.auth.decorators import login_required
 @login_required   
 def index(request):
     theUser = request.user
+        
     # Load the total number of projects for the user
-    collaborationShip = Collaborationship.objects.filter(user = theUser)
-    private_projects = Project.objects.filter(user = theUser, is_private = 1)
-    public_projects = Project.objects.filter(is_private = 0)
+    collaborationShip = Collaborationship.objects.filter(user = theUser, is_deleted = '0')
+    my_projects_queryset = Project.objects.filter(user = theUser, is_deleted = '0')
+    public_projects_queryset = Project.objects.filter(is_private = 0, is_deleted = '0')
     
     # Calculate the number of projects for the user
     project_set = set()
+    shared_projects = []
+    public_projects = []
     count = 0 
     
     try:
+        for item in my_projects_queryset:
+            if not item.id in project_set:
+                project_set.add(item.id)
+                count += 1
+        
         for item in collaborationShip:
-            if str(item.project.id) not in project_set:
-                project_set.add(str(item.project.id))
-                count += 1
-        for item in private_projects:
-            print item.name
-            if not item.name in project_set:
-                project_set.add(item.name)
-                count += 1
-        for item in public_projects:
-            if item.id not in project_set:
+            if not item.project.id  in project_set:
+                if not item.project.is_deleted:
+                    project_set.add(item.project.id)
+                    shared_projects.append(item.project)
+                    count += 1
+                
+        for item in public_projects_queryset:
+            if not item.id in project_set:
                 project_set.add(str(item.id))
+                public_projects.append(item)
                 count += 1
                 
     except Exception as e:
@@ -65,7 +72,7 @@ def add(request):
                 # Load project data from the database                
                 toUpdate = Project.objects.get(pk = projectRaw['project_id'])
                 
-                # TO-DO check if the project is delted
+                # TO-DO check if the project is deleted
                 
                 # Only the project creator, super user and collaborators can edit the project
                 has_permission = toUpdate.is_creator(theUser) or toUpdate.is_collaborator(theUser) or theUser.is_superuser
@@ -97,9 +104,15 @@ def add(request):
         # Handle request from the add view    
         else:     
             try:
+                
+                if projectRaw['project_privacy'] == '1':
+                    is_private_front_end = True
+                else:
+                    is_private_front_end = False
+                    
                 newProject = Project(user = request.user, dataset = DataSet.objects.get(id = projectRaw['dataset_id']), 
                     name = projectRaw['project_name'], description = projectRaw['project_description'], 
-                    create_time = timezone.now(), is_private = projectRaw['project_privacy'], 
+                    create_time = timezone.now(), is_private = is_private_front_end, 
                     is_deleted = 0)
             
                 newProject.save()

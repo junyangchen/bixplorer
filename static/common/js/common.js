@@ -128,10 +128,9 @@ function requestDataset(datasetId){
 */
 //var csrftoken = $.cookie('csrftoken');
 
-
 function projectSave() {
 	// cancel ajax to get values from all inputs
-    $.ajaxSetup({async:false});
+    //$.ajaxSetup({async:false});
     var csrftoken = $('#csrf_token').val();  
 
     // get all relevent information of a project
@@ -140,15 +139,18 @@ function projectSave() {
     	pdes = $('#project_des').val(),
     	isPrivate = $(':radio:checked').val(),
 		dataset = $('#project_dataset').selectpicker('val');
-
+    
     var save_project = {
-		"project_id": pid,
+		//"project_id": pid,
     	"project_name": pname,
     	"project_description": pdes,
     	"project_privacy": isPrivate,
     	"dataset_id": dataset,
         "csrfmiddlewaretoken": csrftoken
     }
+    if(typeof pid != 'undefined')
+        save_project.project_id = pid;
+    
     function csrfSafeMethod(method) {
         // these HTTP methods do not require CSRF protection
         return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
@@ -169,5 +171,5 @@ function projectSave() {
                 xhr.setRequestHeader("X-CSRFToken", csrftoken);
             }
         }
-    });	
+    });
 }
