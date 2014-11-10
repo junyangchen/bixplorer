@@ -426,10 +426,15 @@ def save_comment(request):
             project_id = commentJson['project_id']
             comment_id = commentJson['comment_id']
             comment_content = commentJson['comment_content']
-            theUser = request.user
+            theUser = request.user           
+            
+            theComment = Comment.objects.get(pk = comment_id)
             
             # TO-DO check permissions
-            theComment = Comment.objects.get(pk = comment_id)
+            # Only the comment creator or super user can edit the comment            
+            if not (theComment.user == theUser or theUser.is_superuser):
+                raise Http404           
+            
             theComment.content = comment_content
             theComment.save()
             
