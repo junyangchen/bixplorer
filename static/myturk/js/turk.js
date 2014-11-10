@@ -128,8 +128,27 @@ $('#hit_result_fetch').click(function(){
         type: "POST",
         data: JSON.stringify(requestJSON),
         contentType: "application/json",
-        success: function(data){            
+        success: function(data){        
             console.log(data);
+            var dataContainer = $('#turk_result');
+            for(var i = 0; i < data.length; i++){
+                var hitID = data[i].hitID;
+                dataContainer.append("<p> Hit id: " + hitID + "</p>");
+                var assignments = data[i].assignments;
+                var assignmentsDiv = $('<div/>').html("<div id = 'assignment_"+ hitID + "'> </div>").contents();
+                for(var j = 0; j < assignments.length; j++){
+                    var workderID = assignments[i].workderID;
+                    console.log(workderID);
+                    assignmentsDiv.append("<p> worker id: " + workderID + "</p>");
+                    var answers = assignments[i].answer;
+                    for(var k = 0; k < answers.length; k++){
+                        assignmentsDiv.append("<p> answer : " + answers[i] + "</p>");
+                    }
+                }
+                
+                dataContainer.append(assignmentsDiv);
+                
+            }
         },
         beforeSend: function(xhr, settings) {
             if (!csrfSafeMethod(settings.type) && !this.crossDomain) {

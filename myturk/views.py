@@ -180,7 +180,7 @@ def hitresultfetch(request):
 
                 print ("--------------------")
                 
-            hitResultArr.append({'hit':{'hitID':hit.HITId, 'assignments':theAssignments}})
+            hitResultArr.append({'hitID':hit.HITId, 'assignments':theAssignments})
         
         print('------after looping through allHits')
     except Exception as e:
