@@ -50,6 +50,10 @@ $('.btn_comment_edit').click(function(){
 
     $('#comment_content_' + commentID).addClass('hide_this');
     $('#comment_edit_' + commentID).removeClass('hide_this');
+    
+    $(this).hide();
+    $(this).siblings().show();
+    //$(this).
 
 });
 
