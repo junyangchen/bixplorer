@@ -53,9 +53,28 @@ $('.btn_comment_edit').click(function(){
     
     $(this).hide();
     $(this).siblings().show();
-    //$(this).
-
 });
+
+$('.btn_comment_edit_save').click(function(){
+    
+    var csrftoken = $('#csrf_token').val();
+    var comment_edit = $(this).siblings();
+    var commentID = comment_edit.val();
+    var projectID = $('#projectID_token').val();
+    var commentContent = $('#comment_edit_area_' + commentID).val();
+    
+    
+    var requestJSON = {
+        "project_id": projectID,
+        "comment_id": commentID,
+        "comment_content": commentContent
+    }
+    
+    commentUpdateRequest('save', requestJSON, csrftoken);
+    
+});
+
+
 
 
 
@@ -87,14 +106,20 @@ function refreshCommentList(commentListID, comments) {
                                                     'By: <a href="#">' + comments[i]['user'] + '</a> On ' + comments[i]['pub_date']+  
                                                 '</div>'+
                                                 '<div class="comment-text">'+ 
-                                                    '<p>' + comments[i]['content'] + '</p>'+ 
-                                                '</div>'+                                          
+                                                    '<p id = "comment_content_' + comments[i]['comment_id'] + '">' + comments[i]['content'] + '</p>'+ 
+                                                '</div>'+   
+                                                '<div class="hide_this" id="comment_edit_' + comments[i]['comment_id'] + '">' +
+                                                    '<textarea class="form-control counted comment_edit_area" name="comment" placeholder="Change your comment" rows="3" id="comment_edit_area_' + comments[i]['comment_id'] + '"></textarea>' +    
+                                                '</div>' +
                                             '</div>';
 
         var btnEditDel = '<div class="col-md-2 col-md-offset-0">'+ 
                             '<button type="button" class="btn btn-primary btn-xs btn_comment_edit" title="Edit" value="' + comments[i]['comment_id'] + '">'+ 
                                 '<span class="glyphicon glyphicon-pencil"></span>'+
                             '</button>'+ 
+                            '<button type="button" class="btn btn-primary btn-xs btn_comment_edit_save" title="Save" value="test" style="display: none;">' + 
+                                '<span class="glyphicon glyphicon-save"></span>' +
+                                                    '</button>' +                            
                             '<button type="button" class="btn btn-danger btn-xs btn_comment_delete btn_appended" title="Delete" value="' + comments[i]['comment_id'] + '">'+ 
                                 '<span class="glyphicon glyphicon-remove"></span>'+
                             '</button>'+
@@ -130,7 +155,44 @@ function refreshCommentList(commentListID, comments) {
         // show confirm deletion popup
         $('#comment_delete_alert').modal('toggle');
         commentIDForDelete = $(this).val();
-    });   
+    });
+    
+    $('.btn_comment_edit').on('click', function(){
+        // cancel ajax
+        $.ajaxSetup({async:false}); 
+        console.log($('#comment_content_' + commentID).html());
+        var commentID = $(this).val(),
+            commentContent = $('#comment_content_' + commentID).html().toString();
+
+        
+
+        $('#comment_edit_area_' + commentID).html(commentContent); 
+
+        $('#comment_content_' + commentID).addClass('hide_this');
+        $('#comment_edit_' + commentID).removeClass('hide_this');
+        
+        $(this).hide();
+        $(this).siblings().show();
+    }); 
+
+    $('.btn_comment_edit_save').click(function(){
+    
+    var csrftoken = $('#csrf_token').val();
+    var comment_edit = $(this).siblings();
+    var commentID = comment_edit.val();
+    var projectID = $('#projectID_token').val();
+    var commentContent = $('#comment_edit_area_' + commentID).val();
+    
+    
+    var requestJSON = {
+        "project_id": projectID,
+        "comment_id": commentID,
+        "comment_content": commentContent
+    }
+    
+    commentUpdateRequest('save', requestJSON, csrftoken);
+    
+});
 }
 
 
@@ -141,11 +203,16 @@ function commentUpdateRequest(type, request, csrftoken) {
         data: JSON.stringify(request),
         contentType: "application/json",
         success: function(data){
+            
+            if(type == 'add')
+                $('#comment_message_area').val("");
+                
             if(data['status'] == 'success') {
                 refreshCommentList('#comment_list', data['comments']);
             }
             if (type == 'delete')
                 $('#comment_delete_alert').modal('hide');
+            
         },
         beforeSend: function(xhr, settings) {
             if (!csrfSafeMethod(settings.type) && !this.crossDomain) {

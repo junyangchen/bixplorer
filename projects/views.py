@@ -217,6 +217,42 @@ def detail(request, project_id):
     
     if theproject.is_deleted:
         raise Http404
+        
+    collaborators = []
+    # Only project creator, collaborator and super user can
+    # have access to the collaborators
+    # perm = 0, user will not see the collaborator view
+    # perm = 1, a user will see the collaborator view, but can not edit or add
+    # perm = 2, a user will be able to edit or add collaborators
+    perm = 0
+    theUser = request.user
+    
+    if theproject.is_creator(theUser) or theUser.is_superuser:
+        perm = 2
+    elif theproject.is_collaborator(theUser):
+        perm = 1
+    else:
+        perm = 0
+        
+    # If a user is not collaborator or owner,
+    # then, he/she can only view public projects.
+    if perm == 0 and theproject.is_private:
+        raise Http404
+        
+    # Load collaborators
+    if not perm == 0:
+        collaboratorShip = Collaborationship.objects.filter(is_deleted = 0, project = theproject)    
+        
+        is_theUser_collaborate = False
+        for collaborator in collaboratorShip:
+            if theUser == collaborator.user:
+                is_theUser_collaborate = True
+            else:
+                collaborators.append(collaborator.user)
+        
+        if (not theproject.user == theUser) and is_theUser_collaborate:
+            collaborators.append(theproject.user)
+            
     
     allComments =    theproject.comment_set.all();
     allComments = allComments.filter(is_deleted = False)  
@@ -232,35 +268,6 @@ def detail(request, project_id):
             comment.edit_enable = False
             comment.delete_enable = False
     
-    collaborators = []
-    # Only project creator, collaborator and super user can
-    # have access to the collaborators
-    # perm = 0, user will not see the collaborator view
-    # perm = 1, a user will see the collaborator view, but can not edit or add
-    # perm = 2, a user will be able to edit or add collaborators
-    perm = 0
-    theUser = request.user
-    if theproject.is_creator(theUser) or theUser.is_superuser:
-        perm = 2
-    elif theproject.is_collaborator(theUser):
-        perm = 1
-    else:
-        perm = 0
-    
-    # Load collaborators
-    if not perm == 0:
-        collaboratorShip = Collaborationship.objects.filter(is_deleted = 0, project = theproject)    
-        
-        is_theUser_collaborate = False
-        for collaborator in collaboratorShip:
-            if theUser == collaborator.user:
-                is_theUser_collaborate = True
-            else:
-                collaborators.append(collaborator.user)
-        
-        if (not theproject.user == theUser) and is_theUser_collaborate:
-            collaborators.append(theproject.user)        
-        
     context = { 'user' : request.user, 'BASE_URL':settings.BASE_URL, 
         'project' : theproject, 'comments': allComments, 
         'collaborators':collaborators, 'collaborate_permisson' : perm}
@@ -276,6 +283,7 @@ def load_project_comment_json(request, project_id):
     theproject = get_object_or_404(Project, pk = project_id)
     allComments =    theproject.comment_set.all();
     allComments = allComments.filter(is_deleted = False)
+    
     
     comments_list = [] 
     for comment in allComments:
@@ -293,7 +301,7 @@ def load_project_comment_json(request, project_id):
         else:
             tmp['edit_enable'] = False
             tmp['delete_enable'] = False
-            
+          
         comments_list.append(tmp)    
     return comments_list  
     
@@ -408,7 +416,33 @@ def delete_comment(request):
             raise Http404
     else:
         raise Http404
-
+        
+@login_required  
+def save_comment(request):
+    if request.method == 'POST':
+        commentJson = json.loads(request.body)
+        
+        try:
+            project_id = commentJson['project_id']
+            comment_id = commentJson['comment_id']
+            comment_content = commentJson['comment_content']
+            theUser = request.user
+            
+            # TO-DO check permissions
+            theComment = Comment.objects.get(pk = comment_id)
+            theComment.content = comment_content
+            theComment.save()
+            
+            # Reload the comments from the database
+            comments_json = load_project_comment_json(request, project_id) 
+            
+            responseData = {'status':'success', 'comments': comments_json}
+            return HttpResponse(json.dumps(responseData), content_type = "application/json")
+        except Exception as e:  
+            print e
+            raise Http404    
+    else:
+        raise Http404
         
 @login_required         
 def add_collaborator(request):

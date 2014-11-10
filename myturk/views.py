@@ -90,14 +90,17 @@ def createhitsubmit(request):
     question_form.append(q2)
     print 'Before create hit'
     #--------------- CREATE THE HIT -------------------
-     
-    creathitReturnValue = mtc.create_hit(questions=question_form,
-                                                       max_assignments= task_max_assignment,
-                                                       title=task_title,
-                                                       description=task_description,
-                                                       keywords='SomeKeywords',
-                                                       duration = task_duration,
-                                                       reward= task_reward)
+    
+    try:
+        creathitReturnValue = mtc.create_hit(questions=question_form,
+                                                           max_assignments= task_max_assignment,
+                                                           title=task_title,
+                                                           description=task_description,
+                                                           keywords='SomeKeywords',
+                                                           duration = task_duration,
+                                                           reward= task_reward)
+    except Exception as e:
+        print e
 
     print 'after crate hit'
     
