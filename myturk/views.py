@@ -43,11 +43,14 @@ def createhitsubmit(request):
     task_selected_docs = requestJson['task_selected_docs'] #id
     task_title = requestJson['task_title']
     #task_dataset = requestJson['task_dataset'] # id   
-    task_description = requestJson['task_description']    
+    task_description = requestJson['task_description']
+    task_duration = requestJson['task_duration']
+    task_max_assignment = requestJson['task_max_assignment']
+    task_reward = requestJson['task_reward']
         
     # adjust host setting, depending on whether HIT is live (production) or in testing mode (sandbox)
     mode = "sandbox"
-    # mode ="production"
+    #mode ="production"
 
     if mode=="production":
         HOST='mechanicalturk.amazonaws.com'
@@ -60,20 +63,19 @@ def createhitsubmit(request):
                       
     overview = Overview()
     overview.append_field('Title', task_title)
-    overview.append(FormattedContent('<p>' + task_description + '</p>'))
-
+    overview.append(FormattedContent('<b>' + task_description + '</b><p></p>'))
+    
     # overview.append(FormattedContent('<table><tr><td>test</td><td>try</td></tr><tr><td>5</td><td>7</td></tr></table>'))
-
-    tableStr = '<table>'
+    
+    tableStr = '<ul>'
     for docID in task_selected_docs:
         docText = Doc.objects.get(pk = docID)
-        tableStr += '<tr><td>' + docText.text + '</td></tr>'
-    tableStr += '</table>' 
-
+        tableStr += '<li>' + docText.text + '</li>'
+    tableStr += '</ul>' 
     overview.append(FormattedContent(tableStr))
-
+    
     qc2 = QuestionContent()
-    qc2.append_field('Title','What is the plan?')
+    qc2.append_field('Title','What do you find?')
      
     fta2 = FreeTextAnswer()
      
@@ -86,18 +88,18 @@ def createhitsubmit(request):
     question_form = QuestionForm()
     question_form.append(overview)
     question_form.append(q2)
-     
+    print 'Before create hit'
     #--------------- CREATE THE HIT -------------------
      
     creathitReturnValue = mtc.create_hit(questions=question_form,
-                                                       max_assignments=10,
+                                                       max_assignments= task_max_assignment,
                                                        title=task_title,
                                                        description=task_description,
                                                        keywords='SomeKeywords',
-                                                       duration = 60*5,
-                                                       reward=0.05)
+                                                       duration = task_duration,
+                                                       reward= task_reward)
 
-    
+    print 'after crate hit'
     
     return HttpResponse(json.dumps({'data' : mtc.get_account_balance()}), content_type = "application/json")
 
@@ -153,8 +155,9 @@ def hitresultfetch(request):
         for hit in allHits:
             assignments=mtc.get_assignments(hit.HITId)        
             
-            print(hit)
+            print(hit.HIT)
             print(hit.HITId)
+            print dir(hit.HIT)
 
             print('assignments in a hit:')
 

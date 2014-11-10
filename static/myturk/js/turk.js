@@ -128,25 +128,32 @@ $('#hit_result_fetch').click(function(){
         type: "POST",
         data: JSON.stringify(requestJSON),
         contentType: "application/json",
-        success: function(data){        
-            console.log(data);
+        success: function(data){  
             var dataContainer = $('#turk_result');
+            var isFirst = true;
             for(var i = 0; i < data.length; i++){
                 var hitID = data[i].hitID;
-                dataContainer.append("<p> Hit id: " + hitID + "</p>");
+                if(isFirst){
+                    dataContainer.append("<p style = 'margin-left:10px'> Hit id: " + hitID + "</p>");
+                    isFirst = false;
+                }else{
+                    dataContainer.append("<hr><p style = 'margin-left:10px'> Hit id: " + hitID + "</p>");
+                }
+                
                 var assignments = data[i].assignments;
-                var assignmentsDiv = $('<div/>').html("<div id = 'assignment_"+ hitID + "'> </div>").contents();
-                for(var j = 0; j < assignments.length; j++){
-                    var workderID = assignments[i].workderID;
-                    console.log(workderID);
+                var assignmentsDiv = $('<div/>').html("<div id = 'assignment_"+ hitID + "' style = 'margin-left:20px'> </div>").contents();
+                                                   
+                for(var j = 0; j < assignments.length; j++){                    
+                    var workderID = assignments[j].workderID;
                     assignmentsDiv.append("<p> worker id: " + workderID + "</p>");
-                    var answers = assignments[i].answer;
+                    var answers = assignments[j].answer;
                     for(var k = 0; k < answers.length; k++){
-                        assignmentsDiv.append("<p> answer : " + answers[i] + "</p>");
+                        assignmentsDiv.append("<p> answer : " + answers[k] + "</p>");
                     }
                 }
                 
                 dataContainer.append(assignmentsDiv);
+                
                 
             }
         },
