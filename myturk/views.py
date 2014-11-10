@@ -139,43 +139,53 @@ def hitresultfetch(request):
 
 
 
+    try:
+        allHits = getAllHits.get_all_reviewable_hits(mtc)
+        
+        hitResultArr = []
+        print('how many hits in allHits')
+        hitNumber = len(allHits)
+        print(hitNumber)
 
-    allHits = getAllHits.get_all_reviewable_hits(mtc)
-
-    print('how many hits in allHits')
-    print(len(allHits))
-
-    ## todo get hit content
-    print('------before looping through allHits')
-    for hit in allHits:
-        assignments=mtc.get_assignments(hit.HITId)
-        print(hit)
-        print(hit.HITId)
-
-        print('assignments in a hit:')
-        print(assignments)
-
-        dir(assignments)
-
-        # print(assignments.Request)
-        # print(assignments.Assignment)
-        # print(assignments.HIT)
-
-        for assignment in assignments:
-            print("Answers of the worker %s" % assignment.WorkerId)
-            for question_form_answer in assignment.answers[0]:
-                # for key, value in question_form_answer.fields:
-                #     print "%s: %s" % (key,value)
-                #     print(value)
-                for value in question_form_answer.fields:
-                    print(value)
-
-
-            print ("--------------------")
+        ## todo get hit content
+        print('------before looping through allHits')
+        
+        for hit in allHits:
+            assignments=mtc.get_assignments(hit.HITId)        
             
-    print('------after looping through allHits')
+            print(hit)
+            print(hit.HITId)
 
+            print('assignments in a hit:')
 
-    return HttpResponse({'hitresult key':'thevaluefromhitresult'}, content_type = "application/json")
+            # print(assignments.Request)
+            # print(assignments.Assignment)
+            # print(assignments.HIT)
+            
+            theAssignments = [] 
+            for assignment in assignments:
+                print("Answers of the worker %s" % assignment.WorkerId)
+                
+                         
+                
+                theAnswer = []
+                for question_form_answer in assignment.answers[0]:
+                    # for key, value in question_form_answer.fields:
+                        # print "%s: %s" % (key,value)
+                        # print(value)
+                    for value in question_form_answer.fields:
+                        theAnswer.append(value)
+                        # print(value)
+                theAssignments.append({'workderID':assignment.WorkerId, 'answer':theAnswer})
+
+                print ("--------------------")
+                
+            hitResultArr.append({'hit':{'hitID':hit.HITId, 'assignments':theAssignments}})
+        
+        print('------after looping through allHits')
+    except Exception as e:
+        print e
+
+    return HttpResponse(json.dumps(hitResultArr), content_type = "application/json")
 
 
