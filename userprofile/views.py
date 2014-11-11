@@ -14,18 +14,18 @@ import json
 from django.contrib.auth.hashers import check_password, make_password
 
 @login_required
-def view_profile(request, **kwargs):
+def view_profile(request, user_id):
     '''
     Display a user's profile. If user_id if provided, then the user 
     will be the user of the user id. Otherwise, the user will be the
     login user.
     '''
     
-    if 'user_id' in kwargs:
-        user_id = kwargs['user_id']
-        thisuser = User.objects.get(pk = user_id)
-    else:
-        thisuser = request.user
+    # if 'user_id' in kwargs:
+        # user_id = kwargs['user_id']
+    thisuser = User.objects.get(pk = user_id)
+    # else:
+        # thisuser = request.user
         
     try:        
         from django.contrib.admin.models import LogEntry

@@ -280,16 +280,84 @@ def detail(request, project_id):
         else:
             comment.edit_enable = False
             comment.delete_enable = False
+            
+    hist_actions = load_project_activity_feed(request, project_id)        
     
     context = { 'user' : request.user, 'BASE_URL':settings.BASE_URL, 
         'project' : theproject, 'comments': allComments, 
-        'collaborators':collaborators, 'collaborate_permisson' : perm}
+        'collaborators':collaborators, 'collaborate_permisson' : perm, 'history_actions':hist_actions}
     return TemplateResponse(request, 'projects/detail.html', context)
  
 @login_required  
 def addCollaborator(request, project_id):
     theproject = Project.objects.get(id = project_id)
+   
+def load_project_activity_feed(request, project_id):
+    thisuser = request.user
+    #theProject = Project.objects.get(id = project_id)
+    # try:        
+    from django.contrib.admin.models import LogEntry
+    from django.contrib.contenttypes.models import ContentType
+
+    new_logging_list = []
+    # Dispay the logActions only for the project. 
+    # get all logs of this project
     
+    theProject = Project.objects.get(pk = project_id)    
+    comments = Comment.objects.filter(project = theProject)
+    
+    project_logs = LogEntry.objects.filter(content_type = ContentType.objects.get(model='project'), object_id = project_id)
+    
+    comments_ids = []
+    for item in comments:
+        comments_ids.append(item.id)
+        
+    comment_logs = LogEntry.objects.filter(content_type = ContentType.objects.get(model='comment'), object_id__in = comments_ids)  
+    
+    # for item in comment_logs:
+        # print item.object_id
+        # print item.object_repr
+    
+    project_logs_list = list(project_logs)
+    
+    comment_logs_list = list(comment_logs)
+    
+    project_logs_list.extend(comment_logs_list)
+    
+    
+    
+    action_dict = { '1' : "add", '2' : 'update', '3' : 'delete'}
+    
+    # rebuild the logging list
+    for item in project_logs_list:
+        logContentType = item.content_type 
+        logAction = item.action_flag
+        logObject = None
+        targetObject = None
+        
+        try:    
+            logObject = logContentType.get_object_for_this_type(pk=item.object_id)
+        except Exception as e:
+            logObject = None                
+        
+        logAction = action_dict[str(logAction)]
+        
+        new_logging_list.append({'action_time':item.action_time, 
+            'change_message':item.change_message, 
+            'logObject':logObject, 
+            'logAction' : logAction,
+            'logContentType': logContentType.name})
+            
+    return new_logging_list 
+
+        # profile = thisuser.userprofile
+              
+        # context = { "profile":profile, "this_user":thisuser, 'active_tag': 'userprofile', 
+            # 'BASE_URL':settings.BASE_URL, 'history_actions': new_logging_list}
+        # return TemplateResponse(request, 'userprofile/view_profile.html', context) 
+    # except Exception as e:
+        # return HttpResponse(e)
+   
 @login_required 
 def load_project_comment_json(request, project_id):
     ''' Helper function for loading comments'''
@@ -301,7 +369,7 @@ def load_project_comment_json(request, project_id):
     comments_list = [] 
     for comment in allComments:
         tmp = {}
-        tmp = {'user':request.user.username,'content':comment.content,
+        tmp = {'user':request.user.username, 'comment_user_id':comment.user.id, 'content':comment.content,
                 'comment_id':comment.id, 'project_id':project_id, 'pub_date': str(comment.create_time)}
                 
         # check edit or delete permissions

@@ -17,5 +17,5 @@ urlpatterns = patterns('',
     url(r'^comment/save/$', views.save_comment, name='save_comment'), 
     url(r'^collaborator/add/$', views.add_collaborator, name='add_collaborator'), 
     url(r'^collaborator/delete/$', views.delete_collaborator, name='delete_collaborator'), 
-    url(r'^test/$', views.load_project_collaborators_json, name='test'),   
+    url(r'^test/$', views.load_project_activity_feed, name='test'),   
 )

@@ -101,7 +101,7 @@ function refreshCommentList(commentListID, comments) {
                                         '<div class="col-xs-7 col-md-10">'+ 
                                             '<div class="col-md-10">'+ 
                                                 '<div class="mic-info">'+ 
-                                                    'By: <a href="#">' + comments[i]['user'] + '</a> On ' + comments[i]['pub_date']+  
+                                                    'By: <a href="' + window.SERVER_PATH + 'profile/' +comments[i]['comment_user_id'] + '/">' + comments[i]['user'] + '</a> On ' + comments[i]['pub_date']+  
                                                 '</div>'+
                                                 '<div class="comment-text">'+ 
                                                     '<p id = "comment_content_' + comments[i]['comment_id'] + '">' + comments[i]['content'] + '</p>'+ 

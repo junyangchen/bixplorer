@@ -52,7 +52,7 @@
                     <li class="dropdown {% if active_tag == 'analytics'  %} active {% endif %}"><a href="#"><span class="glyphicon glyphicon-eye-open"></span> Analytical Workspace</a></li>
                     
                     <!-- profile menu -->
-                    <li class="{% if active_tag == 'userprofile'  %} active {% endif %}"><a href="{{ BASE_URL }}accounts/profile/"><span class="glyphicon glyphicon-user"></span> My Profile</a></li>                
+                    <li class="{% if active_tag == 'userprofile'  %} active {% endif %}"><a href="{{ BASE_URL }}profile/{{user.id}}/"><span class="glyphicon glyphicon-user"></span> My Profile</a></li>                
                     
                     <!-- about menu -->
                     <li class="{% if active_tag == 'myturk'  %} active {% endif %}"><a href="{{ BASE_URL }}myturk/createhit/"><span class="glyphicon glyphicon-info-sign"></span> Crowdsourcing</a></li>
