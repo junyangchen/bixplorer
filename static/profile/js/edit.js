@@ -176,7 +176,13 @@ $('#btn_change_pass_save').click(function(){
         contentType: "application/json",
         success: function(data){                
             if(data['status'] == 'success') {
-                window.location.href = window.SERVER_PATH + "profile/";
+                window.location.href = window.SERVER_PATH;
+            }else if(data['status'] == 'password_incorrect'){
+                alert("The password is incorrect!");
+            }else if(data['status'] == 'repeat_password_incorrect'){
+                alert("Two passwords are not match!");
+            }else{
+                alert("Unknown error!");
             }
             
             

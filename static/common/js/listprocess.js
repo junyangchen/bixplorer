@@ -28,3 +28,7 @@ $('.plist_update').click(function(event) {
 	// requrest to update the project
 	window.location = window.SERVER_PATH + "projects/edit/" + project_id;
 });
+
+$('#plist_create_new_project').click(function(){
+    window.location = window.SERVER_PATH + "projects/add/";
+});

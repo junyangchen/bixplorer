@@ -11,7 +11,7 @@ from django.template.response import TemplateResponse
 from home.utils import * 
 from types import *
 import json
-from django.contrib.auth.hashers import check_password
+from django.contrib.auth.hashers import check_password, make_password
 
 @login_required
 def view_profile(request, **kwargs):
@@ -104,8 +104,17 @@ def change_password(request):
         new_password = requestJson['new_password']
         repeat_password = requestJson['repeat_password']
         
-        print theUser
+        if not check_password(current_password, theUser.password): 
+            return HttpResponse(json.dumps({'status':'password_incorrect'}), content_type = "application/json")
+           
+        if not new_password == repeat_password:
+            return HttpResponse(json.dumps({'status':'repeat_password_incorrect'}), content_type = "application/json")
+
+         
+        theUser.password = make_password(new_password)
+        theUser.save()
         
+        return HttpResponse(json.dumps({'status':'success'}), content_type = "application/json")        
     else:
         raise Http404
     
