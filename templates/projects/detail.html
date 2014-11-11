@@ -195,6 +195,7 @@
                                 	</div>
                                 	<div class="col-xs-7 col-md-9">
                                 		<p>
+                                        <a href="{% url 'userprofile:view_profile' item.action_user.id %}">{{ item.action_user }}</a>
                                 		{{ item.logAction }} 
                                         {% if item.logContentType == 'comment' %}
                                             a comment

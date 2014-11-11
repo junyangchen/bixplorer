@@ -330,6 +330,7 @@ def load_project_activity_feed(request, project_id):
     
     # rebuild the logging list
     for item in project_logs_list:
+        action_user = item.user
         logContentType = item.content_type 
         logAction = item.action_flag
         logObject = None
@@ -342,7 +343,9 @@ def load_project_activity_feed(request, project_id):
         
         logAction = action_dict[str(logAction)]
         
-        new_logging_list.append({'action_time':item.action_time, 
+        new_logging_list.append({
+            'action_user':action_user,
+            'action_time':item.action_time, 
             'change_message':item.change_message, 
             'logObject':logObject, 
             'logAction' : logAction,

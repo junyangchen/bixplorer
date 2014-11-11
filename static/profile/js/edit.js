@@ -56,7 +56,7 @@ $('#btn_profile_save').click(function(){
         contentType: "application/json",
         success: function(data){                
             if(data['status'] == 'success') {
-                window.location.href = window.SERVER_PATH + "profile/";
+                window.location.href = window.SERVER_PATH + "profile/" + uid + "/";
             }
             
             
@@ -197,5 +197,6 @@ $('#btn_change_pass_save').click(function(){
 
 
 $('#btn_change_pass_cancel').click(function(){
-    window.location.href = window.SERVER_PATH + "profile/";
+    var user_id = $('#userid').html().toString();    
+    window.location.href = window.SERVER_PATH + "profile/" + user_id + "/";
 });
