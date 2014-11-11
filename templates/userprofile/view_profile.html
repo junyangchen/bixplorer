@@ -36,11 +36,13 @@ first name: {{ user.firstname }}
 
 			        <!-- edit form column -->
 			        <div class="col-md-8 col-md-offset-1 col-sm-6 col-xs-12">
-			            <form class="form-horizontal" role="form">
+			            <div class="form-horizontal">
+                        <input id="csrf_token" type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
 			                <div class="form-group">
 			                    <label class="col-md-3 control-label">Username:</label>
+                                <label style = "display:none;" id = 'userid'>{{ this_user.id }}</label>
 			                    <div class="col-md-8">
-			                        <p class="p_aligh_lable">{{ this_user.username }}</p>
+			                        <p class="p_aligh_lable" id = 'username'>{{ this_user.username }}</p>
 			                    </div>
 			                </div>
 
@@ -76,10 +78,15 @@ first name: {{ user.firstname }}
 
 			                <div class="form-group">
 			                    <label class="col-lg-3 control-label">Career:</label>
-			                    <div class="col-lg-8">
-			                        <p class="p_aligh_lable active_this">{{ profile.career }}</p>
+			                    <div class="col-lg-8">                                    
+			                        <select id="id_career" name="career" style = "margin-top:5px">
+                                    {% for item in profile.CAREER_CHOICES %}                                        
+                                        <option value="{{item.0}}" {% if profile.career = item.0 %} selected{% endif%}>{{item.1}}</option>
+                                    {% endfor %}
+                                    </select>
+                                    
 			                    </div>
-			                </div>			                
+			                </div>
 
 			                <div class="form-group">
 			                    <label class="col-lg-3 control-label">Location:</label>
@@ -92,17 +99,18 @@ first name: {{ user.firstname }}
 			                </div>
 
 			                <div class="form-group">
-			                    <div class="col-md-8">
-			                        <div class="col-md-3"></div>
-			                        <div class="col-md-8">
-			                        	<div class="col-md-4">
-		                        			<button type="button" class="btn btn-info btn-xs active_this" id="btn_profile_edit"><span class="glyphicon glyphicon-pencil"></span> Edit</button>
-
-											<button type="button" class="btn btn-success btn-xs hide_this" id="btn_profile_save" data-toggle="popover"><span class="glyphicon glyphicon-ok"></span> save</button>
+			                    <div class="col-md-12">
+			                        <div class="col-md-5"></div>
+			                        <div class="col-md-5">
+			                        	<div class="col-md-7">
+		                        			<button type="button" class="btn btn-info btn-x active_this" id="btn_profile_edit"><span class="glyphicon glyphicon-pencil"></span> Edit Profile</button>
+											<button type="button" class="btn btn-success btn-x hide_this" id="btn_profile_save"><span class="glyphicon glyphicon-ok"></span> save</button>
 										</div>
-
-										<div class="col-md-4">
-											<button type="button" class="btn btn-default btn-xs hide_this" id="btn_profile_cancel">Cancel</button>
+                                        <div class="col-md-5">
+                                            <button type="button" class="btn btn-info btn-x active_this" id="btn_change_pass"><span class="glyphicon glyphicon-lock"></span> Change Password</button>
+                                        </div>
+										<div class="col-md-5">
+											<button type="button" class="btn btn-default btn-x hide_this" id="btn_profile_cancel">Cancel</button>
 		                        		</div>
 										
 <!-- 										<div class="col-md-4 col-md-offset-4">
@@ -111,11 +119,12 @@ first name: {{ user.firstname }}
 			                        </div>
 			                    </div>
 			                </div>
-			            </form>
+			            </div>
 			        </div>
                 </div>
             </div>			
-		</div>
+		</div>       
+		
 
 		<div class="col-md-4 col-md-offset-1">
             <!-- collaborator of a project -->
@@ -180,9 +189,9 @@ first name: {{ user.firstname }}
                 </div>
             </div>			
 		</div>
-               
-	</div>
-
+    </div>
+    
+    
 	<script type="text/javascript" src="{% static 'profile/js/edit.js'%}"></script>
 {% endblock %}
 

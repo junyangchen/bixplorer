@@ -76,8 +76,6 @@ $('.btn_comment_edit_save').click(function(){
 
 
 
-
-
 function csrfSafeMethod(method) {
     // these HTTP methods do not require CSRF protection
     return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));

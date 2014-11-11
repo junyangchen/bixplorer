@@ -1,3 +1,7 @@
+function csrfSafeMethod(method) {
+    // these HTTP methods do not require CSRF protection
+    return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+}
 
 // add tooltip for first name
 $('#edit_first_name').tooltip({
@@ -22,7 +26,52 @@ $('#edit_last_name').tooltip({
 // show instance message
 instMsgForText('#edit_last_name', '#last_name_msg');
 
+$('#btn_profile_save').click(function(){
+    $.ajaxSetup({async:false}); 
+    var userName = $('#username').html().toString(),
+        uid = $('#userid').html().toString(),
+        firstName = $('#edit_first_name').val();
+        lastName = $('#edit_last_name').val();
+        email = $('#edit_email').val();
+        career = $('#id_career').val();
+        theLocation = $('#edit_location').val();
+        
+    var jsonData = {
+        'user_id':uid,
+        'user_name':userName,
+        'first_name':firstName,
+        'last_name':lastName,
+        'email':email,
+        'career':career,
+        'location':theLocation}
+    
+        
+    var csrftoken = $('#csrf_token').val();
+    
+    
+    $.ajax({
+        url: window.SERVER_PATH + 'profile/edit/',
+        type: "POST",
+        data: JSON.stringify(jsonData),
+        contentType: "application/json",
+        success: function(data){                
+            if(data['status'] == 'success') {
+                window.location.href = window.SERVER_PATH + "profile/";
+            }
+            
+            
+        },
+        beforeSend: function(xhr, settings) {
+            if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                xhr.setRequestHeader("X-CSRFToken", csrftoken);
+            }
+        }
+    });
+});
 
+$('#btn_change_pass').click(function(){
+    window.location.href = window.SERVER_PATH + "profile/change_password/";
+});
 
 $('#btn_profile_edit').click(function(){
 	// set first name
@@ -32,9 +81,10 @@ $('#btn_profile_edit').click(function(){
 	// set email
 	$('#edit_email').val($('#profile_email').html());
 	// set location
-	$('#edit_location').val($('#profile_location').html());	
-
-
+	$('#edit_location').val($('#profile_location').html());
+    // set career
+    $('#edit_career').val($('#profile_career').html());
+    
 	$('.hide_this').addClass('tmp_this')
 	$('.hide_this').removeClass('hide_this');
 	$('.active_this').addClass('hide_this');
@@ -105,3 +155,41 @@ function instMsgForText(inputTextID, msgID) {
 		});
 	});	
 }
+
+/*-------- Change password ---------*/
+$('#btn_change_pass_save').click(function(){
+    var current_password = $('#old_password').val(),
+        new_password = $('#new_password').val(),
+        repeat_password = $('#repeat_password').val();
+        
+    var jsonData = {
+        'current_password':current_password,
+        'new_password':new_password,
+        'repeat_password':repeat_password
+    };    
+    
+    var csrftoken = $('#csrf_token').val(); 
+    $.ajax({
+        url: window.SERVER_PATH + 'profile/change_password/',
+        type: "POST",
+        data: JSON.stringify(jsonData),
+        contentType: "application/json",
+        success: function(data){                
+            if(data['status'] == 'success') {
+                window.location.href = window.SERVER_PATH + "profile/";
+            }
+            
+            
+        },
+        beforeSend: function(xhr, settings) {
+            if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                xhr.setRequestHeader("X-CSRFToken", csrftoken);
+            }
+        }
+    });
+});
+
+
+$('#btn_change_pass_cancel').click(function(){
+    window.location.href = window.SERVER_PATH + "profile/";
+});

@@ -1,5 +1,5 @@
 # Django
-from django.http import HttpResponse
+from django.http import HttpResponse, Http404
 from django.shortcuts import render_to_response #render
 from django.template.context import RequestContext
 from django.contrib.auth.decorators import login_required
@@ -10,6 +10,8 @@ from django.conf import settings
 from django.template.response import TemplateResponse
 from home.utils import * 
 from types import *
+import json
+from django.contrib.auth.hashers import check_password
 
 @login_required
 def view_profile(request, **kwargs):
@@ -55,9 +57,57 @@ def view_profile(request, **kwargs):
                     'logAction' : logAction,
                     'logContentType': logContentType.name})
 
-        profile = thisuser.userprofile    
+        profile = thisuser.userprofile
+              
         context = { "profile":profile, "this_user":thisuser, 'active_tag': 'userprofile', 
             'BASE_URL':settings.BASE_URL, 'history_actions': new_logging_list}
         return TemplateResponse(request, 'userprofile/view_profile.html', context) 
     except Exception as e:
-        return HttpResponse(e)    
+        return HttpResponse(e)
+
+@login_required
+def edit_profile(request):
+    print 'here'
+    if request.method == 'POST':
+        try:
+            requestJson = json.loads(request.body)
+            # print requestJson
+            uid = requestJson['user_id']
+            theProfile = UserProfile.objects.get(user = uid)
+            theUser = theProfile.user
+            
+            theUser.first_name = requestJson['first_name']
+            theUser.last_name = requestJson['last_name']
+            theUser.email = requestJson['email']
+            theUser.save()
+            
+            theProfile.location = requestJson['location']            
+            theProfile.career = requestJson['career']
+            theProfile.save()
+            
+            return HttpResponse(json.dumps({'status':'success'}), content_type = "application/json")
+            
+        except Exception as e:
+            print e
+    else:
+        raise Http404
+        
+@login_required
+def change_password(request):
+    if request.method == 'GET':
+        context = { 'active_tag': 'profile', 'BASE_URL':settings.BASE_URL}
+        return TemplateResponse(request, 'userprofile/change_pass.html', context)
+    elif request.method == 'POST':
+        requestJson = json.loads(request.body)
+        theUser = request.user
+        current_password = requestJson['current_password']
+        new_password = requestJson['new_password']
+        repeat_password = requestJson['repeat_password']
+        
+        print theUser
+        
+    else:
+        raise Http404
+    
+    
+    
