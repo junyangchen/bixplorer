@@ -26,7 +26,13 @@ def view_profile(request, user_id):
     thisuser = User.objects.get(pk = user_id)
     # else:
         # thisuser = request.user
-        
+    
+    
+    if thisuser == request.user:
+        perm = True
+    else:
+        perm = False
+    
     try:        
         from django.contrib.admin.models import LogEntry
         
@@ -58,21 +64,27 @@ def view_profile(request, user_id):
                     'logContentType': logContentType.name})
 
         profile = thisuser.userprofile
-              
+        
+                
         context = { "profile":profile, "this_user":thisuser, 'active_tag': 'userprofile', 
-            'BASE_URL':settings.BASE_URL, 'history_actions': new_logging_list}
+            'BASE_URL':settings.BASE_URL, 'history_actions': new_logging_list, 'perm':perm}
         return TemplateResponse(request, 'userprofile/view_profile.html', context) 
     except Exception as e:
         return HttpResponse(e)
 
 @login_required
 def edit_profile(request):
-    print 'here'
+    
     if request.method == 'POST':
         try:
             requestJson = json.loads(request.body)
             # print requestJson
             uid = requestJson['user_id']
+            
+            profile_user = User.objects.get(pk = uid);
+            if not profile_user == request.user:
+                raise Http404
+            
             theProfile = UserProfile.objects.get(user = uid)
             theUser = theProfile.user
             

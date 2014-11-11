@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.template.response import TemplateResponse
-from django.http import HttpResponseNotAllowed, HttpResponseForbidden, Http404
+from django.http import HttpResponseNotAllowed, HttpResponseForbidden, Http404, HttpResponseRedirect
 from django.conf import settings
 from projects.models import Project, Comment, DataSet, Collaborationship
 from itertools import chain
@@ -225,7 +225,7 @@ def plist(request):
     return TemplateResponse(request, 'projects/plist.html', context)
 
 @login_required    
-def detail(request, project_id):
+def detail(request, project_id, sort_order = 'asc'):
     theproject = Project.objects.get(id = project_id)
     
     if theproject.is_deleted:
@@ -265,9 +265,13 @@ def detail(request, project_id):
         
         if (not theproject.user == theUser) and is_theUser_collaborate:
             collaborators.append(theproject.user)
-            
+        
+    if sort_order == 'asc':
+        sort_order_str = '-create_time'
+    else:
+        sort_order_str = 'create_time'
     
-    allComments =    theproject.comment_set.all();
+    allComments = theproject.comment_set.all().order_by(sort_order_str);
     allComments = allComments.filter(is_deleted = False)  
     for comment in allComments:
         # check edit or delete permissions
@@ -365,7 +369,7 @@ def load_project_activity_feed(request, project_id):
 def load_project_comment_json(request, project_id):
     ''' Helper function for loading comments'''
     theproject = get_object_or_404(Project, pk = project_id)
-    allComments =    theproject.comment_set.all();
+    allComments =    theproject.comment_set.all().order_by('-create_time');
     allComments = allComments.filter(is_deleted = False)
     
     
@@ -534,6 +538,15 @@ def save_comment(request):
         raise Http404
         
 @login_required         
+def sort_comment_asc(request, project_id):
+    
+    return detail(request, project_id, sort_order = 'asc')
+    
+@login_required         
+def sort_comment_desc(request, project_id): 
+    return detail(request, project_id, sort_order = 'desc')
+    
+@login_required         
 def add_collaborator(request):
     '''
     Handles request for adding a collaborator to a project.
@@ -638,3 +651,22 @@ def delete_collaborator(request):
             raise Http404
     else:
         raise Http404
+        
+@login_required        
+def undo_delete(request, project_id): 
+    print project_id
+    theProject = Project.objects.get(id = project_id)
+    theProject.is_deleted = False
+    theProject.save()
+    return HttpResponseRedirect("/projects/" + project_id + "/")
+    
+def undo_comment_delete(request, comment_id): 
+    print comment_id
+    theComment = Comment.objects.get(id = comment_id)
+    theComment.is_deleted = False
+    theComment.save()
+    
+    project_id = theComment.project.id
+    
+    return HttpResponseRedirect("/projects/" + str(project_id) + "/")    
+    

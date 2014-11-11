@@ -102,6 +102,7 @@ first name: {{ user.firstname }}
 			                    <div class="col-md-12">
 			                        <div class="col-md-5"></div>
 			                        <div class="col-md-5">
+                                        {% if perm == True %}
 			                        	<div class="col-md-7">
 		                        			<button type="button" class="btn btn-info btn-x active_this" id="btn_profile_edit"><span class="glyphicon glyphicon-pencil"></span> Edit Profile</button>
 											<button type="button" class="btn btn-success btn-x hide_this" id="btn_profile_save"><span class="glyphicon glyphicon-ok"></span> save</button>
@@ -112,10 +113,8 @@ first name: {{ user.firstname }}
 										<div class="col-md-5">
 											<button type="button" class="btn btn-default btn-x hide_this" id="btn_profile_cancel">Cancel</button>
 		                        		</div>
-										
-<!-- 										<div class="col-md-4 col-md-offset-4">
-		                        		<button type="button" class="btn btn-info btn-xs" id="btn_edit"><span class="glyphicon glyphicon-lock"></span> Change Password</button>											
-										</div> -->		                        		
+										{% endif %}
+		                        		
 			                        </div>
 			                    </div>
 			                </div>
@@ -166,7 +165,7 @@ first name: {{ user.firstname }}
                                         {% elif item.logContentType == 'project'%}    
                                            project                                           
                                            {% if item.logObject.is_deleted == True%}
-                                                '{{ item.logObject.name}}'
+                                                '{{ item.logObject.name}}' <a href = '{% url 'projects:undo_delete' item.logObject.pk %}'>Undo?</a>
                                            {% else %}
                                                 <a href = '{% url 'projects:detail' item.logObject.pk %}'>{{ item.logObject.name}}</a>
                                            {% endif %}
