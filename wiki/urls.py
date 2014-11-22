@@ -6,6 +6,6 @@ from wiki import views
 urlpatterns = patterns('',
 						# url(r'^$', views.index, name='index'),
                         url(r'^wikilocation/$', views.wikilocation, name='wikilocation'),
-                        url(r'^org/$', views.org, name='org'),
-
+                        url(r'^orgsum/$', views.orgsum, name='orgsum'),
+                        url(r'^orgimage/$', views.orgimage, name='orgimage'),
                         )

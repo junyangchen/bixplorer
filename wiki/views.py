@@ -9,22 +9,38 @@ import wikipedia
 
 
 # Create your views here.
+wikipedia.set_lang("en")
 
-def org(request):
 
-	org = "FBI"
+def orgsum(request):
+
+	org = "cia"
 
 	try:
 		orginfo = wikipedia.summary(org)
 	except wikipedia.exceptions.DisambiguationError as e:
 		options = e.options
-
 		return HttpResponse(options) 
 
 
 	orginfo = wikipedia.summary(org)
 
 	return HttpResponse(orginfo) 
+
+def orgimage(request):
+	org = "FBI"
+
+	try:
+		orgpage = wikipedia.page(org)
+	except wikipedia.exceptions.DisambiguationError as e:
+		options = e.options
+
+		return HttpResponse(options) 
+
+
+	orgimg = orgpage.images[1]
+
+	return HttpResponse(orgimg) 
 
 
 
