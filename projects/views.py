@@ -295,7 +295,8 @@ def detail(request, project_id, sort_order = 'asc'):
 @login_required  
 def addCollaborator(request, project_id):
     theproject = Project.objects.get(id = project_id)
-   
+    
+@login_required   
 def load_project_activity_feed(request, project_id):
     thisuser = request.user
     #theProject = Project.objects.get(id = project_id)
@@ -659,7 +660,8 @@ def undo_delete(request, project_id):
     theProject.is_deleted = False
     theProject.save()
     return HttpResponseRedirect("/projects/" + project_id + "/")
-    
+ 
+@login_required 
 def undo_comment_delete(request, comment_id): 
     print comment_id
     theComment = Comment.objects.get(id = comment_id)

@@ -14,13 +14,13 @@
             <div class="row">
                  <div class="col-xs-6 col-md-6">
                     <a href="{{ BASE_URL }}projects/plist/" class="btn btn-success btn-lg block_btn" role="button"><span class="glyphicon glyphicon-tasks"></span> <br/>Project 
-                    <br/>I have {{ count}} projects.</a>
+                    <br/>I can access {{ count}} projects.</a>
                 </div>
 
                 <!-- dataset -->
                 <div class="col-xs-6 col-md-6">
-                    <a href="#" class="btn btn-warning btn-lg block_btn" role="button"><span class="glyphicon glyphicon-cog"></span> <br/>Dataset
-                    <br/>I can access 1 datasets.</a>
+                    <a href="#" class="btn btn-warning btn-lg block_btn" role="button"><span class="glyphicon glyphicon-cog"></span> <br/>Dataset ManageMent <br/> TO DO
+                    <!--<br/>I can access 1 datasets.--></a>
                 </div>                           
             </div>
 
@@ -33,8 +33,8 @@
 
                 <!-- user profile -->
                 <div class="col-xs-6 col-md-6">
-                    <a href="#" class="btn btn-info btn-lg block_btn" role="button"><span class="glyphicon glyphicon-user"></span> <br/>Profile
-                    <br/>TO-DO</a>
+                    <a href="{{ BASE_URL }}profile/{{user.id}}/" class="btn btn-info btn-lg block_btn" role="button"><span class="glyphicon glyphicon-user"></span> <br/>My Profile <br>
+                    <br/></a>
                 </div>               
             </div>
 
