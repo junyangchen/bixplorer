@@ -87,6 +87,7 @@ function csrfSafeMethod(method) {
 * @param Comments, the array of comments
 */
 function refreshCommentList(commentListID, comments) {
+    location.reload();
     // cancel ajax
     $.ajaxSetup({async:false});   
     // empty the list
