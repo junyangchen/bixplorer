@@ -54,8 +54,15 @@
                     <!-- profile menu -->
                     <li class="{% if active_tag == 'userprofile'  %} active {% endif %}"><a href="{{ BASE_URL }}profile/{{user.id}}/"><span class="glyphicon glyphicon-user"></span> My Profile</a></li>                
                     
-                    <!-- about menu -->
-                    <li class="{% if active_tag == 'myturk'  %} active {% endif %}"><a href="{{ BASE_URL }}myturk/createhit/"><span class="glyphicon glyphicon-info-sign"></span> Crowdsourcing</a></li>
+                    <!-- Hit menu -->
+                    <li class="dropdown {% if active_tag == 'myturk'  %} active {% endif %}">
+                    
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-info-sign"></span> Crowdsourcing<span class="caret"></span></a>
+                        <ul class="dropdown-menu" role="menu">
+                            <li><a href="{{ BASE_URL }}myturk/createhit/"><span class="glyphicon glyphicon-plus"></span> Creat Hit</a></li>
+                            <li><a href="{{ BASE_URL }}myturk/hitresult/"><span class="glyphicon glyphicon-list"></span> Hit Result</a></li>
+                        </ul>
+                    </li>
                     
                     <!-- logout menu -->
                     <li class="{% if active_tag == 'logout'  %} active {% endif %}"><a href="{{ BASE_URL}}accounts/logout/"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>            

@@ -24,7 +24,7 @@
                     <!-- dataset selection -->
                     <label>Select Dataset:</label><br />
                     <div>
-                        <label id = 'add_template'>YES</label>
+                        <label id = 'add_template' style = "display:none;">YES</label>
                         <select id="project_dataset" class="selectpicker" data-live-search="true" data-width="80%" required>
 							{% for item in dataset %}
                                 <option value = "{{item.id}}">{{ item.name }}</option>

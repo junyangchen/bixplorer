@@ -116,6 +116,17 @@ $('#hit_result_fetch').click(function(){
     
     var accessKeyID = $('#myturk_accesskeyid').val();
     var secretKey = $('#myturk_secretkey').val();
+    
+    if(accessKeyID == ""){
+        alert("Please enter accessKeyID");
+        return;
+    }
+    
+    if(secretKey == ""){
+        alert("Please enter secretKey");
+        return;
+    }
+    
     var requestJSON = {
         "myturk_accesskeyid": accessKeyID,
         "myturk_secretkey": secretKey
